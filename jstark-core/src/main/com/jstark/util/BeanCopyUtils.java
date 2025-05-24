@@ -1,11 +1,30 @@
 package com.jstark.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Map;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BeanCopyUtils {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        // 配置ObjectMapper
+        objectMapper.registerModule(new JavaTimeModule()); // 支持Java8日期时间API
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 日期不写为时间戳
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 空对象不报错
+    }
+
     /**
      * 复制源对象属性到目标对象
      *
@@ -194,4 +213,163 @@ public class BeanCopyUtils {
                 value.getClass().getName() + " to " + targetType.getName());
     }
 
+    /**
+     * 将JSON字符串转换为Java对象
+     *
+     * @param json  JSON字符串
+     * @param clazz 目标Java类
+     * @param <T>   泛型类型
+     * @return 转换后的Java对象
+     * @throws RuntimeException 如果转换失败
+     */
+    public static <T> T jsonToBean(String json, Class<T> clazz) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to Bean: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将Java对象转换为JSON字符串
+     *
+     * @param bean Java对象
+     * @return JSON字符串
+     * @throws RuntimeException 如果转换失败
+     */
+    public static String beanToJson(Object bean) {
+        if (bean == null) {
+            return null;
+        }
+
+        try {
+            return objectMapper.writeValueAsString(bean);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert Bean to JSON: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将Java对象转换为格式化的JSON字符串（美化输出）
+     *
+     * @param bean Java对象
+     * @return 格式化的JSON字符串
+     * @throws RuntimeException 如果转换失败
+     */
+    public static String beanToPrettyJson(Object bean) {
+        if (bean == null) {
+            return null;
+        }
+
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bean);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert Bean to pretty JSON: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将JSON字符串转换为指定类型的List
+     *
+     * @param json         JSON字符串
+     * @param elementClass List元素类型
+     * @param <T>          泛型类型
+     * @return 转换后的List
+     * @throws RuntimeException 如果转换失败
+     */
+    public static <T> List<T> jsonToList(String json, Class<T> elementClass) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(json,
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, elementClass));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to List: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将JSON字符串转换为指定类型的Map
+     *
+     * @param json       JSON字符串
+     * @param keyClass   Map的key类型
+     * @param valueClass Map的value类型
+     * @param <K>        key泛型类型
+     * @param <V>        value泛型类型
+     * @return 转换后的Map
+     * @throws RuntimeException 如果转换失败
+     */
+    public static <K, V> Map<K, V> jsonToMap(String json, Class<K> keyClass, Class<V> valueClass) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(json,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, keyClass, valueClass));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to Map: " + e.getMessage(), e);
+        }
+    }
+    /**
+     * 将 JSON 字符串转换为 Map
+     * @param json JSON 字符串
+     * @return 转换后的 Map 对象
+     * @throws RuntimeException 如果转换失败
+     */
+    public static Map<String, Object> jsonToMap(String json) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to Map: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将 Map 转换为 JSON 字符串
+     * @param map 要转换的 Map
+     * @return 转换后的 JSON 字符串
+     * @throws RuntimeException 如果转换失败
+     */
+    public static String mapToJson(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+
+        try {
+            return objectMapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert Map to JSON: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 将 Map 转换为格式化的 JSON 字符串（美化输出）
+     * @param map 要转换的 Map
+     * @return 格式化的 JSON 字符串
+     * @throws RuntimeException 如果转换失败
+     */
+    public static String mapToPrettyJson(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert Map to pretty JSON: " + e.getMessage(), e);
+        }
+    }
 }
+
+
