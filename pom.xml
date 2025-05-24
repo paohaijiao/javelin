@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
   <name>jstark</name>
   <modules>
-    <module>jstack-core</module>
+    <module>jstark-core</module>
   </modules>
   <properties>
     <hutool.version>5.4.2</hutool.version>
