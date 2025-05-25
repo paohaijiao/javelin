@@ -11,6 +11,9 @@
   <name>jstark</name>
   <modules>
     <module>jstark-core</module>
+      <module>jstark-rest</module>
+    <module>jstark-spring</module>
+    <module>jstark-mybatis</module>
   </modules>
   <properties>
     <hutool.version>5.4.2</hutool.version>
