@@ -18,6 +18,7 @@
     <commons-lang3.version>3.12.0</commons-lang3.version>
     <antlr.version>3.12.0</antlr.version>
     <com.fasterxml.version>2.15.2</com.fasterxml.version>
+    <groovy.version>3.0.8</groovy.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -76,6 +77,11 @@
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-datatype-jsr310</artifactId>
         <version>${com.fasterxml.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy</artifactId>
+        <version>${groovy.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
