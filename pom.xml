@@ -22,6 +22,7 @@
     <antlr.version>4.13.2</antlr.version>
     <com.fasterxml.version>2.15.2</com.fasterxml.version>
     <groovy.version>3.0.8</groovy.version>
+    <jstark.version>0.0.1-SNAPSHOT</jstark.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -92,6 +93,11 @@
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy</artifactId>
         <version>${groovy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jstark</groupId>
+        <artifactId>jstark-core</artifactId>
+        <version>${jstark.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
