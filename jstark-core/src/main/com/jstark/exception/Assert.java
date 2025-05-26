@@ -1,52 +1,15 @@
 package com.jstark.exception;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
+import com.sun.istack.internal.Nullable;
+
 import java.util.Collection;
 
 public interface Assert {
-    /**
-     * 断言对象不为 null
-     * @param object 要检查的对象
-     * @param message 异常消息
-     * @throws IllegalArgumentException 如果对象为 null
-     */
-    public static void notNull(Object object, String message) {
-        if (object == null) {
-            throw new IllegalArgumentException(message);
-        }
-    }
-    /**
-     * 断言对象不为 null
-     * @param object 要检查的对象
-     * @param message 异常消息
-     * @throws IllegalArgumentException 如果对象为 null
-     */
-    public static void isNull(Object object, String message) {
-        if (object != null) {
-            throw new IllegalArgumentException(message);
-        }
-    }
-    /**
-     * 断言表达式为 true
-     * @param expression 布尔表达式
-     * @param message 异常消息
-     * @throws IllegalArgumentException 如果表达式为 false
-            */
-    public static void isTrue(boolean expression, String message) {
-        if (!expression) {
-            throw new IllegalArgumentException(message);
-        }
-    }
-    /**
-     * 断言表达式为 true
-     * @param expression 布尔表达式
-     * @param message 异常消息
-     * @throws IllegalArgumentException 如果表达式为 false
-     */
-    public static void isFalse(boolean expression, String message) {
-        if (expression) {
-            throw new IllegalArgumentException(message);
-        }
-    }
+
+
 
     /**
      * 断言字符串不为空（不为 null 且长度大于 0）
@@ -83,6 +46,89 @@ public interface Assert {
         notNull(type, "Type to check against must not be null");
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(message);
+        }
+    }
+    static void isNull(@Nullable Object object, String message) {
+        if (object != null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void isNull(@Nullable Object object, String message, Object... args) {
+        if (object != null) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void notNull(@Nullable Object object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void notNull(@Nullable Object object, String message, Object... args) {
+        if (object == null) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void isTrue(boolean expression, String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void isTrue(boolean expression, String message, Object... args) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void isFalse(boolean expression, String message) {
+        if (expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void isFalse(boolean expression, String message, Object... args) {
+        if (expression) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void notEmptyStr(String value, String message) {
+        if (StrUtil.isEmpty(value)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void notEmptyStr(String value, String message, Object... args) {
+        if (StrUtil.isEmpty(value)) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void notEmptyCol(Collection<?> value, String message) {
+        if (CollUtil.isEmpty(value) || value.size() < 1) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void notEmptyCol(Collection<?> value, String message, Object... args) {
+        if (CollUtil.isEmpty(value) || value.size() < 1) {
+            throw new IllegalArgumentException(String.format(message, args));
+        }
+    }
+
+    static void notEmptyArray(Object[] value, String message) {
+        if (ArrayUtil.isEmpty(value) || value.length < 1) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    static void notEmptyArray(Object[] value, String message, Object... args) {
+        if (ArrayUtil.isEmpty(value) || value.length < 1) {
+            throw new IllegalArgumentException(String.format(message, args));
         }
     }
 }
