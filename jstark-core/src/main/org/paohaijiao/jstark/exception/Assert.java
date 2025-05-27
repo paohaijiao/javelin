@@ -1,4 +1,4 @@
-package com.jstark.exception;
+package org.paohaijiao.jstark.exception;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;

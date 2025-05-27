@@ -4,14 +4,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jstark</groupId>
+  <groupId>org.paohaijiao.jstark</groupId>
   <artifactId>common-frame</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>jstark</name>
   <modules>
     <module>jstark-core</module>
-      <module>jstark-rest</module>
+    <module>jstark-rest</module>
     <module>jstark-spring</module>
     <module>jstark-mybatis</module>
   </modules>
@@ -95,7 +95,7 @@
         <version>${groovy.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.jstark</groupId>
+        <groupId>org.paohaijiao.jstark</groupId>
         <artifactId>jstark-core</artifactId>
         <version>${jstark.version}</version>
       </dependency>

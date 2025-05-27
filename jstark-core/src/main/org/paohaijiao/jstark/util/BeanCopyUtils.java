@@ -1,4 +1,4 @@
-package com.jstark.util;
+package org.paohaijiao.jstark.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
