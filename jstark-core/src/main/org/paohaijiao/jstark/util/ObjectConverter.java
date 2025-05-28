@@ -9,6 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ObjectConverter {
+    public static <T> T assign(Object target, Class<T> clazz) {
+        if (target == null) {
+            return null;
+        }
+        if (clazz.isInstance(target)) {
+            return clazz.cast(target);
+        }
+        throw new ClassCastException("Cannot assign object of type "
+                + target.getClass().getName() + " to " + clazz.getName());
+    }
     /**
      * 将目标对象转换为指定类型的List
      * @param target 目标对象，可以是单个对象、数组、集合等
