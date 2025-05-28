@@ -23,6 +23,7 @@
     <com.fasterxml.version>2.15.2</com.fasterxml.version>
     <groovy.version>3.0.8</groovy.version>
     <jstark.version>0.0.1-SNAPSHOT</jstark.version>
+    <lombok.version>1.18.30</lombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -98,6 +99,12 @@
         <groupId>org.paohaijiao.jstark</groupId>
         <artifactId>jstark-core</artifactId>
         <version>${jstark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version> <!-- 2023年12月最新版本 -->
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
