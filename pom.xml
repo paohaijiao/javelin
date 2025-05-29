@@ -13,6 +13,7 @@
     <module>jstark-rest</module>
     <module>jstark-spring</module>
     <module>jstark-mybatis</module>
+    <module>jstark-cache</module>
   </modules>
   <properties>
     <hutool.version>5.4.2</hutool.version>
