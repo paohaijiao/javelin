@@ -3,7 +3,6 @@ import org.paohaijiao.jstark.enums.JStarkLogLevel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 public class Console {
     // ANSI color Code
     private static final String ANSI_RESET = "\u001B[0m";
