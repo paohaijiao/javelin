@@ -105,6 +105,11 @@
         <version>${lombok.version}</version> <!-- 2023年12月最新版本 -->
         <scope>provided</scope>
       </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version> <!-- 2023年12月最新版本 -->
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
