@@ -24,6 +24,7 @@
     <groovy.version>3.0.8</groovy.version>
     <jstark.version>0.0.1-SNAPSHOT</jstark.version>
     <lombok.version>1.18.30</lombok.version>
+    <okhttp.version>4.10.0</okhttp.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -111,6 +112,12 @@
         <artifactId>commons-lang3</artifactId>
         <version>${commons-lang3.version}</version> <!-- 2023年12月最新版本 -->
       </dependency>
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>${okhttp.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
