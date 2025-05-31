@@ -60,7 +60,6 @@ public class ClassPathScanner {
 
     private static String getBeanName(Class<?> clazz, Class<? extends Annotation> annotation) {
         String value = "";
-
         if (clazz.isAnnotationPresent(Component.class)) {
             value = clazz.getAnnotation(Component.class).value();
         } else if (clazz.isAnnotationPresent(Service.class)) {
@@ -68,7 +67,6 @@ public class ClassPathScanner {
         } else if (clazz.isAnnotationPresent(Repository.class)) {
             value = clazz.getAnnotation(Repository.class).value();
         }
-
         return value.isEmpty() ? toLowerFirstCase(clazz.getSimpleName()) : value;
     }
 
