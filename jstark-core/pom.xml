@@ -42,5 +42,9 @@
             <artifactId>antlr4</artifactId>
             <scope>provided</scope> <!-- 或者使用compile，取决于你的构建配置 -->
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+        </dependency>
     </dependencies>
 </project>

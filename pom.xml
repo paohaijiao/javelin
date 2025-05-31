@@ -25,6 +25,8 @@
     <jstark.version>0.0.1-SNAPSHOT</jstark.version>
     <lombok.version>1.18.30</lombok.version>
     <okhttp.version>4.10.0</okhttp.version>
+    <okhttp.version>4.10.0</okhttp.version>
+    <cglib.version>3.3.0</cglib.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -117,7 +119,11 @@
         <artifactId>okhttp</artifactId>
         <version>${okhttp.version}</version>
       </dependency>
-
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>${cglib.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
