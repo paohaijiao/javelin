@@ -3,7 +3,7 @@ package com.paohaijiao.javelin.exception;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.sun.istack.internal.Nullable;
+
 
 import java.util.Collection;
 
@@ -48,25 +48,25 @@ public interface Assert {
             throw new IllegalArgumentException(message);
         }
     }
-    static void isNull(@Nullable Object object, String message) {
+    static void isNull( Object object, String message) {
         if (object != null) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    static void isNull(@Nullable Object object, String message, Object... args) {
+    static void isNull( Object object, String message, Object... args) {
         if (object != null) {
             throw new IllegalArgumentException(String.format(message, args));
         }
     }
 
-    static void notNull(@Nullable Object object, String message) {
+    static void notNull(Object object, String message) {
         if (object == null) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    static void notNull(@Nullable Object object, String message, Object... args) {
+    static void notNull( Object object, String message, Object... args) {
         if (object == null) {
             throw new IllegalArgumentException(String.format(message, args));
         }
