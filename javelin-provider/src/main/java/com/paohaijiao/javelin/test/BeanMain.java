@@ -26,6 +26,8 @@ public class BeanMain {
             });
         }
         ProviderUserService service = container.getBean("myService", ProviderUserService.class);
+        ProviderUserService service1 = container.getBean(ProviderUserService.class);
         service.sayHello("haha");
+        service1.sayHello("haha1");
     }
 }
