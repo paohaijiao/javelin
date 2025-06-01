@@ -1,12 +1,11 @@
 package org.paohaijiao.jstark.multicaster;
 
-import org.paohaijiao.jstark.anno.Component;
-import org.paohaijiao.jstark.context.BeanPostProcessor;
+import org.paohaijiao.jstark.anno.JComponent;
+import org.paohaijiao.jstark.context.JBeanPostProcessor;
 import org.paohaijiao.jstark.event.JApplicationEvent;
 import org.paohaijiao.jstark.function.JApplicationListener;
 import org.paohaijiao.jstark.publish.JApplicationEventPublisher;
-import org.paohaijiao.jstark.context.BeanContainer;
-import org.paohaijiao.jstark.context.BeanPostProcessor;
+import org.paohaijiao.jstark.context.JBeanProvider;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -15,12 +14,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-@Component
-public class JSimpleApplicationEventMulticaster extends  JApplicationEventPublisher implements  BeanPostProcessor  {
+@JComponent
+public class JSimpleApplicationEventMulticaster extends  JApplicationEventPublisher implements JBeanPostProcessor {
     private final Map<Class<?>, List<JApplicationListener<?>>> listenerCache = new ConcurrentHashMap<>();
-    private final BeanContainer beanContainer;
+    private final JBeanProvider beanContainer;
 
-    public JSimpleApplicationEventMulticaster(BeanContainer beanContainer) {
+    public JSimpleApplicationEventMulticaster(JBeanProvider beanContainer) {
         this.beanContainer = beanContainer;
     }
 

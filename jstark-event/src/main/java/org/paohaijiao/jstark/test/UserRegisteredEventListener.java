@@ -1,8 +1,8 @@
 package org.paohaijiao.jstark.test;
 
-import org.paohaijiao.jstark.anno.Component;
+import org.paohaijiao.jstark.anno.JComponent;
 import org.paohaijiao.jstark.function.JApplicationListener;
-@Component
+@JComponent
 public class UserRegisteredEventListener  implements JApplicationListener<SystemNotificationEvent> {
     private boolean eventReceived = false;
     private String receivedUsername;

@@ -1,8 +1,8 @@
 package org.paohaijiao.jstark.service;
 
-import org.paohaijiao.jstark.anno.Service;
+import org.paohaijiao.jstark.anno.JService;
 
-@Service
+@JService
 public class UserService {
     public String getUserName(Long userId) {
         return "User-" + userId;

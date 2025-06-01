@@ -16,6 +16,7 @@
     <module>jstark-scan</module>
     <module>jstark-resource</module>
     <module>jstark-event</module>
+    <module>jstark-provider</module>
   </modules>
   <properties>
     <hutool.version>5.4.2</hutool.version>

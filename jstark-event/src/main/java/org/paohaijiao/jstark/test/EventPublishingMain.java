@@ -1,6 +1,5 @@
 package org.paohaijiao.jstark.test;
 
-import org.paohaijiao.jstark.context.AnnotationConfigApplicationContext;
 import org.paohaijiao.jstark.context.JEventAnnotationConfigApplicationContext;
 
 public class EventPublishingMain {

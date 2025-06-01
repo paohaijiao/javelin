@@ -1,17 +1,18 @@
 package org.paohaijiao.jstark.context;
 
-import org.paohaijiao.jstark.context.bean.BeanDefinition;
+
+import org.paohaijiao.jstark.bean.JBeanDefinition;
 import org.paohaijiao.jstark.event.JApplicationEvent;
 import org.paohaijiao.jstark.multicaster.JSimpleApplicationEventMulticaster;
 
 
-public class JEventAnnotationConfigApplicationContext extends AnnotationConfigApplicationContext implements BeanContainer {
+public class JEventAnnotationConfigApplicationContext extends JAnnotationConfigApplicationContext implements JBeanProvider {
     private JSimpleApplicationEventMulticaster eventMulticaster;
 
     protected void initEventMulticaster() {
         this.eventMulticaster = new JSimpleApplicationEventMulticaster(this);
         this.registerBeanDefinition("applicationEventMulticaster",
-                new BeanDefinition(JSimpleApplicationEventMulticaster.class));
+                new JBeanDefinition(JSimpleApplicationEventMulticaster.class));
     }
 
     public JEventAnnotationConfigApplicationContext(String... basePackages) {
@@ -29,7 +30,7 @@ public class JEventAnnotationConfigApplicationContext extends AnnotationConfigAp
     }
 
     @Override
-    public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
-        beanContainer.registerBeanDefinition(beanName, new BeanDefinition(JSimpleApplicationEventMulticaster.class));
+    public void registerBeanDefinition(String beanName, JBeanDefinition beanDefinition) {
+        beanContainer.registerBeanDefinition(beanName, beanDefinition);
     }
 }

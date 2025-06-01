@@ -12,7 +12,8 @@
     <dependencies>
         <dependency>
             <groupId>org.paohaijiao.jstark</groupId>
-            <artifactId>jstark-core</artifactId>
+            <artifactId>jstark-provider</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
