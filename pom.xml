@@ -3,18 +3,20 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.paohaijiao.jstark</groupId>
-  <artifactId>common-frame</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>com.paohaijiao.javelin</groupId>
+  <artifactId>javelin</artifactId>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
-  <name>jstark</name>
+  <name>javelin</name>
   <modules>
-    <module>jstark-core</module>
-    <module>jstark-mybatis</module>
-    <module>jstark-scan</module>
-    <module>jstark-resource</module>
-    <module>jstark-event</module>
-    <module>jstark-provider</module>
+    <module>javelin-core</module>
+    <module>javelin-resource</module>
+    <module>javelin-provider</module>
+    <module>javelin-scan</module>
+    <!--optional-->
+    <module>javelin-mybatis</module>
+    <module>javelin-event</module>
+
   </modules>
   <properties>
     <hutool.version>5.4.2</hutool.version>
@@ -31,6 +33,7 @@
     <druid.version>1.1.4</druid.version>
     <yaml.version>2.4</yaml.version>
     <junit.version>4.11</junit.version>
+    <javelin.version>1.0.0</javelin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -104,8 +107,28 @@
       </dependency>
       <dependency>
         <groupId>org.paohaijiao.jstark</groupId>
-        <artifactId>jstark-core</artifactId>
-        <version>${jstark.version}</version>
+        <artifactId>javelin-core</artifactId>
+        <version>${javelin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.paohaijiao.javelin</groupId>
+        <artifactId>jstark-provider</artifactId>
+        <version>${javelin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.paohaijiao.javelin</groupId>
+        <artifactId>jstark-scan</artifactId>
+        <version>${javelin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.paohaijiao.javelin</groupId>
+        <artifactId>jstark-event</artifactId>
+        <version>${javelin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.paohaijiao.javelin</groupId>
+        <artifactId>javelin-mybatis</artifactId>
+        <version>${javelin.version}</version>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>
@@ -146,5 +169,25 @@
     </dependencies>
 
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.paohaijiao.javelin</groupId>
+      <artifactId>javelin-scan</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
