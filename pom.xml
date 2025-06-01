@@ -10,8 +10,6 @@
   <name>jstark</name>
   <modules>
     <module>jstark-core</module>
-    <module>jstark-rest</module>
-    <module>jstark-spring</module>
     <module>jstark-mybatis</module>
     <module>jstark-scan</module>
     <module>jstark-resource</module>
@@ -32,6 +30,7 @@
     <cglib.version>3.3.0</cglib.version>
     <druid.version>1.1.4</druid.version>
     <yaml.version>2.4</yaml.version>
+    <junit.version>4.11</junit.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -139,7 +138,13 @@
         <artifactId>snakeyaml</artifactId>
         <version>${yaml.version}</version>
       </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
     </dependencies>
+
   </dependencyManagement>
 
 </project>
