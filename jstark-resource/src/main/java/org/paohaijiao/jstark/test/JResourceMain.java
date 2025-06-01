@@ -21,9 +21,6 @@ public class JResourceMain {
 
             JResourcePropertiesReader<ServerConfig> subpropsParser = new JResourcePropertiesReader<>();
             ServerConfig serverConfig1 = subpropsParser.parse("application.properties", ServerConfig.class,"server");
-
-
-
             System.out.println("Properties config: " + propsConfig);
         } catch (IOException e) {
             e.printStackTrace();

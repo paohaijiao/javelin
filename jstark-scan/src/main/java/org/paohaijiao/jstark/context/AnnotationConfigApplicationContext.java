@@ -1,16 +1,13 @@
 package org.paohaijiao.jstark.context;
-import org.paohaijiao.jstark.context.BeanContainer;
-import org.paohaijiao.jstark.context.BeanPostProcessor;
 import org.paohaijiao.jstark.context.bean.BeanDefinition;
 import org.paohaijiao.jstark.context.service.ProxyEnhancedBeanContainer;
 import org.paohaijiao.jstark.scan.ClassPathScanner;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 public class AnnotationConfigApplicationContext {
-    private final BeanContainer beanContainer;
+    protected final BeanContainer beanContainer;
 
     public AnnotationConfigApplicationContext(String... basePackages) {
         this(new Properties(), basePackages);
