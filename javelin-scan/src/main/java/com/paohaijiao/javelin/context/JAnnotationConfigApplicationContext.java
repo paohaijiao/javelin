@@ -1,6 +1,6 @@
 package com.paohaijiao.javelin.context;
 import com.paohaijiao.javelin.bean.JBeanDefinition;
-import com.paohaijiao.javelin.context.service.JProxyEnhancedBeanContainer;
+import com.paohaijiao.javelin.context.service.JProxyEnhancedBeanProvider;
 import com.paohaijiao.javelin.factory.JBeanProviderFactory;
 import com.paohaijiao.javelin.scan.JClassPathScanner;
 
@@ -53,8 +53,8 @@ public class JAnnotationConfigApplicationContext {
     }
 
     public void registerInterceptor(String beanName, JMethodInterceptor interceptor) {
-        if (beanProvider instanceof JProxyEnhancedBeanContainer) {
-            ((JProxyEnhancedBeanContainer) beanProvider).registerInterceptor(beanName, interceptor);
+        if (beanProvider instanceof JProxyEnhancedBeanProvider) {
+            ((JProxyEnhancedBeanProvider) beanProvider).registerInterceptor(beanName, interceptor);
         }
         // 可以扩展支持CglibBeanContainer
     }

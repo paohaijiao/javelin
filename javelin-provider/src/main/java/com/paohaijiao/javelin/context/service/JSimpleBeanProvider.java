@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-public class JSimpleBeanContainer implements JBeanProvider {
+public class JSimpleBeanProvider implements JBeanProvider {
 
     private final Map<String, JBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
