@@ -1,16 +1,15 @@
 package org.paohaijiao.jstark.reader.impl;
 
+import org.paohaijiao.jstark.reader.JResourceBaseReader;
 import org.paohaijiao.jstark.reader.JResourceReader;
 
-import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
-public class JResourcePropertiesReader<T> implements JResourceReader<T> {
+public class JResourcePropertiesReader<T> extends JResourceBaseReader implements JResourceReader<T> {
     @Override
     public T parse(InputStream inputStream, Class<T> targetClass) throws IOException {
         Properties properties = new Properties();
@@ -50,6 +49,54 @@ public class JResourcePropertiesReader<T> implements JResourceReader<T> {
             return instance;
         } catch (Exception e) {
             throw new IOException("Failed to create instance of " + targetClass.getName(), e);
+        }
+    }
+
+    @Override
+    public T parse(InputStream inputStream, Class<T> targetClass, String key) throws IOException {
+        Properties properties = new Properties();
+        properties.load(inputStream);
+        try {
+            T instance = targetClass.getDeclaredConstructor().newInstance();
+            String prefix = key.endsWith(".") ? key : key + ".";
+            Properties filteredProps = new Properties();
+            properties.stringPropertyNames().stream()
+                    .filter(propKey -> propKey.startsWith(prefix))
+                    .forEach(propKey -> {
+                        String newKey = propKey.substring(prefix.length());
+                        filteredProps.setProperty(newKey, properties.getProperty(propKey));
+                    });
+            populateObject(instance, filteredProps);
+            return instance;
+        } catch (Exception e) {
+            throw new IOException("Failed to create or populate instance of " + targetClass.getName(), e);
+        }
+    }
+    private <T> void populateObject(T instance, Properties properties) throws Exception {
+        for (String propKey : properties.stringPropertyNames()) {
+            String[] parts = propKey.split("\\.");
+            Object current = instance;
+            for (int i = 0; i < parts.length - 1; i++) {
+                String part = parts[i];
+                PropertyDescriptor pd = new PropertyDescriptor(part, current.getClass());
+                Method getter = pd.getReadMethod();
+                Object nested = getter.invoke(current);
+                if (nested == null) {
+                    Method setter = pd.getWriteMethod();
+                    nested = pd.getPropertyType().getDeclaredConstructor().newInstance();
+                    setter.invoke(current, nested);
+                }
+                current = nested;
+            }
+            String finalPart = parts[parts.length - 1];
+            PropertyDescriptor finalPd = new PropertyDescriptor(finalPart, current.getClass());
+            Method setter = finalPd.getWriteMethod();
+            if (setter != null) {
+                Class<?> paramType = setter.getParameterTypes()[0];
+                String value = properties.getProperty(propKey);
+                Object convertedValue = convertValue(value, paramType);
+                setter.invoke(current, convertedValue);
+            }
         }
     }
 
