@@ -82,7 +82,7 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
     public List<T> list() {
         String sql = buildSelectSQL();
         System.out.println("sql:"  +sql);
-        getStatement(sql);
+        //getStatement(sql);
         return sqlSession.selectList(null, buildParameterMap());
     }
 
