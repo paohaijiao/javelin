@@ -9,7 +9,9 @@ import java.util.Collection;
 
 public interface Assert {
 
-
+    public static void throwNewException( String message) {
+        throw new IllegalArgumentException(message);
+    }
 
     /**
      * 断言字符串不为空（不为 null 且长度大于 0）
