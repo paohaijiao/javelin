@@ -1,21 +1,20 @@
 package com.paohaijiao.javelin.context.service;
-import com.paohaijiao.javelin.anno.JAutowired;
+
 import com.paohaijiao.javelin.bean.JBeanDefinition;
-import com.paohaijiao.javelin.context.JBeanProvider;
 import com.paohaijiao.javelin.context.JBeanPostProcessor;
+import com.paohaijiao.javelin.context.JBeanProvider;
 import com.paohaijiao.javelin.context.JMethodInterceptor;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-public class JSimpleBeanContainer implements JBeanProvider {
 
-    private final Map<String, JBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
-    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
-    private final List<JBeanPostProcessor> beanPostProcessors = new ArrayList<>();
-
+public abstract class JBaseBeanProvider implements JBeanProvider {
+    protected final Map<String, JBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    protected final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+    protected final List<JBeanPostProcessor> beanPostProcessors = new ArrayList<>();
     @Override
     public void registerBeanDefinition(String beanName, JBeanDefinition beanDefinition) {
         if (beanDefinitionMap.containsKey(beanName)) {
@@ -23,7 +22,6 @@ public class JSimpleBeanContainer implements JBeanProvider {
         }
         beanDefinitionMap.put(beanName, beanDefinition);
     }
-
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getBean(String beanName, Class<T> requiredType) {
@@ -32,6 +30,16 @@ public class JSimpleBeanContainer implements JBeanProvider {
             throw new IllegalArgumentException("Bean '" + beanName + "' is not   " + requiredType.getName() + " type");
         }
         return (T) bean;
+    }
+
+    @Override
+    public <T> T getBean(Class<T> requiredType) {
+        for(Object obj:singletonObjects.values()){
+            if( requiredType.isInstance(obj) ){
+                return requiredType.cast(obj);
+            }
+        }
+        return null;
     }
 
     protected Object doGetBean(String beanName) {
@@ -80,70 +88,6 @@ public class JSimpleBeanContainer implements JBeanProvider {
             throw new RuntimeException("create Bean '" + beanName + "' fail", e);
         }
     }
-
-    protected void populateBean(String beanName, JBeanDefinition bd, Object bean) {
-        for (Field field : bd.getBeanClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(JAutowired.class)) {
-                try {
-                    field.setAccessible(true);
-                    Object dependency = getBean(field.getName(), field.getType());
-                    field.set(bean, dependency);
-                } catch (Exception e) {
-                    throw new RuntimeException("inject Dependency '" + field.getName() + "' into Bean '" + beanName + "' fail", e);
-                }
-            }
-        }
-    }
-
-    protected void initializeBean(String beanName, JBeanDefinition bd, Object bean) {
-        if (bd.getInitMethodName() != null) {
-            try {
-                Method initMethod = bd.getBeanClass().getMethod(bd.getInitMethodName());
-                initMethod.invoke(bean);
-            } catch (Exception e) {
-                throw new RuntimeException("invoke the method '" + bd.getInitMethodName() + "' fail", e);
-            }
-        }
-    }
-
-    protected Object resolveBeforeInstantiation(String beanName, JBeanDefinition bd) {
-        for (JBeanPostProcessor bp : beanPostProcessors) {
-            Object result = bp.postProcessBeforeInstantiation(bd.getBeanClass(), beanName);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    protected Object applyBeanPostProcessorsBeforeInitialization(Object bean, String beanName) {
-        Object result = bean;
-        for (JBeanPostProcessor processor : beanPostProcessors) {
-            Object current = processor.postProcessBeforeInitialization(result, beanName);
-            if (current == null) {
-                return result;
-            }
-            result = current;
-        }
-        return result;
-    }
-
-    protected Object applyBeanPostProcessorsAfterInitialization(Object bean, String beanName) {
-        Object result = bean;
-        for (JBeanPostProcessor processor : beanPostProcessors) {
-            Object current = processor.postProcessAfterInitialization(result, beanName);
-            if (current == null) {
-                return result;
-            }
-            result = current;
-        }
-        return result;
-    }
-
-    protected void addSingleton(String beanName, Object singletonObject) {
-        singletonObjects.put(beanName, singletonObject);
-    }
-
     @Override
     public void addBeanPostProcessor(JBeanPostProcessor processor) {
         this.beanPostProcessors.add(processor);
@@ -152,5 +96,8 @@ public class JSimpleBeanContainer implements JBeanProvider {
     @Override
     public void registerInterceptor(String beanName, JMethodInterceptor interceptor) {
         throw new UnsupportedOperationException("simple container not support registerInterceptor");
+    }
+    protected void addSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
     }
 }

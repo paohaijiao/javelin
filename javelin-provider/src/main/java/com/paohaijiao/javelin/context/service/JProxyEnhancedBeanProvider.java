@@ -9,7 +9,7 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class JProxyEnhancedBeanContainer extends JSimpleBeanContainer {
+public class JProxyEnhancedBeanProvider extends JSimpleBeanProvider {
 
     private final Map<String, JMethodInterceptor> interceptors = new ConcurrentHashMap<>();
 

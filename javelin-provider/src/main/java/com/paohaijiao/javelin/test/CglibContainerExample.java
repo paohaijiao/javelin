@@ -1,11 +1,11 @@
 package com.paohaijiao.javelin.test;
 
 import com.paohaijiao.javelin.bean.JBeanDefinition;
-import com.paohaijiao.javelin.context.service.JCglibBeanContainer;
+import com.paohaijiao.javelin.context.service.JCglibBeanProvider;
 
 public class CglibContainerExample {
     public static void main(String[] args) {
-        JCglibBeanContainer container = new JCglibBeanContainer();
+        JCglibBeanProvider container = new JCglibBeanProvider();
         JBeanDefinition serviceDef = new JBeanDefinition(ProviderUserServiceImpl.class);
         container.registerBeanDefinition("myService", serviceDef);
         container.registerInterceptor("myService",

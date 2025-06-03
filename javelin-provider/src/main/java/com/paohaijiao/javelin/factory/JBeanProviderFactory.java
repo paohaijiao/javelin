@@ -1,8 +1,8 @@
 package com.paohaijiao.javelin.factory;
 
 import com.paohaijiao.javelin.context.JBeanProvider;
-import com.paohaijiao.javelin.context.service.JProxyEnhancedBeanContainer;
-import com.paohaijiao.javelin.context.service.JSimpleBeanContainer;
+import com.paohaijiao.javelin.context.service.JProxyEnhancedBeanProvider;
+import com.paohaijiao.javelin.context.service.JSimpleBeanProvider;
 
 import java.util.Properties;
 
@@ -14,10 +14,10 @@ public class JBeanProviderFactory {
         String mode = config.getProperty("bean.container.mode", "simple");
         switch (mode.toLowerCase()) {
             case "proxy":
-                return new JProxyEnhancedBeanContainer();
+                return new JProxyEnhancedBeanProvider();
             case "simple":
             default:
-                return new JSimpleBeanContainer();
+                return new JSimpleBeanProvider();
         }
     }
 

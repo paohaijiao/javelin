@@ -17,6 +17,14 @@ public interface JBeanProvider {
     <T> T getBean(String beanName, Class<T> requiredType);
 
     /**
+     *
+     * @param requiredType
+     * @return
+     * @param <T>
+     */
+    <T> T getBean( Class<T> requiredType);
+
+    /**
      * Add Bean PostProcessor
      */
     void addBeanPostProcessor(JBeanPostProcessor processor);

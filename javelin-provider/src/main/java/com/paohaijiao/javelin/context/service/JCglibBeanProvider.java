@@ -5,8 +5,7 @@ import com.paohaijiao.javelin.context.JCglibMethodInterceptor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-public class JCglibBeanContainer extends JSimpleBeanContainer {
-    // storage bean interceptor
+public class JCglibBeanProvider extends JSimpleBeanProvider {
     private final Map<String, JCglibMethodInterceptor> interceptors = new ConcurrentHashMap<>();
 
     /**

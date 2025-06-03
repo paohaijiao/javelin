@@ -8,12 +8,10 @@ public class JunitTest {
 
     @Test
     public void testInheritedEventTypes() {
-
         JEventSupportedApplicationContext context = new JEventSupportedApplicationContext(
-                "org.paohaijiao.jstark.test"
+                "com.paohaijiao.javelin.test"
         );
         System.out.println("Registered beans: " );
-
         ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
         context.publishEvent(new AnotherTestEvent(context, "Child Message"));
     }
