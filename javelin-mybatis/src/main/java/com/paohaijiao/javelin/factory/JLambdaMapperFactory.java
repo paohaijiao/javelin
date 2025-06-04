@@ -12,6 +12,7 @@ public class JLambdaMapperFactory {
     }
 
     public <T> JLambdaMapper<T> createMapper(Class<T> entityClass) {
-        return new JLambdaMapperImpl<>(entityClass, sqlSessionFactory.openSession());
+        //return new JLambdaMapperImpl<>(entityClass, sqlSessionFactory.openSession());
+        return new JLambdaMapperImpl<>(entityClass, null);
     }
 }
