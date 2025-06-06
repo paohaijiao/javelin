@@ -68,6 +68,11 @@
         <version>${javelin.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.paohaijiao.javelin</groupId>
+        <artifactId>javelin-resource</artifactId>
+        <version>${javelin.version}</version>
+      </dependency>
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
@@ -106,7 +111,7 @@
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <version>1.18.24</version>
+        <version>${lombok.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -181,5 +186,11 @@
     </dependencies>
 
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
