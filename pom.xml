@@ -34,6 +34,7 @@
     <yaml.version>2.4</yaml.version>
     <junit.version>4.11</junit.version>
     <javelin.version>1.0.0</javelin.version>
+    <poi.version>5.2.3</poi.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -182,6 +183,16 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>${poi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>${poi.version}</version>
       </dependency>
     </dependencies>
 
