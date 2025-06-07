@@ -365,4 +365,97 @@ public class ReflectionUtils {
                 .filter(clazz -> clazz.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toSet());
     }
+    /**
+     * 根据包名和类名加载类并创建实例
+     * @param packageName 包名
+     * @param className 类名
+     * @param constructorArgs 构造参数
+     * @return 对象实例
+     */
+    public static Object createInstance(String packageName, String className, Object... constructorArgs) {
+        try {
+            Class<?> clazz = Class.forName(packageName + "." + className);
+            return ReflectionUtils.newInstance(clazz, constructorArgs);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("类未找到: " + packageName + "." + className, e);
+        }
+    }
+    /**
+     * 动态调用方法
+     * @param packageName 包名
+     * @param className 类名
+     * @param methodName 方法名
+     * @param methodArgs 方法参数
+     * @param constructorArgs 构造参数(用于创建实例)
+     * @return 方法调用结果
+     */
+    public static Object invokeMethod(String packageName, String className,
+                                      String methodName, Object[] methodArgs,
+                                      Object... constructorArgs) {
+        // 创建实例
+        Object instance = createInstance(packageName, className, constructorArgs);
+        // 调用方法
+        return ReflectionUtils.invokeMethod(instance, methodName, methodArgs);
+    }
+    public static Object preciseInvokeMethod(String packageName, String className,
+                                             String methodName, Object[] methodArgs,
+                                             Class<?>[] parameterTypes,
+                                             Object... constructorArgs) {
+        try {
+            Class<?> clazz = Class.forName(packageName + "." + className);
+            Object instance = constructorArgs != null && constructorArgs.length > 0
+                    ? ReflectionUtils.newInstance(clazz, constructorArgs)
+                    : clazz.newInstance();
+
+            Method method = ReflectionUtils.getDeclaredMethod(clazz, methodName, parameterTypes);
+            method.setAccessible(true);
+            return method.invoke(instance, methodArgs);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("方法调用失败", e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getPackageName(String fullClassName) {
+        if (fullClassName == null || fullClassName.isEmpty()) {
+            throw new IllegalArgumentException("类名不能为空");
+        }
+
+        int lastDotIndex = fullClassName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return null;
+        }
+
+        String packageName = fullClassName.substring(0, lastDotIndex);
+        return packageName;
+    }
+    public static String getClassName(String fullClassName) {
+        if (fullClassName == null || fullClassName.isEmpty()) {
+            throw new IllegalArgumentException("类名不能为空");
+        }
+        int lastDotIndex = fullClassName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            // 没有包名的情况
+            return fullClassName;
+        }
+
+        String className = fullClassName.substring(lastDotIndex + 1);
+        return className;
+    }
+
+
+
+    public static void main(String[] args) {
+        //  调用无参构造和无参方法
+        Object result = invokeMethod("com.example", "MyClass", "myMethod", null);
+        //  调用有参构造和有参方法
+        Object[] methodArgs = new Object[]{"param1", 123};
+        Object[] constructorArgs = new Object[]{"initValue"};
+        Object result1 = invokeMethod("com.example", "MyClass", "myMethod", methodArgs, constructorArgs);
+        Object[] methodArgs1 = new Object[]{"param1", 123};
+        Class<?>[] paramTypes = new Class<?>[]{String.class, int.class};
+        Object result2 = preciseInvokeMethod("com.example", "MyClass", "processData",
+                methodArgs, paramTypes);
+    }
 }
