@@ -42,6 +42,10 @@
             <artifactId>antlr4</artifactId>
             <scope>provided</scope> <!-- 或者使用compile，取决于你的构建配置 -->
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-all</artifactId>
+            <version>1.16</version>
+        </dependency>
     </dependencies>
 </project>
