@@ -1,5 +1,5 @@
 package com.paohaijiao.javelin.i18n.conf;
-import java.util.Locale;
+
 import java.util.Objects;
 import java.util.ResourceBundle;
 public class ResourceBundleConfig {

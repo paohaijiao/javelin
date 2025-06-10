@@ -3,7 +3,7 @@ package com.paohaijiao.javelin.util;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 public class LambdaUtils {
     private LambdaUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");

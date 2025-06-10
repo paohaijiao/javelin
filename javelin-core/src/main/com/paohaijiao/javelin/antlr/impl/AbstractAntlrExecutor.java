@@ -1,10 +1,10 @@
 package com.paohaijiao.javelin.antlr.impl;
 
-import org.antlr.v4.runtime.*;
 import com.paohaijiao.javelin.antlr.AntlrErrorListener;
 import com.paohaijiao.javelin.antlr.AntlrExecutor;
 import com.paohaijiao.javelin.exception.AntlrError;
 import com.paohaijiao.javelin.exception.AntlrExecutionException;
+import org.antlr.v4.runtime.*;
 
 import java.io.IOException;
 import java.io.InputStream;

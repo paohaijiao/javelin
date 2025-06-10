@@ -1,7 +1,8 @@
 package com.paohaijiao.javelin.context.service;
-import net.sf.cglib.proxy.Enhancer;
+
 import com.paohaijiao.javelin.bean.JBeanDefinition;
 import com.paohaijiao.javelin.context.JCglibMethodInterceptor;
+import net.sf.cglib.proxy.Enhancer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

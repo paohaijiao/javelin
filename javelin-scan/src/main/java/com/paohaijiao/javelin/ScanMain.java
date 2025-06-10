@@ -1,9 +1,7 @@
 package com.paohaijiao.javelin;
 
 import com.paohaijiao.javelin.context.JAnnotationConfigApplicationContext;
-import com.paohaijiao.javelin.service.UserRepository;
 import com.paohaijiao.javelin.service.UserRule;
-import com.paohaijiao.javelin.service.UserService;
 
 public class ScanMain {
     public static void main(String[] args) {

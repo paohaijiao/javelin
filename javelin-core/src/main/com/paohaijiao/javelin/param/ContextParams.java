@@ -1,7 +1,6 @@
 package com.paohaijiao.javelin.param;
 
 import java.util.*;
-import java.util.Map;
 
 public class ContextParams implements Map<String, Object> {
 

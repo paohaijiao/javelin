@@ -1,7 +1,5 @@
 package com.paohaijiao.javelin.test;
 
-import lombok.Data;
-
 public class ServerConfig {
     private int port;
     private String name;

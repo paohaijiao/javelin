@@ -1,15 +1,12 @@
 package com.paohaijiao.javelin.context.service;
+
 import com.paohaijiao.javelin.anno.JAutowired;
 import com.paohaijiao.javelin.bean.JBeanDefinition;
-import com.paohaijiao.javelin.context.JBeanProvider;
 import com.paohaijiao.javelin.context.JBeanPostProcessor;
-import com.paohaijiao.javelin.context.JMethodInterceptor;
+import com.paohaijiao.javelin.context.JBeanProvider;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvider {
 
 

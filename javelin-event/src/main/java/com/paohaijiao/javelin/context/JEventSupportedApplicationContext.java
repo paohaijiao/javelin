@@ -4,7 +4,6 @@ import com.paohaijiao.javelin.anno.JEventListener;
 import com.paohaijiao.javelin.event.JApplicationEvent;
 import com.paohaijiao.javelin.publisher.JEventPublisher;
 
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;

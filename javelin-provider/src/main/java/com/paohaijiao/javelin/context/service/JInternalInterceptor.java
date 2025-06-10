@@ -1,8 +1,8 @@
 package com.paohaijiao.javelin.context.service;
 
+import com.paohaijiao.javelin.context.JCglibMethodInterceptor;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import com.paohaijiao.javelin.context.JCglibMethodInterceptor;
 
 import java.lang.reflect.Method;
 

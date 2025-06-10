@@ -1,7 +1,6 @@
 package com.paohaijiao.javelin.core;
 
 import com.paohaijiao.javelin.function.JSFunction;
-import com.paohaijiao.javelin.mapper.JLambdaQuery;
 import com.paohaijiao.javelin.mapper.JLambdaUpdate;
 import com.paohaijiao.javelin.session.JSqlSession;
 

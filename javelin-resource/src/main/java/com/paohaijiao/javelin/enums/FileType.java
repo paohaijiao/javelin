@@ -1,8 +1,8 @@
 package com.paohaijiao.javelin.enums;
 
-import lombok.Getter;
 import com.paohaijiao.javelin.reader.impl.JResourcePropertiesReader;
 import com.paohaijiao.javelin.reader.impl.JResourceYamlReader;
+import lombok.Getter;
 @Getter
 public enum FileType {
     YAML("yaml", JResourceYamlReader.class), PROPERTIES("properties", JResourcePropertiesReader.class);

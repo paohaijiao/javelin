@@ -1,8 +1,8 @@
 package com.paohaijiao.javelin.test;
 
-import lombok.Data;
 import com.paohaijiao.javelin.anno.JColumn;
 import com.paohaijiao.javelin.anno.JTable;
+import lombok.Data;
 
 @JTable("user")
 @Data
