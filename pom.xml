@@ -208,6 +208,10 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.paohaijiao.javelin</groupId>
+      <artifactId>javelin-scan</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
