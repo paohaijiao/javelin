@@ -43,7 +43,6 @@ public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
 
     @Override
     public JLambdaUpdate<T> update() {
-//        return new LambdaUpdateImpl<>(entityClass, sqlSession);
-        return null;
+        return new LambdaUpdateImpl<>(entityClass, sqlSession);
     }
 }
