@@ -7,6 +7,7 @@ import com.paohaijiao.javelin.mapper.JLambdaQuery;
 import com.paohaijiao.javelin.session.JSqlSession;
 import com.paohaijiao.javelin.util.JStringUtils;
 
+import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -19,7 +20,14 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         this.entityClass = entityClass;
         this.sqlSession = sqlSession;
     }
-
+    public T selectById(Serializable id){
+        String selectSql = "select * from  %s  where %s = %s";
+        String tableName = getTableName();
+        String idClause=this.getIdFieldName();
+        String sql=String.format(selectSql, tableName, idClause,id);
+        System.out.println(sql);
+        return null;
+    }
     @Override
     public JLambdaQuery<T> eq(JSFunction<T, ?> column, Object value) {
         conditions.add(new JCondition(getColumnName(column), "=", value));
@@ -96,7 +104,7 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         return 0;
     }
 
-    private String getColumnName(JSFunction<T, ?> column) {
+    protected String getColumnName(JSFunction<T, ?> column) {
         try {
             Method writeReplace = column.getClass().getDeclaredMethod("writeReplace");
             writeReplace.setAccessible(true);

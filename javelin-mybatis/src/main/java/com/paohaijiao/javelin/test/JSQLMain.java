@@ -16,19 +16,22 @@ public class JSQLMain {
         JSqlSessionFactory sqlSessionFactory =new DefaultSqlSessionFactory(null,map);
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
         JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
-        List<JUser> users = userMapper.query()
-                .eq(JUser::getName, "张三")
-//                .gt(User::getAge, 18)
-//                .orderByDesc(User::getAge)
-                .list();
+//        List<JUser> users = userMapper.query()
+//                .eq(JUser::getName, "张三")
+////                .gt(User::getAge, 18)
+////                .orderByDesc(User::getAge)
+//                .list();
 
-        int affected = userMapper.update()
-                .set(JUser::getAge, 25)
-                .eq(JUser::getId, 1L)
-                .execute();
+//        int affected = userMapper.update()
+//                .set(JUser::getAge, 25)
+//                .set(JUser::getId, 25)
+//                .set(JUser::getName, 25)
+//                .eq(JUser::getId, 1L)
+//                .execute();
         JUser newUser = new JUser();
-//    newUser.setName("李四");
-//    newUser.setAge(30);
-//    userMapper.insert(newUser);
+        newUser.setName("李四");
+        newUser.setAge(30);
+        newUser.setId(1L);
+        userMapper.selectById(1);
     }
 }

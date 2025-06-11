@@ -4,10 +4,14 @@ import com.paohaijiao.javelin.anno.JColumn;
 import com.paohaijiao.javelin.anno.JTable;
 import com.paohaijiao.javelin.bean.JCondition;
 import com.paohaijiao.javelin.bean.JOrder;
+import com.paohaijiao.javelin.function.JSFunction;
 import com.paohaijiao.javelin.session.JSqlSession;
 import com.paohaijiao.javelin.util.JStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,34 @@ public abstract class JLambdaBaseImpl<T>{
     protected JSqlSession sqlSession;
     protected final List<JCondition> conditions = new ArrayList<>();
     protected final List<JOrder> orders = new ArrayList<>();
+    protected String getColumnName(Field field) {
+        JColumn columnAnnotation = field.getAnnotation(JColumn.class);
+        return columnAnnotation != null && !columnAnnotation.value().isEmpty()
+                ? columnAnnotation.value()
+                : JStringUtils.camelToUnderline(field.getName());
+    }
+
+    protected String getColumnName(JSFunction<T, ?> column) {
+        try {
+            Method writeReplace = column.getClass().getDeclaredMethod("writeReplace");
+            writeReplace.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(column);
+            String methodName = lambda.getImplMethodName();
+            if (methodName.startsWith("get")) {
+                methodName = methodName.substring(3);
+            } else if (methodName.startsWith("is")) {
+                methodName = methodName.substring(2);
+            }
+            String fieldName = JStringUtils.uncapitalize(methodName);
+            Field field = entityClass.getDeclaredField(fieldName);
+            JColumn columnAnnotation = field.getAnnotation(JColumn.class);
+            return columnAnnotation != null && !columnAnnotation.value().isEmpty()
+                    ? columnAnnotation.value()
+                    : JStringUtils.camelToUnderline(fieldName);
+        } catch (Exception e) {
+            throw new RuntimeException("解析Lambda表达式失败", e);
+        }
+    }
     protected String buildSelectSQL() {
         String tableName = getTableName();
         String selectFields = buildSelectFields();
@@ -31,14 +63,14 @@ public abstract class JLambdaBaseImpl<T>{
         }
         return sql.toString();
     }
-    private String getTableName() {
+    protected String getTableName() {
         JTable tableAnnotation = entityClass.getAnnotation(JTable.class);
         if (tableAnnotation != null && !tableAnnotation.value().isEmpty()) {
             return tableAnnotation.value();
         }
         return JStringUtils.camelToUnderline(entityClass.getSimpleName());
     }
-    private String buildSelectFields() {
+    protected String buildSelectFields() {
         Field[] fields = entityClass.getDeclaredFields();
         return Arrays.stream(fields)
                 .map(field -> {
@@ -50,7 +82,7 @@ public abstract class JLambdaBaseImpl<T>{
                 })
                 .collect(Collectors.joining(", "));
     }
-    private String buildWhereClause() {
+    protected String buildWhereClause() {
         if (conditions.isEmpty()) {
             return "";
         }
@@ -58,8 +90,7 @@ public abstract class JLambdaBaseImpl<T>{
                 .map(condition -> {
                     String column = condition.getColumn();
                     String operator = condition.getOperator();
-                    String paramName = "param_" + column.replace('.', '_');
-                    // 处理IN操作符特殊情况
+                    String paramName = "" + column.replace('.', '_');
                     if ("IN".equalsIgnoreCase(operator)) {
                         Collection<?> values = (Collection<?>) condition.getValue();
                         String placeholders = values.stream()
@@ -67,8 +98,6 @@ public abstract class JLambdaBaseImpl<T>{
                                 .collect(Collectors.joining(", "));
                         return column + " IN (" + placeholders + ")";
                     }
-
-                    // 处理LIKE操作符特殊情况
                     if ("LIKE".equalsIgnoreCase(operator)) {
                         return column + " LIKE CONCAT('%', #{" + paramName + "}, '%')";
                     }
@@ -92,7 +121,7 @@ public abstract class JLambdaBaseImpl<T>{
         Map<String, Object> paramMap = new HashMap<>();
         for (JCondition condition : conditions) {
             String column = condition.getColumn();
-            String paramName = "param_" + column.replace('.', '_');
+            String paramName = "" + column.replace('.', '_');
             if ("IN".equalsIgnoreCase(condition.getOperator())) {
                 Collection<?> values = (Collection<?>) condition.getValue();
                 int index = 0;
@@ -105,6 +134,20 @@ public abstract class JLambdaBaseImpl<T>{
         }
 
         return paramMap;
+    }
+    protected String getIdFieldName() {
+        Field[] fields = entityClass.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getAnnotation(JColumn.class) != null) {
+                JColumn jColumn=field.getAnnotation(JColumn.class);
+                if(jColumn.id()){
+                    String filedName=JStringUtils.camelToUnderline(field.getName());
+                    String value=jColumn.value();
+                    return StringUtils.isEmpty(value) ?filedName:jColumn.value();
+                }
+            }
+        }
+        return "id";
     }
 
 }

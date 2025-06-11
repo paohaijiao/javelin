@@ -3,7 +3,11 @@ package com.paohaijiao.javelin.mapper;
 import java.io.Serializable;
 
 public interface JLambdaMapper<T>{
-    // insert
+    /**
+     *
+     * @param entity
+     * @return
+     */
     int insert(T entity);
 
     /**
