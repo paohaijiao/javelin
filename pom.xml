@@ -13,7 +13,6 @@
     <module>javelin-resource</module>
     <module>javelin-provider</module>
     <module>javelin-scan</module>
-    <!--optional-->
     <module>javelin-mybatis</module>
     <module>javelin-event</module>
 
@@ -51,17 +50,17 @@
       </dependency>
       <dependency>
         <groupId>com.paohaijiao.javelin</groupId>
-        <artifactId>jstark-provider</artifactId>
+        <artifactId>javelin-provider</artifactId>
         <version>${javelin.version}</version>
       </dependency>
       <dependency>
         <groupId>com.paohaijiao.javelin</groupId>
-        <artifactId>jstark-scan</artifactId>
+        <artifactId>javelin-scan</artifactId>
         <version>${javelin.version}</version>
       </dependency>
       <dependency>
         <groupId>com.paohaijiao.javelin</groupId>
-        <artifactId>jstark-event</artifactId>
+        <artifactId>javelin-event</artifactId>
         <version>${javelin.version}</version>
       </dependency>
       <dependency>
