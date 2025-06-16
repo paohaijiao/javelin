@@ -5,11 +5,92 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 public class LambdaUtils {
+
     private LambdaUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
-    // ================ 基础函数工具 ================
+    /**
+     * 谓词(Predicate)工具方法 - 判断集合中是否存在满足条件的元素
+     */
+    public static <T> boolean anyMatch(Collection<T> collection, Predicate<T> predicate) {
+        return collection.stream().anyMatch(predicate);
+    }
+
+    /**
+     * 谓词(Predicate)工具方法 - 过滤集合
+     */
+    public static <T> List<T> filter(Collection<T> collection, Predicate<T> predicate) {
+        return collection.stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    /**
+     * 函数(Function)工具方法 - 映射集合
+     */
+    public static <T, R> List<R> map(Collection<T> collection, Function<T, R> mapper) {
+        return collection.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    /**
+     * 消费(Consumer)工具方法 - 对集合中每个元素执行操作
+     */
+    public static <T> void forEach(Collection<T> collection, Consumer<T> consumer) {
+        collection.forEach(consumer);
+    }
+
+    /**
+     * 分组工具方法 - 按照指定分类函数分组
+     */
+    public static <T, K> Map<K, List<T>> groupBy(Collection<T> collection, Function<T, K> classifier) {
+        return collection.stream().collect(Collectors.groupingBy(classifier));
+    }
+
+    /**
+     * 去重工具方法 - 按照指定函数提取特征去重
+     */
+    public static <T, K> List<T> distinctBy(Collection<T> collection, Function<T, K> keyExtractor) {
+        return collection.stream()
+                .filter(distinctByKey(keyExtractor))
+                .collect(Collectors.toList());
+    }
+
+    private static <T, K> Predicate<T> distinctByKey(Function<T, K> keyExtractor) {
+        Set<K> seen = new HashSet<>();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
+    /**
+     * 链式Predicate - 多个Predicate的与操作
+     */
+    @SafeVarargs
+    public static <T> Predicate<T> and(Predicate<T>... predicates) {
+        return Arrays.stream(predicates).reduce(Predicate::and).orElse(t -> true);
+    }
+
+    /**
+     * 链式Predicate - 多个Predicate的或操作
+     */
+    @SafeVarargs
+    public static <T> Predicate<T> or(Predicate<T>... predicates) {
+        return Arrays.stream(predicates).reduce(Predicate::or).orElse(t -> false);
+    }
+
+    /**
+     * 将BiFunction转换为带两个参数的Function
+     */
+    public static <T, U, R> Function<T, Function<U, R>> curry(BiFunction<T, U, R> biFunction) {
+        return t -> u -> biFunction.apply(t, u);
+    }
+
+    /**
+     * 将两个Consumer组合成一个BiConsumer
+     */
+    public static <T, U> BiConsumer<T, U> toBiConsumer(Consumer<T> first, Consumer<U> second) {
+        return (t, u) -> {
+            first.accept(t);
+            second.accept(u);
+        };
+    }
 
     /**
      * 将多个 Consumer 组合成一个
@@ -20,7 +101,6 @@ public class LambdaUtils {
     }
 
 
-
     /**
      * 创建一个带缓存的 Supplier
      */
@@ -28,7 +108,6 @@ public class LambdaUtils {
         return new Supplier<T>() {
             private volatile boolean initialized;
             private T value;
-
             @Override
             public T get() {
                 if (!initialized) {
@@ -44,7 +123,6 @@ public class LambdaUtils {
         };
     }
 
-    // ================ 集合操作增强 ================
 
     /**
      * 将两个集合按索引合并
@@ -101,8 +179,6 @@ public class LambdaUtils {
         };
     }
 
-    // ================ 异常处理 ================
-
     /**
      * 将可能抛出异常的 Function 包装为安全的
      */
@@ -139,8 +215,6 @@ public class LambdaUtils {
         T get() throws Exception;
     }
 
-    // ================ 计时操作 ================
-
     /**
      * 带计时的 Runnable
      */
@@ -163,8 +237,6 @@ public class LambdaUtils {
             return result;
         };
     }
-
-    // ================ 其他实用方法 ================
 
     /**
      * 重试操作
@@ -200,14 +272,5 @@ public class LambdaUtils {
             executor.shutdownNow();
         }
     }
-
-
-
-
-
-
-
-
-
 
 }

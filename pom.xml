@@ -44,7 +44,7 @@
         <version>${javelin.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.paohaijiao.jstark</groupId>
+        <groupId>com.paohaijiao.javelin</groupId>
         <artifactId>javelin-core</artifactId>
         <version>${javelin.version}</version>
       </dependency>
