@@ -13,13 +13,13 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.datasource;
+package com.paohaijiao.javelin.model;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import lombok.Data;
 
-public interface JPoolDataSource {
-
-    public Connection getConnection() throws SQLException;
-
+@Data
+public class JCondition {
+    private final String column;
+    private final String operator;
+    private final Object value;
 }

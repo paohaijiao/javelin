@@ -13,13 +13,42 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.datasource;
+package com.paohaijiao.javelin.model;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import lombok.Data;
 
-public interface JPoolDataSource {
+@Data
+public class JDataSourceBean<T extends JDataSourceExtract> {
+    /**
+     * driver
+     */
+    private String driver;
+    /**
+     *
+     */
+    private String ip;
+    /**
+     *
+     */
+    private String port;
 
-    public Connection getConnection() throws SQLException;
+    private String schema;
+
+    private String database;
+
+    private String url;
+    /**
+     * username
+     */
+    private String username;
+    /**
+     * password
+     */
+    private String password;
+
+    private T extract;
+
+    private JDruid druid;
+
 
 }

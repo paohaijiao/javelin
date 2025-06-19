@@ -13,13 +13,8 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.datasource;
+package com.paohaijiao.javelin.model;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-public interface JPoolDataSource {
-
-    public Connection getConnection() throws SQLException;
+public class JDataSourceExtract {
 
 }
