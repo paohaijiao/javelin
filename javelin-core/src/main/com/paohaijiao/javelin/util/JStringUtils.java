@@ -13,16 +13,15 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.util;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import lombok.Data;
+public class JStringUtils {
 
-import java.util.List;
-@Data
-public class JMethodCallModel {
-
-    private JMethodEnums method;
-
-    private List<Object> list;
+    public static String trim(String str) {
+        if(null==str || "".equals(str)) {
+            return str;
+        }
+        String newStr = str.replaceAll("^['\"]|['\"]$", "");
+        return newStr;
+    }
 }

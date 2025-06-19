@@ -13,16 +13,22 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.exception;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import lombok.Data;
-
-import java.util.List;
-@Data
-public class JMethodCallModel {
-
-    private JMethodEnums method;
-
-    private List<Object> list;
+/**
+ * packageName com.paohaijiao.javelin.exception
+ *
+ * @author Martin
+ * @version 1.0.0
+ * @className JI18NException
+ * @date 2025/6/19
+ * @description
+ */
+public class JI18NException extends RuntimeException{
+    public JI18NException(String message) {
+        super(message);
+    }
+    public JI18NException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

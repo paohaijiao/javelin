@@ -1,3 +1,18 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
+ */
 package com.paohaijiao.javelin.evalue;
 
 import com.paohaijiao.javelin.enums.JMethodEnums;
@@ -17,7 +32,6 @@ public class JEvaluator {
     private static final Map<String, Object> FUNCTION_REGISTRY = new HashMap<>();
 
     static {
-        // Single Parameter
         FUNCTION_REGISTRY.put(JMethodEnums.length.getMethod(), JFunction.LENGTH);
         FUNCTION_REGISTRY.put(JMethodEnums.toInteger.getMethod(), (Function<Object, Object>) obj -> Integer.valueOf(obj.toString()));
         FUNCTION_REGISTRY.put(JMethodEnums.toString.getMethod(), (Function<Object, Object>) obj -> String.valueOf(obj.toString()));
@@ -27,7 +41,6 @@ public class JEvaluator {
         FUNCTION_REGISTRY.put(JMethodEnums.toUpper.getMethod(), (Function<Object, Object>) obj -> obj.toString().toUpperCase());
         FUNCTION_REGISTRY.put(JMethodEnums.ceil.getMethod(), (Function<Object, Object>) obj -> Math.ceil(((Number) obj).doubleValue()));
         FUNCTION_REGISTRY.put(JMethodEnums.floor.getMethod(), (Function<Object, Object>) obj -> Math.floor(((Number) obj).doubleValue()));
-        // Double Parameter
         FUNCTION_REGISTRY.put(JMethodEnums.contains.getMethod(), JFunction.CONTAINS);
         FUNCTION_REGISTRY.put(JMethodEnums.join.getMethod(), JFunction.JOIN);
         FUNCTION_REGISTRY.put(JMethodEnums.split.getMethod(), JFunction.SPLIT);
@@ -45,7 +58,6 @@ public class JEvaluator {
                     int scale = ((Number) precision).intValue();
                     return BigDecimal.valueOf(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
                 });
-        // list Parameter Functions
         FUNCTION_REGISTRY.put(JMethodEnums.sum.getMethod(), JFunction.SUM);
         FUNCTION_REGISTRY.put(JMethodEnums.max.getMethod(), JFunction.MAX);
         FUNCTION_REGISTRY.put(JMethodEnums.min.getMethod(), JFunction.MIN);

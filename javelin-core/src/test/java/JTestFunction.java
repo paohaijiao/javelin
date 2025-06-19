@@ -1,6 +1,6 @@
 import com.paohaijiao.javelin.enums.JMethodEnums;
 import com.paohaijiao.javelin.evalue.JEvaluator;
-import com.paohaijiao.javelin.param.ContextParams;
+import com.paohaijiao.javelin.param.JContext;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -143,7 +143,7 @@ public class JTestFunction {
     }
     @Test
     public void testTrans() throws IOException {
-        ContextParams contextParams = new ContextParams();
+        JContext contextParams = new JContext();
         contextParams.put("1","男");
         contextParams.put("2","女");
         List<Object> args = new ArrayList<>();

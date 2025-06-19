@@ -1,6 +1,21 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
+ */
 package com.paohaijiao.javelin.function;
-import com.paohaijiao.javelin.exception.Assert;
-import com.paohaijiao.javelin.param.ContextParams;
+
+import com.paohaijiao.javelin.exception.JAssert;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -15,7 +30,7 @@ public class JFunction {
             return ((String) obj).length();
         } else if (obj instanceof List) {
             return ((List<?>) obj).size();
-        }else if (obj.getClass().isArray()) {
+        } else if (obj.getClass().isArray()) {
             return Array.getLength(obj);
         }
         throw new IllegalArgumentException("Unsupported type for length(): " + obj.getClass());
@@ -27,43 +42,43 @@ public class JFunction {
         throw new IllegalArgumentException("Invalid arguments for contains()");
     };
     public static final BiFunction<Object, Object, Object> JOIN = (list, delimiter) -> {
-        Assert.isTrue(list instanceof List, "parameter 1 must be a list");
+        JAssert.isTrue(list instanceof List, "parameter 1 must be a list");
         return ((List<?>) list).stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(delimiter.toString()));
     };
     public static final BiFunction<Object, Object, Object> SPLIT = (string, delimiter) -> {
-        Assert.isTrue(string instanceof String, "parameter 1 must be a string");
-        String[] str=((String) string).split(delimiter.toString());
+        JAssert.isTrue(string instanceof String, "parameter 1 must be a string");
+        String[] str = ((String) string).split(delimiter.toString());
         List<String> data = Arrays.asList(str);
         return data;
     };
     public static final BiFunction<Object, Object, Object> TRANS = (context, key) -> {
-        Assert.notNull(key, "parameter 2 must not be null");
-        Assert.isTrue(context instanceof HashMap, "parameter 1 must be initialized in the ContextParam's map");
-        Object object=((HashMap) context).get(key.toString());
+        JAssert.notNull(key, "parameter 2 must not be null");
+        JAssert.isTrue(context instanceof HashMap, "parameter 1 must be initialized in the ContextParam's map");
+        Object object = ((HashMap) context).get(key.toString());
         return object;
     };
-    public static final BiFunction<Date, String, String> DATEFORMAT  = (date, format) -> {
-        Assert.notNull(date, "date  must not be null");
-        Assert.notNull(format, "format  must not be null");
-        Assert.isTrue(date instanceof Date, "parameter 1 must be a date");
-        Assert.isTrue(format instanceof String, "parameter 2 must be a date");
-        Date d=(Date) date;
-        SimpleDateFormat sdf=new SimpleDateFormat(format);
+    public static final BiFunction<Date, String, String> DATEFORMAT = (date, format) -> {
+        JAssert.notNull(date, "date  must not be null");
+        JAssert.notNull(format, "format  must not be null");
+        JAssert.isTrue(date instanceof Date, "parameter 1 must be a date");
+        JAssert.isTrue(format instanceof String, "parameter 2 must be a date");
+        Date d = (Date) date;
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(d);
     };
-    public static final BiFunction<String, String, Date> parseToDate  = (dateStr, format) -> {
-        Assert.notNull(dateStr, "dateStr  must not be null");
-        Assert.notNull(format, "format  must not be null");
-        Assert.isTrue(dateStr instanceof String, "parameter 1 must be a String");
-        Assert.isTrue(format instanceof String, "parameter 2 must be a date");
-        SimpleDateFormat sdf=new SimpleDateFormat(format);
-        try{
+    public static final BiFunction<String, String, Date> parseToDate = (dateStr, format) -> {
+        JAssert.notNull(dateStr, "dateStr  must not be null");
+        JAssert.notNull(format, "format  must not be null");
+        JAssert.isTrue(dateStr instanceof String, "parameter 1 must be a String");
+        JAssert.isTrue(format instanceof String, "parameter 2 must be a date");
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        try {
             return sdf.parse(dateStr);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Assert.throwNewException( "parse date failed");
+            JAssert.throwNewException("parse date failed");
             return null;
         }
     };
@@ -124,7 +139,7 @@ public class JFunction {
         String str = args.get(0).toString();
         int start = ((Number) args.get(1)).intValue();
         int step = ((Number) args.get(2)).intValue();
-        return str.substring(start, start+step);
+        return str.substring(start, start + step);
     };
     public static final Function<List<Object>, Object> REPLACE = args -> {
         if (args.size() < 3) {
@@ -135,10 +150,6 @@ public class JFunction {
         String replaceString = args.get(2).toString();
         return str.replace(searchString, replaceString);
     };
-
-
-
-
 
 
 }

@@ -1,4 +1,3 @@
-package com.paohaijiao.javelin.enums;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +13,8 @@ package com.paohaijiao.javelin.enums;
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-import com.paohaijiao.javelin.exception.Assert;
+package com.paohaijiao.javelin.enums;
+import com.paohaijiao.javelin.exception.JAssert;
 
 public enum JOperatorEnums {
     GREATER_THAN(">"),
@@ -40,7 +40,7 @@ public enum JOperatorEnums {
                 return jOperatorEnums;
             }
         }
-        Assert.throwNewException("No JOperatorEnums found for symbol " + symbol);
+        JAssert.throwNewException("No JOperatorEnums found for symbol " + symbol);
         return null;
     }
 

@@ -1,4 +1,3 @@
-package com.paohaijiao.javelin.constants;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +13,10 @@ package com.paohaijiao.javelin.constants;
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-public class Constants {
+package com.paohaijiao.javelin.antlr;
 
-    public static final String dateTime = "yyyy-MM-dd HH:mm:ss";
+import com.paohaijiao.javelin.exception.JAntlrError;
 
-    public static final String date = "yyyy-MM-dd";
-
+public interface JAntlrErrorListener {
+    void onError(JAntlrError error);
 }

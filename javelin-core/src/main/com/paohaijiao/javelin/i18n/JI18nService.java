@@ -13,16 +13,13 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.i18n;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import lombok.Data;
+public interface JI18nService {
 
-import java.util.List;
-@Data
-public class JMethodCallModel {
+    String getMessage(String key);
 
-    private JMethodEnums method;
+    String getMessage(String key, Object... args);
 
-    private List<Object> list;
+    String getLanguage();
 }

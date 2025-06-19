@@ -13,16 +13,8 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.enums;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import lombok.Data;
-
-import java.util.List;
-@Data
-public class JMethodCallModel {
-
-    private JMethodEnums method;
-
-    private List<Object> list;
+public enum JLogLevel {
+    DEBUG, INFO, WARN, ERROR
 }

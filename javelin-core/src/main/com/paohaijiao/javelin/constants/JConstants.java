@@ -13,16 +13,12 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.constants;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import lombok.Data;
+public class JConstants {
 
-import java.util.List;
-@Data
-public class JMethodCallModel {
+    public static final String dateTime = "yyyy-MM-dd HH:mm:ss";
 
-    private JMethodEnums method;
+    public static final String date = "yyyy-MM-dd";
 
-    private List<Object> list;
 }

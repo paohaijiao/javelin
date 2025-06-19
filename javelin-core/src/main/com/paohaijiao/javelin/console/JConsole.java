@@ -1,10 +1,25 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
+ */
 package com.paohaijiao.javelin.console;
-import com.paohaijiao.javelin.enums.JStarkLogLevel;
+import com.paohaijiao.javelin.enums.JLogLevel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-public class Console {
-    // ANSI color Code
+public class JConsole {
+
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_DEBUG = "\u001B[36m"; // light green
     private static final String ANSI_INFO = "\u001B[32m";  // green
@@ -12,14 +27,15 @@ public class Console {
     private static final String ANSI_ERROR = "\u001B[31m"; // red
 
     private boolean showTimestamp;
+
     private DateTimeFormatter timestampFormatter;
 
-    public Console(boolean showTimestamp) {
+    public JConsole(boolean showTimestamp) {
         this.showTimestamp = showTimestamp;
         this.timestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     }
 
-    public Console() {
+    public JConsole() {
         this(true);
     }
 
@@ -27,20 +43,19 @@ public class Console {
         return LocalDateTime.now().format(timestampFormatter);
     }
 
-    public void log(JStarkLogLevel level, String message) {
+    public void log(JLogLevel level, String message) {
         String timestamp = showTimestamp ? "[" + getTimestamp() + "] " : "";
         String color = getColorCode(level);
         String levelName = level.name();
-
         System.out.println(timestamp + color + "[" + levelName + "] " + message + ANSI_RESET);
     }
 
-    public void log(JStarkLogLevel level, String message, Throwable throwable) {
+    public void log(JLogLevel level, String message, Throwable throwable) {
         log(level, message);
         throwable.printStackTrace(System.out);
     }
 
-    private String getColorCode(JStarkLogLevel level) {
+    private String getColorCode(JLogLevel level) {
         switch (level) {
             case DEBUG: return ANSI_DEBUG;
             case INFO: return ANSI_INFO;
@@ -51,27 +66,27 @@ public class Console {
     }
 
     public void debug(String message) {
-        log(JStarkLogLevel.DEBUG, message);
+        log(JLogLevel.DEBUG, message);
     }
 
     public void info(String message) {
-        log(JStarkLogLevel.INFO, message);
+        log(JLogLevel.INFO, message);
     }
 
     public void warn(String message) {
-        log(JStarkLogLevel.WARN, message);
+        log(JLogLevel.WARN, message);
     }
 
     public void error(String message) {
-        log(JStarkLogLevel.ERROR, message);
+        log(JLogLevel.ERROR, message);
     }
 
     public void error(String message, Throwable throwable) {
-        log(JStarkLogLevel.ERROR, message, throwable);
+        log(JLogLevel.ERROR, message, throwable);
     }
 
     public static void main(String[] args) {
-        Console console = new Console();
+        JConsole console = new JConsole();
         console.debug("hello");
         console.info("hello");
         console.warn("hello");

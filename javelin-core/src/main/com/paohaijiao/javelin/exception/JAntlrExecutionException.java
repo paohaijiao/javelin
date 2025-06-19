@@ -13,16 +13,12 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.model;
+package com.paohaijiao.javelin.exception;
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
 import lombok.Data;
 
 import java.util.List;
 @Data
-public class JMethodCallModel {
-
-    private JMethodEnums method;
-
-    private List<Object> list;
+public class JAntlrExecutionException extends RuntimeException{
+    private final List<JAntlrError> errors;
 }

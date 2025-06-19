@@ -1,6 +1,6 @@
 package com.paohaijiao.javelin.enums;
 
-public enum JStarkSqlType {
+public enum JSQLType {
     MYSQL("MySQL","MySQL"),
     ORACLE("Oracle","Oracle"),
     POSTGRESQL("PostgreSQL","PostgreSQL"),
@@ -11,7 +11,7 @@ public enum JStarkSqlType {
     private final String code;
     private final String name;
 
-    JStarkSqlType(String code,String name) {
+    JSQLType(String code, String name) {
         this.code = code;
         this.name = name;
     }

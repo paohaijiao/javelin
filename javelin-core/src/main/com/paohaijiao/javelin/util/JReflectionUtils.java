@@ -1,6 +1,6 @@
 package com.paohaijiao.javelin.util;
 
-import com.paohaijiao.javelin.exception.Assert;
+import com.paohaijiao.javelin.exception.JAssert;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReflectionUtils {
+public class JReflectionUtils {
     /**
      * 创建对象实例
      *
@@ -377,7 +377,7 @@ public class ReflectionUtils {
     public static Object createInstance(String packageName, String className, Object... constructorArgs) {
         try {
             Class<?> clazz = Class.forName(packageName + "." + className);
-            return ReflectionUtils.newInstance(clazz, constructorArgs);
+            return JReflectionUtils.newInstance(clazz, constructorArgs);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("类未找到: " + packageName + "." + className, e);
         }
@@ -397,7 +397,7 @@ public class ReflectionUtils {
         // 创建实例
         Object instance = createInstance(packageName, className, constructorArgs);
         // 调用方法
-        return ReflectionUtils.invokeMethod(instance, methodName, methodArgs);
+        return JReflectionUtils.invokeMethod(instance, methodName, methodArgs);
     }
     public static Object preciseInvokeMethod(String packageName, String className,
                                              String methodName, Object[] methodArgs,
@@ -406,10 +406,10 @@ public class ReflectionUtils {
         try {
             Class<?> clazz = Class.forName(packageName + "." + className);
             Object instance = constructorArgs != null && constructorArgs.length > 0
-                    ? ReflectionUtils.newInstance(clazz, constructorArgs)
+                    ? JReflectionUtils.newInstance(clazz, constructorArgs)
                     : clazz.newInstance();
 
-            Method method = ReflectionUtils.getDeclaredMethod(clazz, methodName, parameterTypes);
+            Method method = JReflectionUtils.getDeclaredMethod(clazz, methodName, parameterTypes);
             method.setAccessible(true);
             return method.invoke(instance, methodArgs);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -465,15 +465,15 @@ public class ReflectionUtils {
             return new HashMap<>();
         }
         Map<String, Object> fieldMap = new HashMap<>();
-        List<Field> fields = ReflectionUtils.getAllFields(obj.getClass());
+        List<Field> fields = JReflectionUtils.getAllFields(obj.getClass());
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                Object value = ReflectionUtils.getFieldValue(obj, field.getName());
+                Object value = JReflectionUtils.getFieldValue(obj, field.getName());
                 fieldMap.put(field.getName(), value);
             } catch (Exception e) {
                 e.printStackTrace();
-                Assert.throwNewException("invalid get field and field Values");
+                JAssert.throwNewException("invalid get field and field Values");
             }
         }
         return fieldMap;
