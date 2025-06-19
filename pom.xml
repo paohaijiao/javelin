@@ -202,5 +202,11 @@
     </dependencies>
 
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
