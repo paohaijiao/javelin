@@ -10,6 +10,10 @@
     <name>javelin resource</name>
     <dependencies>
         <dependency>
+            <groupId>com.paohaijiao.javelin</groupId>
+            <artifactId>javelin-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
         </dependency>

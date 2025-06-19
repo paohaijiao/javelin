@@ -19,7 +19,6 @@ import com.paohaijiao.javelin.enums.JFileType;
 import com.paohaijiao.javelin.reader.JResourceReader;
 import com.paohaijiao.javelin.reader.impl.JResourcePropertiesReader;
 import com.paohaijiao.javelin.reader.impl.JResourceYamlReader;
-
 public class JParserFactory {
     public static <T> JResourceReader<T> createParser(JFileType fileType) {
         switch (fileType) {
