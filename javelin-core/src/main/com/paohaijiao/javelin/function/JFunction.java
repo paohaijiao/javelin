@@ -1,9 +1,10 @@
 package com.paohaijiao.javelin.function;
 import com.paohaijiao.javelin.exception.Assert;
+import com.paohaijiao.javelin.param.ContextParams;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,6 +37,35 @@ public class JFunction {
         String[] str=((String) string).split(delimiter.toString());
         List<String> data = Arrays.asList(str);
         return data;
+    };
+    public static final BiFunction<Object, Object, Object> TRANS = (context, key) -> {
+        Assert.notNull(key, "parameter 2 must not be null");
+        Assert.isTrue(context instanceof HashMap, "parameter 1 must be initialized in the ContextParam's map");
+        Object object=((HashMap) context).get(key.toString());
+        return object;
+    };
+    public static final BiFunction<Date, String, String> DATEFORMAT  = (date, format) -> {
+        Assert.notNull(date, "date  must not be null");
+        Assert.notNull(format, "format  must not be null");
+        Assert.isTrue(date instanceof Date, "parameter 1 must be a date");
+        Assert.isTrue(format instanceof String, "parameter 2 must be a date");
+        Date d=(Date) date;
+        SimpleDateFormat sdf=new SimpleDateFormat(format);
+        return sdf.format(d);
+    };
+    public static final BiFunction<String, String, Date> parseToDate  = (dateStr, format) -> {
+        Assert.notNull(dateStr, "dateStr  must not be null");
+        Assert.notNull(format, "format  must not be null");
+        Assert.isTrue(dateStr instanceof String, "parameter 1 must be a String");
+        Assert.isTrue(format instanceof String, "parameter 2 must be a date");
+        SimpleDateFormat sdf=new SimpleDateFormat(format);
+        try{
+            return sdf.parse(dateStr);
+        }catch (Exception e){
+            e.printStackTrace();
+            Assert.throwNewException( "parse date failed");
+            return null;
+        }
     };
 
 
