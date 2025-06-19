@@ -13,11 +13,12 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.test;
+package com.paohaijiao.javelin.model;
 
-public class ProviderUserServiceImpl implements ProviderUserService {
-    @Override
-    public void sayHello(String name) {
-        System.out.println("Hello " + name);
-    }
+import java.lang.reflect.Method;
+
+public interface JMethodInvocationModel {
+    Object proceed() throws Throwable;
+    Method getMethod();
+    Object[] getArguments();
 }

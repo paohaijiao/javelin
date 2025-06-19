@@ -1,5 +1,5 @@
 package com.paohaijiao.javelin.context;
-import com.paohaijiao.javelin.bean.JBeanDefinition;
+import com.paohaijiao.javelin.model.JBeanDefinitionModel;
 import com.paohaijiao.javelin.context.service.JProxyEnhancedBeanProvider;
 import com.paohaijiao.javelin.factory.JBeanProviderFactory;
 import com.paohaijiao.javelin.scan.JClassPathScanner;
@@ -27,8 +27,8 @@ public class JAnnotationConfigApplicationContext {
     private void scanAndRegisterBeans(String[] basePackages) {
         try {
             for (String basePackage : basePackages) {
-                List<JBeanDefinition> beanDefinitions = JClassPathScanner.scan(basePackage);
-                for (JBeanDefinition bd : beanDefinitions) {
+                List<JBeanDefinitionModel> beanDefinitions = JClassPathScanner.scan(basePackage);
+                for (JBeanDefinitionModel bd : beanDefinitions) {
                     String beanName = toLowerFirstCase(bd.getBeanClass().getSimpleName());
                     beanProvider.registerBeanDefinition(beanName, bd);
                     beanNames.add(beanName);

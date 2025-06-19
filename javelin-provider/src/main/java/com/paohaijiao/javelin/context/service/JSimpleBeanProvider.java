@@ -1,7 +1,22 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
+ */
 package com.paohaijiao.javelin.context.service;
 
 import com.paohaijiao.javelin.anno.JAutowired;
-import com.paohaijiao.javelin.bean.JBeanDefinition;
+import com.paohaijiao.javelin.model.JBeanDefinitionModel;
 import com.paohaijiao.javelin.context.JBeanPostProcessor;
 import com.paohaijiao.javelin.context.JBeanProvider;
 
@@ -10,12 +25,7 @@ import java.lang.reflect.Method;
 public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvider {
 
 
-
-
-
-
-
-    protected void populateBean(String beanName, JBeanDefinition bd, Object bean) {
+    protected void populateBean(String beanName, JBeanDefinitionModel bd, Object bean) {
         for (Field field : bd.getBeanClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(JAutowired.class)) {
                 try {
@@ -29,7 +39,7 @@ public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvi
         }
     }
 
-    protected void initializeBean(String beanName, JBeanDefinition bd, Object bean) {
+    protected void initializeBean(String beanName, JBeanDefinitionModel bd, Object bean) {
         if (bd.getInitMethodName() != null) {
             try {
                 Method initMethod = bd.getBeanClass().getMethod(bd.getInitMethodName());
@@ -40,7 +50,7 @@ public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvi
         }
     }
 
-    protected Object resolveBeforeInstantiation(String beanName, JBeanDefinition bd) {
+    protected Object resolveBeforeInstantiation(String beanName, JBeanDefinitionModel bd) {
         for (JBeanPostProcessor bp : beanPostProcessors) {
             Object result = bp.postProcessBeforeInstantiation(bd.getBeanClass(), beanName);
             if (result != null) {

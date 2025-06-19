@@ -1,6 +1,21 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
+ */
 package com.paohaijiao.javelin.context.service;
 
-import com.paohaijiao.javelin.bean.JBeanDefinition;
+import com.paohaijiao.javelin.model.JBeanDefinitionModel;
 import com.paohaijiao.javelin.context.JBeanPostProcessor;
 import com.paohaijiao.javelin.context.JBeanProvider;
 import com.paohaijiao.javelin.context.JMethodInterceptor;
@@ -12,11 +27,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class JBaseBeanProvider implements JBeanProvider {
-    protected final Map<String, JBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    protected final Map<String, JBeanDefinitionModel> beanDefinitionMap = new ConcurrentHashMap<>();
     protected final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
     protected final List<JBeanPostProcessor> beanPostProcessors = new ArrayList<>();
     @Override
-    public void registerBeanDefinition(String beanName, JBeanDefinition beanDefinition) {
+    public void registerBeanDefinition(String beanName, JBeanDefinitionModel beanDefinition) {
         if (beanDefinitionMap.containsKey(beanName)) {
             throw new IllegalStateException("Bean name '" + beanName + "' exists");
         }
@@ -47,7 +62,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
         if (sharedInstance != null) {
             return sharedInstance;
         }
-        JBeanDefinition bd = beanDefinitionMap.get(beanName);
+        JBeanDefinitionModel bd = beanDefinitionMap.get(beanName);
         if (bd == null) {
             throw new IllegalArgumentException("can not find the  '" + beanName + "' Bean define");
         }
@@ -58,7 +73,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
         return bean;
     }
 
-    protected Object createBean(String beanName, JBeanDefinition bd) {
+    protected Object createBean(String beanName, JBeanDefinitionModel bd) {
         try {
             if (bd.getBeanClass().isInterface() || bd.getBeanClass().isPrimitive() || bd.getBeanClass().isArray()) {
                 throw new IllegalArgumentException("can not instance due to class is interface or Primitive or array " + bd.getBeanClass().getName());

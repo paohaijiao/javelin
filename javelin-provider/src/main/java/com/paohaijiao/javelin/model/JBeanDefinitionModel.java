@@ -13,11 +13,20 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.test;
+package com.paohaijiao.javelin.model;
 
-public class ProviderUserServiceImpl implements ProviderUserService {
-    @Override
-    public void sayHello(String name) {
-        System.out.println("Hello " + name);
+public class JBeanDefinitionModel {
+    private Class<?> beanClass;
+    private boolean singleton = true;
+    private String initMethodName;
+
+    public JBeanDefinitionModel(Class<?> beanClass) {
+        this.beanClass = beanClass;
     }
+
+    public Class<?> getBeanClass() { return beanClass; }
+    public boolean isSingleton() { return singleton; }
+    public void setSingleton(boolean singleton) { this.singleton = singleton; }
+    public String getInitMethodName() { return initMethodName; }
+    public void setInitMethodName(String initMethodName) { this.initMethodName = initMethodName; }
 }

@@ -4,7 +4,7 @@ import com.paohaijiao.javelin.anno.JComponent;
 import com.paohaijiao.javelin.anno.JRepository;
 import com.paohaijiao.javelin.anno.JRule;
 import com.paohaijiao.javelin.anno.JService;
-import com.paohaijiao.javelin.bean.JBeanDefinition;
+import com.paohaijiao.javelin.model.JBeanDefinitionModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +19,8 @@ public class JClassPathScanner {
             JComponent.class, JService.class, JRepository.class, JRule.class
     };
 
-    public static List<JBeanDefinition> scan(String basePackage) throws IOException, ClassNotFoundException {
-        List<JBeanDefinition> beanDefinitions = new ArrayList<>();
+    public static List<JBeanDefinitionModel> scan(String basePackage) throws IOException, ClassNotFoundException {
+        List<JBeanDefinitionModel> beanDefinitions = new ArrayList<>();
         String path = basePackage.replace('.', '/');
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> resources = classLoader.getResources(path);
@@ -33,7 +33,7 @@ public class JClassPathScanner {
         return beanDefinitions;
     }
 
-    private static void scanDirectory(File directory, String packageName, List<JBeanDefinition> beanDefinitions)
+    private static void scanDirectory(File directory, String packageName, List<JBeanDefinitionModel> beanDefinitions)
             throws ClassNotFoundException {
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -46,7 +46,7 @@ public class JClassPathScanner {
                 Class<?> clazz = Class.forName(className);
                 for (Class annotation : BEAN_ANNOTATIONS) {
                     if (clazz.isAnnotationPresent(annotation)) {
-                        JBeanDefinition bd = new JBeanDefinition(clazz);
+                        JBeanDefinitionModel bd = new JBeanDefinitionModel(clazz);
                         String beanName = getBeanName(clazz, annotation);
                         bd.setSingleton(true);
                         beanDefinitions.add(bd);
