@@ -1,8 +1,11 @@
+import com.paohaijiao.javelin.enums.JMethodEnums;
 import com.paohaijiao.javelin.evalue.JEvaluator;
+import com.paohaijiao.javelin.param.ContextParams;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class JTestFunction {
@@ -10,7 +13,7 @@ public class JTestFunction {
     public void length() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
-        Object result = JEvaluator.evaluateFunction("length", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.length.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -18,7 +21,7 @@ public class JTestFunction {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         args.add("Hello");
-        Object result = JEvaluator.evaluateFunction("contains", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.contains.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -27,7 +30,7 @@ public class JTestFunction {
         args.add(10);
         args.add(11);
         args.add(12);
-        Object result = JEvaluator.evaluateFunction("sum", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.sum.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -35,7 +38,7 @@ public class JTestFunction {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         args.add("Hel1lo");
-        Object result = JEvaluator.evaluateFunction("startsWith", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.startsWith.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -43,14 +46,14 @@ public class JTestFunction {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         args.add("World");
-        Object result = JEvaluator.evaluateFunction("endsWith", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
     public void toLower() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
-        Object result = JEvaluator.evaluateFunction("toLower", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.toLower.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -61,7 +64,7 @@ public class JTestFunction {
         args.add(3);
         args.add(4);
         args.add(5);
-        Object result = JEvaluator.evaluateFunction("max", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.max.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -72,7 +75,7 @@ public class JTestFunction {
         args.add(3);
         args.add(4);
         args.add(5);
-        Object result = JEvaluator.evaluateFunction("min", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.min.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -83,7 +86,7 @@ public class JTestFunction {
         args.add(3);
         args.add(4);
         args.add(5);
-        Object result = JEvaluator.evaluateFunction("avg", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.avg.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -92,7 +95,7 @@ public class JTestFunction {
         args.add("substring");
         args.add(1);
         args.add(3);
-        Object result = JEvaluator.evaluateFunction("substring", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.substring.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -101,7 +104,7 @@ public class JTestFunction {
         args.add("replace");
         args.add("ep");
         args.add("2345");
-        Object result = JEvaluator.evaluateFunction("replace", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.replace.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
@@ -112,7 +115,7 @@ public class JTestFunction {
         List<Object> args = new ArrayList<>();
         args.add("123,12344");
         args.add(",");
-        Object result = JEvaluator.evaluateFunction("split", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.split.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
 
@@ -120,24 +123,50 @@ public class JTestFunction {
     public void toInteger() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("1");
-        Object result = JEvaluator.evaluateFunction("toInteger", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.toInteger.getMethod(), args);
         System.out.println(result); // 输出: 11
     }
     @Test
     public void toStringq() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add(1.5);
-        Object result = JEvaluator.evaluateFunction("toString", args);
-        Object result1 = JEvaluator.evaluateFunction("toDouble", args);
-        Object ceil= JEvaluator.evaluateFunction("ceil", args);
-        Object floor= JEvaluator.evaluateFunction("floor", args);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.toString.getMethod(), args);
+        Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toDouble.getMethod(), args);
+        Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
+        Object floor= JEvaluator.evaluateFunction(JMethodEnums.floor.getMethod(), args);
         List<Object> args1 = new ArrayList<>();
         args1.add(1.5321321312);
         args1.add(2);
-        Object round= JEvaluator.evaluateFunction("round", args1);
+        Object round= JEvaluator.evaluateFunction(JMethodEnums.round.getMethod(), args1);
 
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
-
+    @Test
+    public void testTrans() throws IOException {
+        ContextParams contextParams = new ContextParams();
+        contextParams.put("1","男");
+        contextParams.put("2","女");
+        List<Object> args = new ArrayList<>();
+        args.add(contextParams);
+        args.add("1");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.trans.getMethod(), args);
+        System.out.println(result);
+    }
+    @Test
+    public void dateFormat() throws IOException {
+        List<Object> args = new ArrayList<>();
+        args.add(new Date());
+        args.add("yyyy-MM-dd HH:mm:ss");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.dateFormat.getMethod(), args);
+        System.out.println(result);
+    }
+    @Test
+    public void parseToDate() throws IOException {
+        List<Object> args = new ArrayList<>();
+        args.add("2019-04-25 16:23:23");
+        args.add("yyyy-MM-dd HH:mm:ss");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.parseToDate.getMethod(), args);
+        System.out.println(result);
+    }
 
 }

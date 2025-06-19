@@ -1,5 +1,7 @@
 package com.paohaijiao.javelin.util;
 
+import com.paohaijiao.javelin.exception.Assert;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -457,5 +459,23 @@ public class ReflectionUtils {
         Class<?>[] paramTypes = new Class<?>[]{String.class, int.class};
         Object result2 = preciseInvokeMethod("com.example", "MyClass", "processData",
                 methodArgs, paramTypes);
+    }
+    public static Map<String, Object> getFieldAndFieldValueByObject(Object obj) {
+        if (obj == null) {
+            return new HashMap<>();
+        }
+        Map<String, Object> fieldMap = new HashMap<>();
+        List<Field> fields = ReflectionUtils.getAllFields(obj.getClass());
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object value = ReflectionUtils.getFieldValue(obj, field.getName());
+                fieldMap.put(field.getName(), value);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Assert.throwNewException("invalid get field and field Values");
+            }
+        }
+        return fieldMap;
     }
 }

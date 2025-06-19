@@ -2,10 +2,7 @@ package com.paohaijiao.javelin.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ObjectConverter {
@@ -83,6 +80,23 @@ public class ObjectConverter {
         } catch (Exception e) {
             throw new RuntimeException("JSON conversion failed", e);
         }
+    }
 
+    /**
+     *  convert Object List To Map List
+     * @param list
+     * @return
+     */
+    public static List<Map<String, Object>> convert(List<?> list) {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for (Object object : list) {
+            if (object instanceof Map) {
+                mapList.add((Map<String, Object>) object);
+            }else if (object instanceof Object) {
+                Map<String, Object> fieldAndValue= ReflectionUtils.getFieldAndFieldValueByObject(object);
+                mapList.add(fieldAndValue);
+            }
+        }
+        return mapList;
     }
 }
