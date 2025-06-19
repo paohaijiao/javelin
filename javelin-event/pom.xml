@@ -18,7 +18,6 @@
         <dependency>
             <groupId>com.paohaijiao.javelin</groupId>
             <artifactId>javelin-scan</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

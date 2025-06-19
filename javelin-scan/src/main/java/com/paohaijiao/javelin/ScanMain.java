@@ -1,15 +1,13 @@
 package com.paohaijiao.javelin;
 
 import com.paohaijiao.javelin.context.JAnnotationConfigApplicationContext;
-import com.paohaijiao.javelin.service.UserRule;
+import com.paohaijiao.javelin.service.JUserRule;
 
 public class ScanMain {
     public static void main(String[] args) {
         JAnnotationConfigApplicationContext context =
                 new JAnnotationConfigApplicationContext("com.paohaijiao.javelin");
-        UserRule userService = context.getBean("userRule", UserRule.class);
-
-        // 使用Bean
+        JUserRule userService = context.getBean("jUserRule", JUserRule.class);
         System.out.println(userService.findUser(1L));
     }
 }
