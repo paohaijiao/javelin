@@ -24,4 +24,20 @@ public class JStringUtils {
         String newStr = str.replaceAll("^['\"]|['\"]$", "");
         return newStr;
     }
+    public static String replaceJsonFormat(String str) {
+        if(null==str || "".equals(str)) {
+            return str;
+        }
+        String newStr = str.replaceAll(";type=application/json", "");
+        return newStr;
+    }
+    public static String trimJsonFormat(String str) {
+        if(null==str || "".equals(str)) {
+            return str;
+        }
+        String newStr=str.replaceAll("\\\\\"","\"");
+        return newStr;
+    }
+
+
 }
