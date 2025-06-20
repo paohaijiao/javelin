@@ -16,7 +16,7 @@
 package com.paohaijiao.javelin.evalue;
 
 import com.paohaijiao.javelin.enums.JMethodEnums;
-import com.paohaijiao.javelin.function.JFunction;
+import com.paohaijiao.javelin.function.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,7 +32,7 @@ public class JEvaluator {
     private static final Map<String, Object> FUNCTION_REGISTRY = new HashMap<>();
 
     static {
-        FUNCTION_REGISTRY.put(JMethodEnums.length.getMethod(), JFunction.LENGTH);
+        FUNCTION_REGISTRY.put(JMethodEnums.length.getMethod(), JListArrayFunction.LENGTH);
         FUNCTION_REGISTRY.put(JMethodEnums.toInteger.getMethod(), (Function<Object, Object>) obj -> Integer.valueOf(obj.toString()));
         FUNCTION_REGISTRY.put(JMethodEnums.toString.getMethod(), (Function<Object, Object>) obj -> String.valueOf(obj.toString()));
         FUNCTION_REGISTRY.put(JMethodEnums.toDouble.getMethod(), (Function<Object, Object>) obj -> Double.valueOf(obj.toString()));
@@ -41,14 +41,14 @@ public class JEvaluator {
         FUNCTION_REGISTRY.put(JMethodEnums.toUpper.getMethod(), (Function<Object, Object>) obj -> obj.toString().toUpperCase());
         FUNCTION_REGISTRY.put(JMethodEnums.ceil.getMethod(), (Function<Object, Object>) obj -> Math.ceil(((Number) obj).doubleValue()));
         FUNCTION_REGISTRY.put(JMethodEnums.floor.getMethod(), (Function<Object, Object>) obj -> Math.floor(((Number) obj).doubleValue()));
-        FUNCTION_REGISTRY.put(JMethodEnums.contains.getMethod(), JFunction.CONTAINS);
-        FUNCTION_REGISTRY.put(JMethodEnums.join.getMethod(), JFunction.JOIN);
-        FUNCTION_REGISTRY.put(JMethodEnums.split.getMethod(), JFunction.SPLIT);
+        FUNCTION_REGISTRY.put(JMethodEnums.contains.getMethod(), JStringFunction.CONTAINS);
+        FUNCTION_REGISTRY.put(JMethodEnums.join.getMethod(), JStringFunction.JOIN);
+        FUNCTION_REGISTRY.put(JMethodEnums.split.getMethod(), JStringFunction.SPLIT);
         FUNCTION_REGISTRY.put(JMethodEnums.trans.getMethod(), JFunction.TRANS);
         FUNCTION_REGISTRY.put(JMethodEnums.startsWith.getMethod(), (BiFunction<Object, Object, Object>)
                 (str, prefix) -> str.toString().startsWith(prefix.toString()));
-        FUNCTION_REGISTRY.put(JMethodEnums.dateFormat.getMethod(), JFunction.DATEFORMAT);
-        FUNCTION_REGISTRY.put(JMethodEnums.parseToDate.getMethod(), JFunction.DATEFORMAT);
+        FUNCTION_REGISTRY.put(JMethodEnums.dateFormat.getMethod(), JDateFunction.DATEFORMAT);
+        FUNCTION_REGISTRY.put(JMethodEnums.parseToDate.getMethod(), JDateFunction.parseToDate);
 
         FUNCTION_REGISTRY.put(JMethodEnums.endsWith.getMethod(), (BiFunction<Object, Object, Object>)
                 (str, prefix) -> str.toString().endsWith(prefix.toString()));
@@ -58,12 +58,12 @@ public class JEvaluator {
                     int scale = ((Number) precision).intValue();
                     return BigDecimal.valueOf(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
                 });
-        FUNCTION_REGISTRY.put(JMethodEnums.sum.getMethod(), JFunction.SUM);
-        FUNCTION_REGISTRY.put(JMethodEnums.max.getMethod(), JFunction.MAX);
-        FUNCTION_REGISTRY.put(JMethodEnums.min.getMethod(), JFunction.MIN);
-        FUNCTION_REGISTRY.put(JMethodEnums.avg.getMethod(), JFunction.AVG);
-        FUNCTION_REGISTRY.put(JMethodEnums.substring.getMethod(), JFunction.SUBSTRING);
-        FUNCTION_REGISTRY.put(JMethodEnums.replace.getMethod(), JFunction.REPLACE);
+        FUNCTION_REGISTRY.put(JMethodEnums.sum.getMethod(), JNumberFunction.SUM);
+        FUNCTION_REGISTRY.put(JMethodEnums.max.getMethod(), JNumberFunction.MAX);
+        FUNCTION_REGISTRY.put(JMethodEnums.min.getMethod(), JNumberFunction.MIN);
+        FUNCTION_REGISTRY.put(JMethodEnums.avg.getMethod(), JNumberFunction.AVG);
+        FUNCTION_REGISTRY.put(JMethodEnums.substring.getMethod(), JStringFunction.SUBSTRING);
+        FUNCTION_REGISTRY.put(JMethodEnums.replace.getMethod(), JStringFunction.REPLACE);
 
 
     }

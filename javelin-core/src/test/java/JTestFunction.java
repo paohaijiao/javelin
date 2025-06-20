@@ -14,7 +14,7 @@ public class JTestFunction {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.length.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void contains() throws IOException {
@@ -22,7 +22,7 @@ public class JTestFunction {
         args.add("Hello World");
         args.add("Hello");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.contains.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void sum() throws IOException {
@@ -31,7 +31,7 @@ public class JTestFunction {
         args.add(11);
         args.add(12);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.sum.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void startsWith() throws IOException {
@@ -39,7 +39,7 @@ public class JTestFunction {
         args.add("Hello World");
         args.add("Hel1lo");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.startsWith.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void endsWith() throws IOException {
@@ -47,7 +47,7 @@ public class JTestFunction {
         args.add("Hello World");
         args.add("World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void toLower() throws IOException {
