@@ -13,19 +13,22 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.enums;
+package com.paohaijiao.javelin.adaptor;
 
-import com.paohaijiao.javelin.reader.impl.JResourcePropertiesReader;
-import com.paohaijiao.javelin.reader.impl.JResourceYamlReader;
-public enum JFileType {
-    YAML("yaml", JResourceYamlReader.class),
-    PROPERTIES("properties", JResourcePropertiesReader.class);
-    private String code;
-    private Class clazz;
+import com.paohaijiao.javelin.resouce.JReader;
 
-    private JFileType(String code, Class clazz){
-        this.code = code;
-        this.clazz = clazz;
+public class JAdaptor {
+    private JReader dataReader;
+
+    public JAdaptor(JReader dataReader) {
+        this.dataReader = dataReader;
     }
 
+    public void setDataReader(JReader dataReader) {
+        this.dataReader = dataReader;
+    }
+
+    public String getRuleContent() {
+        return dataReader.getRule();
+    }
 }

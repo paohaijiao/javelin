@@ -13,19 +13,8 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.enums;
+package com.paohaijiao.javelin.resouce;
 
-import com.paohaijiao.javelin.reader.impl.JResourcePropertiesReader;
-import com.paohaijiao.javelin.reader.impl.JResourceYamlReader;
-public enum JFileType {
-    YAML("yaml", JResourceYamlReader.class),
-    PROPERTIES("properties", JResourcePropertiesReader.class);
-    private String code;
-    private Class clazz;
-
-    private JFileType(String code, Class clazz){
-        this.code = code;
-        this.clazz = clazz;
-    }
-
+public interface JReader {
+    String getRule();
 }

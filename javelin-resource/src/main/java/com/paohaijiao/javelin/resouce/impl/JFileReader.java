@@ -13,19 +13,27 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.paohaijiao.javelin.enums;
+package com.paohaijiao.javelin.resouce.impl;
 
-import com.paohaijiao.javelin.reader.impl.JResourcePropertiesReader;
-import com.paohaijiao.javelin.reader.impl.JResourceYamlReader;
-public enum JFileType {
-    YAML("yaml", JResourceYamlReader.class),
-    PROPERTIES("properties", JResourcePropertiesReader.class);
-    private String code;
-    private Class clazz;
+import com.paohaijiao.javelin.resouce.JReader;
 
-    private JFileType(String code, Class clazz){
-        this.code = code;
-        this.clazz = clazz;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class JFileReader implements JReader {
+    private String filePath;
+
+    public JFileReader(String filePath) {
+        this.filePath = filePath;
     }
 
+    @Override
+    public String getRule() {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file: " + filePath, e);
+        }
+    }
 }

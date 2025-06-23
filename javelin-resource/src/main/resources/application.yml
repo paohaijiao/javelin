@@ -1,4 +1,5 @@
-server:
-  port: 8080
-  name: My Server
-  enabled: true
+app:
+  name: My Application
+  version: 1.0.0
+database:
+  pool-size: 10
