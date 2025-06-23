@@ -9,8 +9,9 @@
     <artifactId>javelin-scan</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.paohaijiao.javelin</groupId>
+            <groupId>com.github.paohaijiao</groupId>
             <artifactId>javelin-provider</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

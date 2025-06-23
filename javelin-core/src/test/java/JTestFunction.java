@@ -1,6 +1,6 @@
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import com.paohaijiao.javelin.evalue.JEvaluator;
-import com.paohaijiao.javelin.param.JContext;
+import com.github.paohaijiao.enums.JMethodEnums;
+import com.github.paohaijiao.evalue.JEvaluator;
+import com.github.paohaijiao.param.JContext;
 import org.junit.Test;
 
 import java.io.IOException;

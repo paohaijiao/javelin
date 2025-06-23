@@ -14,17 +14,12 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 
-import com.paohaijiao.javelin.enums.JMethodEnums;
-import com.paohaijiao.javelin.enums.JResourceType;
-import com.paohaijiao.javelin.evalue.JEvaluator;
-import com.paohaijiao.javelin.i18n.JI18nService;
-import com.paohaijiao.javelin.i18n.JPropertiesI18nService;
-import com.paohaijiao.javelin.i18n.factory.JI18nFactory;
+import com.github.paohaijiao.enums.JResourceType;
+import com.github.paohaijiao.i18n.JI18nService;
+import com.github.paohaijiao.i18n.factory.JI18nFactory;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * packageName PACKAGE_NAME

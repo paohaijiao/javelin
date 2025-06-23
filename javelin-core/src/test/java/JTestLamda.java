@@ -1,4 +1,4 @@
-import com.paohaijiao.javelin.lamda.JLambda;
+import com.github.paohaijiao.lamda.JLambda;
 import org.junit.Test;
 
 import java.io.IOException;

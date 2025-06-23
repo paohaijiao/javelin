@@ -1,7 +1,7 @@
 package util;
 
-import com.paohaijiao.javelin.model.JKeyValueModel;
-import com.paohaijiao.javelin.util.JObjectConverter;
+import com.github.paohaijiao.model.JKeyValueModel;
+import com.github.paohaijiao.util.JObjectConverter;
 import org.junit.Test;
 
 import java.util.ArrayList;
