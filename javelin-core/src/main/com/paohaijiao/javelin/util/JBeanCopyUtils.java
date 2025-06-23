@@ -31,7 +31,6 @@ public class JBeanCopyUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
-        // 配置ObjectMapper
         objectMapper.registerModule(new JavaTimeModule()); // 支持Java8日期时间API
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 日期不写为时间戳
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 空对象不报错
