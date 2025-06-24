@@ -15,7 +15,7 @@
  */
 package com.github.paohaijiao.test;
 
-import com.paohaijiao.javelin.anno.JComponent;
+import com.github.paohaijiao.anno.JComponent;
 import com.github.paohaijiao.anno.JEventListener;
 @JComponent
 public class ParentEventService {

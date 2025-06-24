@@ -15,7 +15,7 @@
  */
 package com.github.paohaijiao;
 
-import com.paohaijiao.javelin.config.JEnvironmentAware;
+import com.github.paohaijiao.config.JEnvironmentAware;
 import org.junit.Test;
 
 import java.io.IOException;
