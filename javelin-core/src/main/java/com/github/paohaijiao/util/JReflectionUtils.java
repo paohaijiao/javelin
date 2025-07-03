@@ -445,9 +445,9 @@ public class JReflectionUtils {
     }
     public static Map<String, Object> getFieldAndFieldValueByObject(Object obj) {
         if (obj == null) {
-            return new HashMap<>();
+            return new LinkedHashMap<>();
         }
-        Map<String, Object> fieldMap = new HashMap<>();
+        Map<String, Object> fieldMap = new LinkedHashMap<>();
         List<Field> fields = JReflectionUtils.getAllFields(obj.getClass());
         for (Field field : fields) {
             try {
