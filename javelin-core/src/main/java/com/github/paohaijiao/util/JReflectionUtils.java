@@ -433,16 +433,6 @@ public class JReflectionUtils {
 
 
 
-    public static void main(String[] args) {
-        Object result = invokeMethod("com.example", "MyClass", "myMethod", null);
-        Object[] methodArgs = new Object[]{"param1", 123};
-        Object[] constructorArgs = new Object[]{"initValue"};
-        Object result1 = invokeMethod("com.example", "MyClass", "myMethod", methodArgs, constructorArgs);
-        Object[] methodArgs1 = new Object[]{"param1", 123};
-        Class<?>[] paramTypes = new Class<?>[]{String.class, int.class};
-        Object result2 = preciseInvokeMethod("com.example", "MyClass", "processData",
-                methodArgs, paramTypes);
-    }
     public static Map<String, Object> getFieldAndFieldValueByObject(Object obj) {
         if (obj == null) {
             return new LinkedHashMap<>();
@@ -461,4 +451,5 @@ public class JReflectionUtils {
         }
         return fieldMap;
     }
+
 }
