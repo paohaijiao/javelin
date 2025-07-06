@@ -73,6 +73,9 @@ public class JReflectionUtils {
         try {
             Field field = getDeclaredField(obj.getClass(), fieldName);
             field.setAccessible(true);
+            if (field.getType().isPrimitive() && value == null) {
+                throw new IllegalArgumentException("不能为基本类型"+field.getName()+"赋null值");
+            }
             field.set(obj, value);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("设置字段值失败", e);
