@@ -15,10 +15,13 @@
  */
 package com.github.paohaijiao.core;
 
+import com.github.paohaijiao.format.JSqlFormatter;
+import com.github.paohaijiao.map.JMultiValuedMap;
 import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
-import com.github.paohaijiao.session.JSqlSession;
+import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
 
 import java.lang.reflect.Field;
@@ -31,9 +34,9 @@ import java.util.stream.Collectors;
 public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaUpdate<T> {
     private final Map<String, Object> updateValues = new HashMap<>();
 
-    public LambdaUpdateImpl(Class<T> entityClass, JSqlSession sqlSession) {
+    public LambdaUpdateImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
-        this.sqlSession = sqlSession;
+        this.sqlConnection = sqlConnection;
     }
 
     @Override
@@ -97,7 +100,8 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
         System.out.println("update sql:" + sql);
         Map<String, Object> paramMap = buildParameterMap();
         paramMap.putAll(updateValues);
-        return sqlSession.update(null, paramMap);
+       // return sqlSession.update(null, paramMap);
+        return 0;
     }
 
     private String buildUpdateSQL() {
@@ -127,14 +131,26 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
         return paramMap;
     }
 
-    public int updateById() {
+    public int updateById(T entity) {
         String tableName = getTableName();
         String setClause = buildUpdateSetClause();
         String idClause=getIdFieldName();
         String whereClause = idClause + " = #{" + idClause + "}";
         String sql= "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereClause;
-        System.out.println(sql);
-        return 1;
+        try {
+            JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
+            JMultiValuedMap<String, String> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
+            JMultiValuedMap<String, Object> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap.keySet());
+            for (Map.Entry<String, Object> entry : fieldValueMap.entrySet()) {
+                String fieldName = entry.getKey();
+                Object fieldValue = entry.getValue();
+                namedParameterPreparedStatement.setParameter(fieldName, fieldValue);
+            }
+            namedParameterPreparedStatement.executeUpdate();
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return 0;
     }
     private String buildUpdateSetClause() {
         Field[] fields = entityClass.getDeclaredFields();

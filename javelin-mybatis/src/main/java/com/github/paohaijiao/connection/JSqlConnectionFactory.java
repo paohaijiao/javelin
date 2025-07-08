@@ -13,20 +13,23 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.github.paohaijiao.test;
+package com.github.paohaijiao.connection;
 
-import com.github.paohaijiao.anno.JColumn;
-import com.github.paohaijiao.anno.JTable;
-import lombok.Data;
 
-@JTable("user")
-@Data
-public class JUser {
-    @JColumn(id = true)
-    private Long id;
+import java.sql.SQLException;
 
-    @JColumn("username")
-    private String name;
+public interface JSqlConnectionFactory {
 
-    private Integer age;
+
+    public JSqlConnection openConnection() throws SQLException;
+
+
+    public JSqlConnection openConnection(Boolean autoCommit);
+
+    public JSqlConnection openConnection(String userName, String  password);
+
+
+
+
+
 }

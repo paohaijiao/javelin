@@ -13,19 +13,15 @@
  *
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
-package com.github.paohaijiao.datasource.impl;
+package com.github.paohaijiao.connection;
 
-import com.github.paohaijiao.model.JDataSourceBean;
-import com.github.paohaijiao.datasource.JBaseDataSource;
+import java.sql.Connection;
 
-public class JMySqlBaseDataSource extends JBaseDataSource {
-    public JMySqlBaseDataSource(String driver, String url,
-                                String username, String password) {
-        JDataSourceBean dataSourceBean = new JDataSourceBean();
-        dataSourceBean.setUsername(username);
-        dataSourceBean.setPassword(password);
-        dataSourceBean.setDriver(driver);
-        dataSourceBean.setUrl(url);
-    }
+public interface JSqlConnection {
+
+
+    public Connection getConnection();
+
+    public Boolean getAutoCommit();
 
 }

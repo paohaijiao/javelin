@@ -19,7 +19,7 @@ import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaQuery;
-import com.github.paohaijiao.session.JSqlSession;
+import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.util.JStringUtils;
 
 import java.io.Serializable;
@@ -31,9 +31,9 @@ import java.util.List;
 
 public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQuery<T> {
 
-    public JLambdaQueryImpl(Class<T> entityClass, JSqlSession sqlSession) {
+    public JLambdaQueryImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
-        this.sqlSession = sqlSession;
+        this.sqlConnection = sqlConnection;
     }
     public T selectById(Serializable id){
         String selectSql = "select * from  %s  where %s = %s";
@@ -105,8 +105,9 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
     public List<T> list() {
         String sql = buildSelectSQL();
         System.out.println("sql:"  +sql);
+        return null;
         //getStatement(sql);
-        return sqlSession.selectList(null, buildParameterMap());
+        //        return sqlConnection.selectList(null, buildParameterMap());
     }
 
     @Override

@@ -18,33 +18,29 @@ package com.github.paohaijiao.core;
 import com.github.paohaijiao.mapper.JLambdaMapper;
 import com.github.paohaijiao.mapper.JLambdaQuery;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
-import com.github.paohaijiao.session.JSqlSession;
+import com.github.paohaijiao.connection.JSqlConnection;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
     private final Class<T> entityClass;
-    private final JSqlSession sqlSession;
+    private final JSqlConnection sqlSession;
 
-    public JLambdaMapperImpl(Class<T> entityClass, JSqlSession sqlSession) {
+    public JLambdaMapperImpl(Class<T> entityClass, JSqlConnection sqlSession) {
         this.entityClass = entityClass;
         this.sqlSession = sqlSession;
     }
 
     @Override
     public int insert(T entity) {
-        String sql = new LambdaInsertImpl<>(entityClass, sqlSession).buildInsertSQL();
-        System.out.println("insert sql:" + sql);
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("entity", entity);
-        return sqlSession.insert(null, paramMap);
+         LambdaInsertImpl lambdaInsert = new LambdaInsertImpl<>(entityClass, sqlSession);
+         return lambdaInsert.insert(entity);
     }
 
     @Override
     public int updateById(T entity) {
-        return new LambdaUpdateImpl<>(entityClass, sqlSession).updateById();
+        LambdaUpdateImpl lambdaUpdate =  new LambdaUpdateImpl<>(entityClass, sqlSession);
+        return lambdaUpdate.updateById(entity);
     }
 
     @Override

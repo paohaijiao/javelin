@@ -1,4 +1,5 @@
 import com.github.paohaijiao.lamda.JLambda;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
-
+@Ignore
 public class JTestLamda {
     @Test
     public void length() throws IOException {

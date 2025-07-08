@@ -15,7 +15,7 @@
  */
 package com.github.paohaijiao.core;
 
-import com.github.paohaijiao.session.JSqlSession;
+import com.github.paohaijiao.connection.JSqlConnection;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,9 +24,9 @@ import java.util.Map;
 public class LambdaDeleteImpl<T> extends JLambdaBaseImpl<T>  {
     private final Map<String, Object> updateValues = new HashMap<>();
 
-    public LambdaDeleteImpl(Class<T> entityClass, JSqlSession sqlSession) {
+    public LambdaDeleteImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
-        this.sqlSession = sqlSession;
+        this.sqlConnection = sqlConnection;
     }
     public int deleteById(Serializable id){
         String deleteSql = "delete * from  %s  where %s = %s";

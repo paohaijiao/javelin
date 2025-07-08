@@ -17,17 +17,16 @@ package com.github.paohaijiao.factory;
 
 import com.github.paohaijiao.core.JLambdaMapperImpl;
 import com.github.paohaijiao.mapper.JLambdaMapper;
-import com.github.paohaijiao.session.JSqlSessionFactory;
+import com.github.paohaijiao.connection.JSqlConnectionFactory;
 
 public class JLambdaMapperFactory {
-    private final JSqlSessionFactory sqlSessionFactory;
+    private final JSqlConnectionFactory sqlConnectionFactory;
 
-    public JLambdaMapperFactory(JSqlSessionFactory sqlSessionFactory) {
-        this.sqlSessionFactory = sqlSessionFactory;
+    public JLambdaMapperFactory(JSqlConnectionFactory sqlSessionFactory) {
+        this.sqlConnectionFactory = sqlSessionFactory;
     }
 
     public <T> JLambdaMapper<T> createMapper(Class<T> entityClass) {
-        //return new JLambdaMapperImpl<>(entityClass, sqlSessionFactory.openSession());
-        return new JLambdaMapperImpl<>(entityClass, null);
+        return new JLambdaMapperImpl<>(entityClass, sqlConnectionFactory.openConnection(true));
     }
 }

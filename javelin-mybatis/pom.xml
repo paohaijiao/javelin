@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.paohaijiao</groupId>
+        <groupId>io.github.paohaijiao</groupId>
         <artifactId>javelin</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -25,6 +25,23 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kingbase8</groupId>
+            <artifactId>kingbase8</artifactId>
+            <version>8.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.paohaijiao</groupId>
+            <artifactId>javelin-core</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -17,24 +17,31 @@ package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.anno.JTable;
+import com.github.paohaijiao.format.JSqlFormatter;
+import com.github.paohaijiao.map.JMultiValuedMap;
 import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.model.JOrder;
 import com.github.paohaijiao.function.JSFunction;
-import com.github.paohaijiao.session.JSqlSession;
+import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.util.JStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class JLambdaBaseImpl<T>{
     protected  Class<T> entityClass;
-    protected JSqlSession sqlSession;
+
+    protected JSqlConnection sqlConnection;
+
     protected final List<JCondition> conditions = new ArrayList<>();
+
     protected final List<JOrder> orders = new ArrayList<>();
+
     protected String getColumnName(Field field) {
         JColumn columnAnnotation = field.getAnnotation(JColumn.class);
         return columnAnnotation != null && !columnAnnotation.value().isEmpty()
@@ -163,6 +170,19 @@ public abstract class JLambdaBaseImpl<T>{
             }
         }
         return "id";
+    }
+    protected PreparedStatement buildPreparedStatement (String sql) throws Throwable {
+        PreparedStatement preparedStatement=this.sqlConnection.getConnection().prepareStatement(sql);
+        return preparedStatement;
+    }
+
+    protected static String fillSqlWithEntity(String sqlTemplate, Object entity) {
+        if (sqlTemplate == null || entity == null) {
+            throw new IllegalArgumentException("sql templates and entity objects cannot be null");
+        }
+        JMultiValuedMap<String, String> placeholderMap = JSqlFormatter.parsePlaceholders(sqlTemplate);
+        JMultiValuedMap<String, Object> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap.keySet());
+        return JSqlFormatter.replacePlaceholders(sqlTemplate, fieldValueMap);
     }
 
 }
