@@ -21,14 +21,14 @@ import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
 import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
+import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.ResultSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaUpdate<T> {
@@ -98,9 +98,32 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
     public int execute() {
         String sql = buildUpdateSQL();
         System.out.println("update sql:" + sql);
-        Map<String, Object> paramMap = buildParameterMap();
-        paramMap.putAll(updateValues);
-       // return sqlSession.update(null, paramMap);
+        List<JCondition> condition=this.conditions;
+        Map<String, Object> updateCause=this.updateValues;
+        int k=0;
+        try {
+            JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
+            for (String key : updateCause.keySet()) {
+                k=k+1;
+                JKeyValue model=new JKeyValue();
+                model.setNum(k);
+                model.setKey(key);
+                model.setValue(updateCause.get(key));
+                namedParameterPreparedStatement.setParameter(model);
+            }
+            for (int i=0;i<condition.size();i++){
+                k=k+1;
+                JKeyValue model=new JKeyValue();
+                model.setNum(k);
+                model.setKey(condition.get(i).getColumn());
+                model.setValue(condition.get(i).getValue());
+                namedParameterPreparedStatement.setParameter(model);
+            }
+            return namedParameterPreparedStatement.executeUpdate();
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
         return 0;
     }
 
@@ -139,12 +162,10 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
         String sql= "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereClause;
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
-            JMultiValuedMap<String, String> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
-            JMultiValuedMap<String, Object> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap.keySet());
-            for (Map.Entry<String, Object> entry : fieldValueMap.entrySet()) {
-                String fieldName = entry.getKey();
-                Object fieldValue = entry.getValue();
-                namedParameterPreparedStatement.setParameter(fieldName, fieldValue);
+            List<JKeyValue> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
+            List<JKeyValue> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap);
+            for (JKeyValue entry : fieldValueMap) {
+                namedParameterPreparedStatement.setParameter(entry);
             }
             namedParameterPreparedStatement.executeUpdate();
         }catch (Exception exception){

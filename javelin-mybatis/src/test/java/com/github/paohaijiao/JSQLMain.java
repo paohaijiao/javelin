@@ -30,15 +30,16 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JSQLMain {
 
     private DataSource getDBConfig() throws ClassNotFoundException, SQLException {
-         String userName="system";
-         String password="sqwswqswqswqswq";
-         String clazz="com.kingbase8.Driver";
-         String url="jdbc:kingbase8://127.0.0.1:54323/?currentSchema=public";
+         String userName="root";
+         String password="13579admin";
+         String clazz="com.mysql.cj.jdbc.Driver";
+         String url="jdbc:mysql://192.168.32.132:3306/test?serverTimezone=UTC";
         JDBCBaseConnectionConfig config=new JBasicJDBConnectionConfig(clazz,url,userName,password);
         return config.createDataSource();
     }
@@ -50,7 +51,7 @@ public class JSQLMain {
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
         JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
         JUser userPo=new JUser();
-        userPo.setId(1L);
+        userPo.setId(3L);
         userPo.setName("kimoo");
         userPo.setAge(12);
         int i=userMapper.insert(userPo);
@@ -69,15 +70,39 @@ public class JSQLMain {
         System.out.println(i);
     }
 
-//    @Test
-//    public void selectById() throws IOException, SQLException, ClassNotFoundException {
-//        Map<String, JMappedStatement> map=new HashMap<>();
-//        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig(),map);
-//        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
-//        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
-//        JUser userPo=userMapper.selectById(1);
-//        System.out.println(userPo);
-//    }
+    @Test
+    public void selectById() throws IOException, SQLException, ClassNotFoundException {
+        Map<String, JMappedStatement> map=new HashMap<>();
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JUser userPo=userMapper.selectById(1);
+        System.out.println(userPo);
+    }
+    @Test
+    public void deleteById() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        int   userPo=userMapper.deleteById(1);
+        System.out.println(userPo);
+    }
+    @Test
+    public void query() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> list=userMapper.query().eq(JUser::getAge,12).list();
+        System.out.println(list.size());
+    }
+    @Test
+    public void update() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        userMapper.update().eq(JUser::getId,1).set(JUser::getAge,18).set(JUser::getName,"admin").execute();
+        System.out.println("update");
+    }
 
 
 }

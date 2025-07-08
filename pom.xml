@@ -37,6 +37,8 @@
     <batik.version>1.16</batik.version>
     <gson.version>2.10.1</gson.version>
     <hikariCp.version>3.2.0</hikariCp.version>
+    <mysql.version>8.0.28</mysql.version>
+    <commons-collections4>4.4</commons-collections4>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -185,6 +187,16 @@
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
         <version>${hikariCp.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${commons-collections4}</version>
       </dependency>
     </dependencies>
 

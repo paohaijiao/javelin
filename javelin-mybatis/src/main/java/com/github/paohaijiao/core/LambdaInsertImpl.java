@@ -18,14 +18,18 @@ package com.github.paohaijiao.core;
 import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.format.JSqlFormatter;
+import com.github.paohaijiao.map.JMultiValuedMap;
+import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
+import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -73,12 +77,10 @@ public class LambdaInsertImpl<T> extends JLambdaBaseImpl<T>  {
         String sql = buildInsertSQL();
         try{
             JNamedParameterPreparedStatement namedParameterPreparedStatement =new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
-            Map<String, String> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
-            Map<String, Object> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap.keySet());
-            for (Map.Entry<String, Object> entry : fieldValueMap.entrySet()) {
-                String fieldName = entry.getKey();
-                Object fieldValue = entry.getValue();
-                namedParameterPreparedStatement.setParameter(fieldName, fieldValue);
+            List<JKeyValue> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
+            List<JKeyValue> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap);
+            for (JKeyValue entry : fieldValueMap) {
+                namedParameterPreparedStatement.setParameter(entry);
             }
             return  namedParameterPreparedStatement.executeUpdate();
         }catch (Throwable exception){

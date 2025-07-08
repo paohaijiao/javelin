@@ -45,12 +45,14 @@ public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
 
     @Override
     public int deleteById(Serializable id) {
-        return new LambdaDeleteImpl<>(entityClass, sqlSession).deleteById(id);
+        LambdaDeleteImpl<T> lambdaDelete= new LambdaDeleteImpl<>(entityClass, sqlSession);
+        return   lambdaDelete.deleteById(id);
     }
 
     @Override
     public T selectById(Serializable id) {
-        return new JLambdaQueryImpl<>(entityClass, sqlSession).selectById(id);
+        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
+        return lambdaQuery.selectById(id);
 
     }
 

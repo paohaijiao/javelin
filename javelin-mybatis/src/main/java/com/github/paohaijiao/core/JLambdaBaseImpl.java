@@ -17,21 +17,27 @@ package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.anno.JTable;
-import com.github.paohaijiao.format.JSqlFormatter;
-import com.github.paohaijiao.map.JMultiValuedMap;
-import com.github.paohaijiao.model.JCondition;
-import com.github.paohaijiao.model.JOrder;
-import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.format.JSqlFormatter;
+import com.github.paohaijiao.function.JSFunction;
+import com.github.paohaijiao.model.JCondition;
+import com.github.paohaijiao.model.JKeyValue;
+import com.github.paohaijiao.model.JOrder;
 import com.github.paohaijiao.util.JStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.paohaijiao.resultSet.JResultSetMapper.TYPE_HANDLERS;
 
 public abstract class JLambdaBaseImpl<T>{
     protected  Class<T> entityClass;
@@ -180,9 +186,38 @@ public abstract class JLambdaBaseImpl<T>{
         if (sqlTemplate == null || entity == null) {
             throw new IllegalArgumentException("sql templates and entity objects cannot be null");
         }
-        JMultiValuedMap<String, String> placeholderMap = JSqlFormatter.parsePlaceholders(sqlTemplate);
-        JMultiValuedMap<String, Object> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap.keySet());
+        List<JKeyValue> list = JSqlFormatter.parsePlaceholders(sqlTemplate);
+        List<JKeyValue> fieldValueMap = JSqlFormatter.getFieldValues(entity, list);
         return JSqlFormatter.replacePlaceholders(sqlTemplate, fieldValueMap);
     }
 
+    public static <T> T resultSetToObject(ResultSet rs, Class<T> targetClass) throws SQLException {
+        try {
+            T obj = targetClass.getDeclaredConstructor().newInstance();
+            ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String columnName = metaData.getColumnLabel(i);
+                try {
+                    Field field = targetClass.getDeclaredField(columnName);
+                    field.setAccessible(true);
+                    setFieldValue(rs, columnName, obj, field);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+            }
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static <T> void setFieldValue(ResultSet rs, String columnName, T obj, Field field) throws SQLException, IllegalAccessException {
+        Class<?> fieldType = field.getType();
+        Object value = TYPE_HANDLERS.getOrDefault(fieldType, ResultSet::getObject)
+                .handle(rs, columnName);
+        if (value != null || fieldType.isPrimitive()) {
+            field.set(obj, value);
+        }
+    }
 }

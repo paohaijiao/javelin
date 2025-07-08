@@ -16,16 +16,21 @@
 package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
+import com.github.paohaijiao.format.JSqlFormatter;
 import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaQuery;
 import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.model.JKeyValue;
+import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,8 +44,22 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         String selectSql = "select * from  %s  where %s = %s";
         String tableName = getTableName();
         String idClause=this.getIdFieldName();
-        String sql=String.format(selectSql, tableName, idClause,id);
-        System.out.println(sql);
+        String value="#{"+idClause+"}";
+        String sql=String.format(selectSql, tableName, idClause,value);
+        try {
+            JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
+            JKeyValue model=new JKeyValue();
+            model.setNum(1);
+            model.setKey(idClause);
+            model.setValue(id);
+            namedParameterPreparedStatement.setParameter(model);
+            ResultSet resultSet=namedParameterPreparedStatement.executeQuery();
+            resultSet.next();
+            T t= resultSetToObject(resultSet,entityClass);
+           return t;
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
         return null;
     }
     @Override
@@ -103,11 +122,30 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
 
     @Override
     public List<T> list() {
+        List<T> list=new ArrayList<>();
         String sql = buildSelectSQL();
-        System.out.println("sql:"  +sql);
-        return null;
-        //getStatement(sql);
-        //        return sqlConnection.selectList(null, buildParameterMap());
+        List<JCondition> condition=this.conditions;
+        try {
+            JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
+            for (int i=0;i<condition.size();i++){
+                JKeyValue model=new JKeyValue();
+                model.setNum(i+1);
+                model.setKey(condition.get(i).getColumn());
+                model.setValue(condition.get(i).getValue());
+                namedParameterPreparedStatement.setParameter(model);
+            }
+            ResultSet resultSet=namedParameterPreparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                T t= resultSetToObject(resultSet,entityClass);
+                list.add(t);
+            }
+            return list;
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return list;
     }
 
     @Override

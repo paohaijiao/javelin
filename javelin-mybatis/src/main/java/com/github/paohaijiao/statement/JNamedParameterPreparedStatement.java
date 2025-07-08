@@ -1,5 +1,7 @@
 package com.github.paohaijiao.statement;
 
+import com.github.paohaijiao.exception.JAssert;
+import com.github.paohaijiao.model.JKeyValue;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -45,13 +47,10 @@ public class JNamedParameterPreparedStatement {
         return parsedSql.toString();
     }
 
-    public void setParameter(String name, Object value) throws SQLException {
-        Integer index = parameterIndexes.get(name);
-        if (index == null) {
-            throw new SQLException("field name '" + name + "' could not transfer from sql");
-        }
+    public void setParameter(JKeyValue keyValue) throws SQLException {
+        Object value = keyValue.getValue();
+        int index = keyValue.getNum();
         try{
-
             if (value == null) {
                 stmt.setNull(index, Types.NULL);
             } else if (value instanceof String) {
@@ -74,7 +73,6 @@ public class JNamedParameterPreparedStatement {
             } else {
                 stmt.setObject(index, value);
             }
-//            stmt.setLong(1,1);
 //            stmt.setString(2,"admin");
 //            stmt.setInt(3,12);
 //            stmt.setLong(4,1);
@@ -93,12 +91,12 @@ public class JNamedParameterPreparedStatement {
                 Field field = clazz.getDeclaredField(paramName);
                 field.setAccessible(true);
                 Object value = field.get(entity);
-                setParameter(paramName, value);
+                //setParameter(paramName, value);
             } catch (NoSuchFieldException e) {
                 try {
                     String getterName = "get" + paramName.substring(0, 1).toUpperCase() + paramName.substring(1);
                     Object value = clazz.getMethod(getterName).invoke(entity);
-                    setParameter(paramName, value);
+                   // setParameter(paramName, value);
                 } catch (Exception ex) {
                     throw new SQLException("could not get  '" + paramName + "'s Value", ex);
                 }
@@ -107,7 +105,7 @@ public class JNamedParameterPreparedStatement {
     }
 
     public ResultSet executeQuery() throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(this.sql);
+        JAssert.notNull(stmt,"statement is null");
         return stmt.executeQuery();
     }
 
