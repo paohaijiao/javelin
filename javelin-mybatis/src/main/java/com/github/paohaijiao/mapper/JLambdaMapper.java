@@ -16,6 +16,8 @@
 package com.github.paohaijiao.mapper;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 public interface JLambdaMapper<T>{
     /**
@@ -45,6 +47,13 @@ public interface JLambdaMapper<T>{
      * @return
      */
     T selectById(Serializable id);
+
+    /**
+     *  select
+     * @param sql
+     * @return
+     */
+    List<T> select (String sql, Map<String,Object> param);
 
     /**
      * Lambda query

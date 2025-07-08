@@ -17,6 +17,7 @@ package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.format.JSqlFormatter;
+import com.github.paohaijiao.function.JParameterHandler;
 import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaQuery;
@@ -29,16 +30,52 @@ import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import static com.github.paohaijiao.param.JPreparedStatementMapper.PARAM_HANDLERS;
 
 public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQuery<T> {
 
     public JLambdaQueryImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
+    }
+
+    public List<T> select(String sql, Map<String,Object> param) {
+        List<T> list=new ArrayList<>();
+        Connection connection= sqlConnection.getConnection();
+        try {
+          PreparedStatement pstmt= connection.prepareStatement(sql);
+          int i=0;
+          for (Map.Entry<String,Object> entry : param.entrySet()) {
+              i=i+1;
+              if (param == null) {
+                  pstmt.setNull(i, Types.NULL);
+                  continue;
+              }
+              Class<?> paramType = param.getClass();
+              @SuppressWarnings("unchecked")
+              JParameterHandler<Object> handler = (JParameterHandler<Object>) PARAM_HANDLERS.get(paramType);
+              if (handler != null) {
+                  handler.handle(pstmt, param, i);
+              } else {
+                  pstmt.setObject(i, param);
+              }
+            }
+
+            ResultSet r=pstmt.executeQuery();
+            while (r.next()) {
+               T t= resultSetToObject(r,entityClass);
+               list.add(t);
+           }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
     public T selectById(Serializable id){
         String selectSql = "select * from  %s  where %s = %s";

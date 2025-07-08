@@ -21,6 +21,8 @@ import com.github.paohaijiao.mapper.JLambdaUpdate;
 import com.github.paohaijiao.connection.JSqlConnection;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
     private final Class<T> entityClass;
@@ -53,8 +55,13 @@ public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
     public T selectById(Serializable id) {
         JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
         return lambdaQuery.selectById(id);
-
     }
+    @Override
+    public List<T> select(String sql, Map<String,Object> param) {
+        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
+        return lambdaQuery.select(sql,param);
+    }
+
 
     @Override
     public JLambdaQuery<T> query() {

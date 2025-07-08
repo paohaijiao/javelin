@@ -104,5 +104,17 @@ public class JSQLMain {
         System.out.println("update");
     }
 
+    @Test
+    public void sql() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        String sql="select * from j_user where id>?";
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("id",1L);
+        List<JUser> list=userMapper.select(sql,map);
+        System.out.println(list.size());
+    }
+
 
 }
