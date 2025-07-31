@@ -24,7 +24,7 @@ public class JunitTest {
     @Test
     public void testInheritedEventTypes() {
         JEventSupportedApplicationContext context = new JEventSupportedApplicationContext(
-                "com.paohaijiao.javelin.test"
+                "com.github.paohaijiao.test"
         );
         System.out.println("Registered beans: " );
         ParentEventService service = context.getBean("parentEventService", ParentEventService.class);

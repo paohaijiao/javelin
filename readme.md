@@ -287,3 +287,117 @@ System.out.println(result);
         List<JDept> siblings = JTreeUtil.getSiblings(backendGroup, null, JDept::getId, JDept::getParentId, JDept::getChildren, nodeMap, false);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
 ```
+### resource
+####  load the file to string
+```java
+        JReader fileReader = new JFileReader("data/rule.txt");
+        JAdaptor context = new JAdaptor(fileReader);
+        System.out.println(context.getRuleContent());
+```
+####  load the spring profiles
+```java
+@Test
+public void test() throws IOException {
+JEnvironmentAware configLoader = new JEnvironmentAware();
+System.out.println("Dev Environment:");
+printConfigs(configLoader);
+configLoader.setActiveProfile("prod");
+System.out.println("\nProd Environment:");
+printConfigs(configLoader);
+}
+private static void printConfigs(JEnvironmentAware configLoader) {
+System.out.println("App Name: " + configLoader.getProperty("app.name"));
+System.out.println("DB URL: " + configLoader.getProperty("database.url"));
+System.out.println("DB Username: " + configLoader.getProperty("database.username"));
+System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
+}
+```
+### provider
+```java
+Properties config = new Properties();
+config.setProperty("bean.container.mode", "simple"); // 或 "simple"
+JBeanProvider container = JBeanProviderFactory.createProvider(config);
+JBeanDefinitionModel serviceDef = new JBeanDefinitionModel(ProviderUserServiceImpl.class);
+container.registerBeanDefinition("myService", serviceDef);
+if (container instanceof JProxyEnhancedBeanProvider) {
+container.registerInterceptor("myService", invocation -> {
+System.out.println("拦截方法: " + invocation.getMethod().getName());
+long start = System.currentTimeMillis();
+try {
+return invocation.proceed();
+} finally {
+System.out.println("方法执行耗时: " + (System.currentTimeMillis() - start) + "ms");
+}
+});
+}
+ProviderUserService service = container.getBean("myService", ProviderUserService.class);
+ProviderUserService service1 = container.getBean(ProviderUserService.class);
+service.sayHello("haha");
+service1.sayHello("haha1");
+```
+### scan
+```java
+        JAnnotationConfigApplicationContext context =
+                new JAnnotationConfigApplicationContext("com.github.paohaijiao");
+        JUserRule userService = context.getBean("jUserRule", JUserRule.class);
+        System.out.println(userService.findUser(1L));
+```
+
+### public event to another object
+### 1.define a EventService
+```java
+@JComponent
+public class ParentEventService {
+private boolean parentEventReceived = false;
+private String lastParentMessage;
+
+    @JEventListener
+    public void handleParentEvent(JunitTest.ParentTestEvent event) {
+        this.parentEventReceived = true;
+        this.lastParentMessage = event.getMessage();
+    }
+
+    public boolean isParentEventReceived() {
+        return parentEventReceived;
+    }
+
+    public String getLastParentMessage() {
+        return lastParentMessage;
+    }
+}
+```
+### 2.define a Event
+```java
+    public static class AnotherTestEvent extends JApplicationEvent {
+        public AnotherTestEvent(Object source, String message) {
+            super(source);
+        }
+    }
+
+
+    public static class ParentTestEvent extends JApplicationEvent {
+        private final String message;
+
+        public ParentTestEvent(Object source, String message) {
+            super(source);
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+    public static class ChildTestEvent extends ParentTestEvent {
+        public ChildTestEvent(Object source, String message) {
+            super(source, message);
+        }
+    }
+```
+### 3. public an event
+```java
+ JEventSupportedApplicationContext context = new JEventSupportedApplicationContext("com.github.paohaijiao.test");
+ System.out.println("Registered beans: " );
+ ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
+ context.publishEvent(new AnotherTestEvent(context, "Child Message"));
+```

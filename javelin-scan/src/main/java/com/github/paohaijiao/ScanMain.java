@@ -6,7 +6,7 @@ import com.github.paohaijiao.service.JUserRule;
 public class ScanMain {
     public static void main(String[] args) {
         JAnnotationConfigApplicationContext context =
-                new JAnnotationConfigApplicationContext("com.paohaijiao.javelin");
+                new JAnnotationConfigApplicationContext("com.github.paohaijiao");
         JUserRule userService = context.getBean("jUserRule", JUserRule.class);
         System.out.println(userService.findUser(1L));
     }
