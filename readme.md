@@ -242,6 +242,18 @@ System.out.println(result);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.trans.getMethod(), args);
         System.out.println(result);
 ```
+### custom function
+```java
+        JEvaluator.registerFunction("daysBetween", (BiFunction<Object, Object, Object>) (date1, date2) -> {
+            long diff = ((Date) date2).getTime() - ((Date) date1).getTime();
+            return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        });
+        Date today = new Date();
+        Date nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        Object result = JEvaluator.evaluateFunction("daysBetween", Arrays.asList(today,nextWeek));
+        System.out.println(result);
+```
+
 ## Tree Function Reference
 ### build tree
 ```java
