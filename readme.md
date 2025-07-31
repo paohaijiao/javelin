@@ -344,7 +344,7 @@ service1.sayHello("haha1");
 ```
 
 ### public event to another object
-### 1.define a EventService
+#### 1.define a EventService
 ```java
 @JComponent
 public class ParentEventService {
@@ -366,7 +366,7 @@ private String lastParentMessage;
     }
 }
 ```
-### 2.define a Event
+#### 2.define a Event
 ```java
     public static class AnotherTestEvent extends JApplicationEvent {
         public AnotherTestEvent(Object source, String message) {
@@ -394,10 +394,88 @@ private String lastParentMessage;
         }
     }
 ```
-### 3. public an event
+#### 3. public an event
 ```java
  JEventSupportedApplicationContext context = new JEventSupportedApplicationContext("com.github.paohaijiao.test");
  System.out.println("Registered beans: " );
  ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
  context.publishEvent(new AnotherTestEvent(context, "Child Message"));
+```
+### mybatis
+#### 1.define the jdbc configuration
+```java
+         String userName="root";
+         String password="13579admin";
+         String clazz="com.mysql.cj.jdbc.Driver";
+         String url="jdbc:mysql://192.168.32.132:3306/test?serverTimezone=UTC";
+        JDBCBaseConnectionConfig config=new JBasicJDBConnectionConfig(clazz,url,userName,password);
+        
+```
+#### 2.insert
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JUser userPo=new JUser();
+        userPo.setId(3L);
+        userPo.setName("kimoo");
+        userPo.setAge(12);
+        int i=userMapper.insert(userPo);
+        System.out.println(i);
+```
+#### 3.updateById
+```java
+   JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JUser userPo=new JUser();
+        userPo.setId(1L);
+        userPo.setName("kimoo1");
+        userPo.setAge(12);
+        int i=userMapper.updateById(userPo);
+        System.out.println(i);
+```
+#### 4.selectById
+```java
+Map<String, JMappedStatement> map=new HashMap<>();
+JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+JUser userPo=userMapper.selectById(1);
+System.out.println(userPo);
+```
+#### 5.deleteById
+```java
+JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+int   userPo=userMapper.deleteById(1);
+System.out.println(userPo);
+```
+#### 6.query
+```java
+    JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> list=userMapper.query().eq(JUser::getAge,12).list();
+        System.out.println(list.size());
+```
+#### 7.update
+```java
+      JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        userMapper.update().eq(JUser::getId,1).set(JUser::getAge,18).set(JUser::getName,"admin").execute();
+        System.out.println("update");
+```
+#### 8.sql
+```java
+  JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        String sql="select * from j_user where id>?";
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("id",1L);
+        List<JUser> list=userMapper.select(sql,map);
+        System.out.println(list.size());
 ```
