@@ -6,12 +6,16 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+
 @Ignore // JUnit 4
 public class JTestFunction {
     @Test
-    @Ignore("暂时忽略这个测试，因为...")
+    @Ignore("Ignore")
     public void length() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
@@ -111,9 +115,6 @@ public class JTestFunction {
     }
     @Test
     public void join() throws IOException {
-        List<Object> data = new ArrayList<>();
-        data.add("replace");
-        data.add("ep");
         List<Object> args = new ArrayList<>();
         args.add("123,12344");
         args.add(",");
@@ -168,6 +169,17 @@ public class JTestFunction {
         args.add("2019-04-25 16:23:23");
         args.add("yyyy-MM-dd HH:mm:ss");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.parseToDate.getMethod(), args);
+        System.out.println(result);
+    }
+    @Test
+    public void daysBetween() throws IOException {
+        JEvaluator.registerFunction("daysBetween", (BiFunction<Object, Object, Object>) (date1, date2) -> {
+            long diff = ((Date) date2).getTime() - ((Date) date1).getTime();
+            return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        });
+        Date today = new Date();
+        Date nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        Object result = JEvaluator.evaluateFunction("daysBetween", Arrays.asList(today,nextWeek));
         System.out.println(result);
     }
 

@@ -19,14 +19,15 @@ import com.github.paohaijiao.exception.JAssert;
 import com.github.paohaijiao.param.JContext;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class JFunction {
 
     public static final BiFunction<Object, Object, Object> TRANS = (context, key) -> {
         JAssert.notNull(key, "parameter 2 require not  null");
-        JAssert.isTrue(context instanceof HashMap, "parameter 1 must be initialized in the Context's map");
-        Object object = ((HashMap) context).get(key.toString());
+        //JAssert.isTrue(context instanceof HashMap, "parameter 1 must be initialized in the Context's map");
+        Object object = ((Map) context).get(key.toString());
         return object;
     };
 
