@@ -26,7 +26,6 @@ public class JNamedParameterPreparedStatement {
         this.connection = connection;
         this.parameterIndexes = new LinkedHashMap<>();
         this.sql = parseNamedParameters(sql);
-        log.info("prepar sql:{}",this.sql);
         System.out.println(this.sql);
         String initialSql=this.sql;
         stmt= connection.prepareStatement(this.sql);

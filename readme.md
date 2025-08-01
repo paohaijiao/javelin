@@ -491,3 +491,95 @@ System.out.println(userPo);
         List<JUser> list=userMapper.select(sql,map);
         System.out.println(list.size());
 ```
+#### 9.sql
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        String sql="select * from j_user where id>?";
+        JParam param=new JParam();
+        param.setIndex(1);
+        param.setValue(4L);
+        List<JUser> list=userMapper.select(sql, Arrays.asList(param));
+        System.out.println(list.size());
+```
+#### 10.page
+```java
+ JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JPage<JUser> list=userMapper.page().orderByDesc(JUser::getAge).page(1,10);
+        System.out.println(list);
+```
+#### 11.one
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JUser list=userMapper.query().orderByDesc(JUser::getAge).one();
+        System.out.println(list);
+```
+#### 12.count
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        Long count=userMapper.query().orderByDesc(JUser::getAge).count();
+        System.out.println(count);
+```
+#### 13.like
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().like(JUser::getName,"张").list();
+        System.out.println(count);
+```
+#### 14.eq
+```java
+      JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().eq(JUser::getName,"张").list();
+        System.out.println(count);
+```
+#### 15.ne
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().ne(JUser::getName,"张三").list();
+        System.out.println(count);
+```
+#### 16.gt
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().gt(JUser::getAge,40).list();
+        System.out.println(count);
+```
+#### 17.ge
+```java
+    JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+    JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+    JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+    List<JUser> count=userMapper.query().ge(JUser::getAge,40).list();
+    System.out.println(count);
+```
+#### 18.ge
+```java
+       JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().lt(JUser::getAge,40).list();
+        System.out.println(count);
+```
+#### 18.le
+```java
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().le(JUser::getAge,40).list();
+        System.out.println(count);
+```

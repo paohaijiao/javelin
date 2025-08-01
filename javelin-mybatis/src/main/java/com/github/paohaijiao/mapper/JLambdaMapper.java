@@ -15,6 +15,10 @@
  */
 package com.github.paohaijiao.mapper;
 
+import com.github.paohaijiao.core.JLambdaQueryPageImpl;
+import com.github.paohaijiao.model.JPage;
+import com.github.paohaijiao.model.JParam;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +59,19 @@ public interface JLambdaMapper<T>{
      */
     List<T> select (String sql, Map<String,Object> param);
 
+    /**
+     *  select
+     * @param sql
+     * @param param
+     * @return
+     */
+    List<T> select (String sql, List<JParam> param);
+
+    /**
+     *  page
+     * @return
+     */
+    JLambdaQuery<T> page ();
     /**
      * Lambda query
      * @return

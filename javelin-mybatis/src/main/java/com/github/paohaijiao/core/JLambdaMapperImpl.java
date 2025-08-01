@@ -19,8 +19,11 @@ import com.github.paohaijiao.mapper.JLambdaMapper;
 import com.github.paohaijiao.mapper.JLambdaQuery;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
 import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.model.JPage;
+import com.github.paohaijiao.model.JParam;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +63,17 @@ public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
     public List<T> select(String sql, Map<String,Object> param) {
         JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
         return lambdaQuery.select(sql,param);
+    }
+
+    @Override
+    public List<T> select(String sql, List<JParam> param) {
+        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
+        return lambdaQuery.select(sql,param);
+    }
+
+    @Override
+    public JLambdaQuery<T> page() {
+        return new JLambdaQueryImpl<>(entityClass, sqlSession);
     }
 
 

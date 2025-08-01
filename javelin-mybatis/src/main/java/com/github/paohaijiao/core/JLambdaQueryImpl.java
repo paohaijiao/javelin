@@ -16,13 +16,13 @@
 package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
+import com.github.paohaijiao.exception.JAssert;
 import com.github.paohaijiao.format.JSqlFormatter;
 import com.github.paohaijiao.function.JParameterHandler;
-import com.github.paohaijiao.model.JCondition;
+import com.github.paohaijiao.model.*;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaQuery;
 import com.github.paohaijiao.connection.JSqlConnection;
-import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
 
@@ -43,6 +43,37 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
     public JLambdaQueryImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
+    }
+    public List<T> select(String sql, List<JParam> params) {
+        List<T> list=new ArrayList<>();
+        Connection connection= sqlConnection.getConnection();
+        try {
+            PreparedStatement pstmt= connection.prepareStatement(sql);
+            for (JParam param : params) {
+                JAssert.notNull(param.getIndex(),"the index of param require not null");
+                if (param.getValue() == null) {
+                    pstmt.setNull(param.getIndex(), Types.NULL);
+                    continue;
+                }
+                Class<?> paramType = param.getValue().getClass();
+                @SuppressWarnings("unchecked")
+                JParameterHandler<Object> handler = (JParameterHandler<Object>) PARAM_HANDLERS.get(paramType);
+                if (handler != null) {
+                    handler.handle(pstmt, param.getValue(), param.getIndex());
+                } else {
+                    pstmt.setObject(param.getIndex(), param.getValue());
+                }
+            }
+
+            ResultSet r=pstmt.executeQuery();
+            while (r.next()) {
+                T t= resultSetToObject(r,entityClass);
+                list.add(t);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 
     public List<T> select(String sql, Map<String,Object> param) {
@@ -141,20 +172,18 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         return this;
     }
 
+
+
     @Override
-    public JLambdaQuery<T> in(JSFunction<T, ?> column, Collection<?> values) {
-        conditions.add(new JCondition(getColumnName(column), "in", values));
+    public JLambdaQuery<T> orderByAsc(JSFunction<T, ?> column) {
+        orders.add(new JOrder(getColumnName(column),true));
         return this;
     }
 
     @Override
-    public JLambdaQuery<T> orderByAsc(JSFunction<T, ?> column) {
-        return null;
-    }
-
-    @Override
     public JLambdaQuery<T> orderByDesc(JSFunction<T, ?> column) {
-        return null;
+        orders.add(new JOrder(getColumnName(column),false));
+        return this;
     }
 
     @Override
@@ -172,7 +201,6 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
                 namedParameterPreparedStatement.setParameter(model);
             }
             ResultSet resultSet=namedParameterPreparedStatement.executeQuery();
-
             while(resultSet.next()){
                 T t= resultSetToObject(resultSet,entityClass);
                 list.add(t);
@@ -186,13 +214,21 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
     }
 
     @Override
+    public JPage<T> page(int pageNum, int pageSize) {
+        JLambdaQueryPageImpl<T> pageImpl=new JLambdaQueryPageImpl<>(this.entityClass,sqlConnection,pageNum,pageSize,conditions,orders);
+        return pageImpl.page();
+    }
+
+    @Override
     public T one() {
-        return null;
+        List<T>  list=this.list();
+        return list.isEmpty()?null:list.get(0);
     }
 
     @Override
     public long count() {
-        return 0;
+        List<T>  list=this.list();
+        return list.size();
     }
 
     protected String getColumnName(JSFunction<T, ?> column) {

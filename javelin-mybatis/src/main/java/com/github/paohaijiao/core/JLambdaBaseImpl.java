@@ -73,7 +73,7 @@ public abstract class JLambdaBaseImpl<T>{
                     ? columnAnnotation.value()
                     : JStringUtils.camelToUnderline(fieldName);
         } catch (Exception e) {
-            throw new RuntimeException("解析Lambda表达式失败", e);
+            throw new RuntimeException("failed to parse Lambda expression", e);
         }
     }
     protected String buildSelectSQL() {
