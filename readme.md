@@ -3,11 +3,23 @@
 ## overview
 ```string
     javelin is a streamlined, high-performance java framework designed to accelerate 
-backend development with minimal overhead. named for its speed and precision, Javelin provides essential infrastructure components without the bloat of full-stack solutions.
+backend development with minimal overhead. named for its speed and precision, 
+javelin provides essential infrastructure components without the bloat of full-stack solutions.
 ```
 ## Features
 ### 
 [TOC]
+## Catalog
+- [Chapter One：Overview](#Chapter ONE overview)
+- [Chapter TWO：Installation](#Chapter TWO)
+    - [Requirements](#Requirements)
+    - [Installation](#Installation)
+- [Chapter THREE：how to use](#Chapter THREE)
+    - [Requirements](#Requirements)
+    - [other](#other )
+- [FAQ](#FAQ)
+
+---
 | Module       | Description                          |
 |--------------|--------------------------------------|
 | **Core**     | Lightweight DI container (<2MB)      |
