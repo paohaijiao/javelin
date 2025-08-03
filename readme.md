@@ -1,22 +1,75 @@
 # javelin - lightweight java foundational framework
 ## Table of Contents
 - [Chapter One: Overview](#chapter-one-overview)
+  - [Core Modules](#core-modules)
 - [Chapter Two: Quick Start](#chapter-two-quick-start)
   - [Requirements](#requirements)
+  - [Maven Dependency](#maven-dependency)
 - [Chapter Three: Core](#chapter-three-core)
   - [JEvaluator Function Reference](#jevaluator-function-reference)
-    - [Type Conversion Functions](#-type-conversion-functions)
-    - [Math Functions](#-math-functions)
-    - [String Functions](#-string-functions)
-    - [Date Functions](#-date-functions)
-    - [Collection Functions](#-collection-functions)
+    - [Type Conversion Functions](#type-conversion-functions)
+      - [toInteger](#tointeger-function)
+      - [toDouble](#todouble-function)
+      - [toFloat](#tofloat-function)
+      - [toString](#tostring-function)
+      - [parseToDate](#parsetodate-function)
+    - [Math Functions](#math-functions)
+      - [ceil](#ceil-function)
+      - [floor](#floor-function)
+      - [round](#round-function)
+      - [sum](#sum-function)
+      - [max](#max-function)
+      - [min](#min-function)
+      - [avg](#avg-function)
+    - [String Functions](#string-functions)
+      - [toLower](#tolower-function)
+      - [toUpper](#toupper-function)
+      - [contains](#contains-function)
+      - [join](#join-function)
+      - [split](#split-function)
+      - [substring](#substring-function)
+      - [replace](#replace-function)
+      - [startsWith](#startswith-function)
+      - [endsWith](#endswith-function)
+    - [Date Functions](#date-functions)
+      - [dateFormat](#dateformat-function)
+    - [Collection Functions](#collection-functions)
+      - [length](#length-function)
+      - [trans](#trans-function)
+    - [Custom Functions](#custom-functions)
   - [Tree Function Reference](#tree-function-reference)
+    - [Build Tree](#build-tree)
+    - [Access Tree](#access-tree-by-custom-method)
 - [Chapter Four: Resource](#chapter-four-resource)
+  - [File Loading](#load-the-file-to-string)
+  - [Profile Loading](#load-the-spring-profiles)
 - [Chapter Five: Provider](#chapter-five-provider)
 - [Chapter Six: Scan](#chapter-six-scan)
 - [Chapter Seven: Event](#chapter-seven-event)
+  - [Event Service](#1define-a-eventservice)
+  - [Event Definition](#2define-a-event)
+  - [Event Publishing](#3-public-an-event)
 - [Chapter Eight: MyBatis](#chapter-eight-mybatis)
----
+  - [JDBC Configuration](#1define-the-jdbc-configuration)
+  - [CRUD Operations](#crud-operations)
+    - [Insert](#2insert)
+    - [Update](#3updatebyid)
+    - [Select](#4selectbyid)
+    - [Delete](#5deletebyid)
+    - [Query](#6query)
+    - [Update with Conditions](#7update)
+    - [Custom SQL](#8sql)
+    - [Pagination](#10page)
+    - [Single Result](#11one)
+    - [Count](#12count)
+  - [Conditional Queries](#conditional-queries)
+    - [Like](#13like)
+    - [Equals](#14eq)
+    - [Not Equals](#15ne)
+    - [Greater Than](#16gt)
+    - [Greater or Equal](#17ge)
+    - [Less Than](#18lt)
+    - [Less or Equal](#19le)
 
 ## Chapter One：Overview
 ```string
@@ -187,14 +240,21 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
 | `replace`    | `replace(str,target,rep)` | 3 (String)            | String      | Replaces all occurrences        |
 | `startsWith` | `startsWith(str,prefix)`  | 2 (String)            | Boolean     | Checks string prefix            |
 | `endsWith`   | `endsWith(str,suffix)`    | 2 (String)            | Boolean     | Checks string suffix            |
-### toLower function
+1. toLower function
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toLower.getMethod(), args);
         System.out.println(result); 
 ```
-### contains function
+2. toUpper function
+```java
+        List<Object> args = new ArrayList<>();
+        args.add("Hello World");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.toUpper.getMethod(), args);
+        System.out.println(result); 
+```
+3. contains function
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
@@ -202,32 +262,35 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.contains.getMethod(), args);
         System.out.println(result);
  ```
-### startsWith function
+4. join function
 ```java
         List<Object> args = new ArrayList<>();
-        args.add("Hello World");
-        args.add("Hel1lo");
-        Object result = JEvaluator.evaluateFunction(JMethodEnums.startsWith.getMethod(), args);
+        List<String> items = new ArrayList<>();
+        items.add("12344");
+        items.add("12345");
+        args.add(items);
+        args.add(",");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.join.getMethod(), args);
         System.out.println(result);
 ```
-### endsWith function
+5. split function
 ```java
-        List<Object> args = new ArrayList<>();
-        args.add("Hello World");
-        args.add("World");
-        Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
-        System.out.println(result);
+   List<Object> args = new ArrayList<>();
+   args.add("123,12344");
+   args.add(",");
+   Object result = JEvaluator.evaluateFunction(JMethodEnums.split.getMethod(), args);
+   System.out.println(result); 
 ```
-### substring function
+6. substring function
 ```java
         List<Object> args = new ArrayList<>();
         args.add("substring");
         args.add(1);
         args.add(3);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.substring.getMethod(), args);
-        System.out.println(result); 
+        System.out.println(result);
 ```
-### replace function
+7. replace function
 ```java
         List<Object> args = new ArrayList<>();
         args.add("replace");
@@ -236,23 +299,28 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.replace.getMethod(), args);
         System.out.println(result); 
 ```
-### split function
+8. startsWith function
 ```java
-        List<Object> data = new ArrayList<>();
-        data.add("replace");
-        data.add("ep");
         List<Object> args = new ArrayList<>();
-        args.add("123,12344");
-        args.add(",");
-        Object result = JEvaluator.evaluateFunction(JMethodEnums.split.getMethod(), args);
-        System.out.println(result); 
+        args.add("Hello World");
+        args.add("Hel1lo");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.startsWith.getMethod(), args);
+        System.out.println(result);
+```
+9. endsWith function
+```java
+        List<Object> args = new ArrayList<>();
+        args.add("Hello World");
+        args.add("World");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
+        System.out.println(result);
 ```
 ## 📅 Date Functions
 
 | Function      | Syntax                  | Parameters       | Return Type | Description                     |
 |---------------|-------------------------|------------------|-------------|---------------------------------|
 | `dateFormat`  | `dateFormat(date,format)` | 2 (Date, String) | String    | Formats date to string          |
-### dateFormat function
+1. dateFormat function
 ```java
         List<Object> args = new ArrayList<>();
         args.add(new Date());
@@ -266,14 +334,14 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
 |----------|-------------------|------------|-------------|---------------------------------|
 | `length` | `length(array)`   | 1 (Array)  | Integer     | Returns array/list length       |
 | `trans`  | `trans(src,dest)` | 2 (Objects)| Object      | Transforms between types        |
-### length function
+1. length function
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.length.getMethod(), args);
         System.out.println(result);
 ```
-### trans function
+2. trans function
 ```java
         JContext contextParams = new JContext();
         contextParams.put("1","男");
@@ -284,7 +352,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.trans.getMethod(), args);
         System.out.println(result);
 ```
-### custom function
+## 📦 Custume Functions
 ```java
         JEvaluator.registerFunction("daysBetween", (BiFunction<Object, Object, Object>) (date1, date2) -> {
             long diff = ((Date) date2).getTime() - ((Date) date1).getTime();

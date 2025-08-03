@@ -102,7 +102,7 @@ public class JTestFunction {
         args.add(1);
         args.add(3);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.substring.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void replace() throws IOException {
@@ -111,10 +111,21 @@ public class JTestFunction {
         args.add("ep");
         args.add("2345");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.replace.getMethod(), args);
-        System.out.println(result); // 输出: 11
+        System.out.println(result);
     }
     @Test
     public void join() throws IOException {
+        List<Object> args = new ArrayList<>();
+        List<String> items = new ArrayList<>();
+        items.add("12344");
+        items.add("12345");
+        args.add(items);
+        args.add(",");
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.join.getMethod(), args);
+        System.out.println(result);
+    }
+    @Test
+    public void split() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("123,12344");
         args.add(",");
