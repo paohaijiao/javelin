@@ -8,34 +8,34 @@
 - [Chapter Three: Core](#chapter-three-core)
   - [JEvaluator Function Reference](#jevaluator-function-reference)
     - [Type Conversion Functions](#type-conversion-functions)
-      - [toInteger](#tointeger-function)
-      - [toDouble](#todouble-function)
-      - [toFloat](#tofloat-function)
-      - [toString](#tostring-function)
-      - [parseToDate](#parsetodate-function)
+      - [toInteger](#1-tointeger-function)
+      - [toDouble](#2-todouble-function)
+      - [toFloat](#3-tofloat-function)
+      - [toString](#4-tostring-function)
+      - [parseToDate](#5-parsetodate-function)
     - [Math Functions](#math-functions)
-      - [ceil](#ceil-function)
-      - [floor](#floor-function)
-      - [round](#round-function)
-      - [sum](#sum-function)
-      - [max](#max-function)
-      - [min](#min-function)
-      - [avg](#avg-function)
+      - [ceil](#1-ceil-function)
+      - [floor](#2-floor-function)
+      - [round](#3-round-function)
+      - [sum](#4-sum-function)
+      - [max](#5-max-function)
+      - [min](#6-min-function)
+      - [avg](#7-avg-function)
     - [String Functions](#string-functions)
-      - [toLower](#tolower-function)
-      - [toUpper](#toupper-function)
-      - [contains](#contains-function)
-      - [join](#join-function)
-      - [split](#split-function)
-      - [substring](#substring-function)
-      - [replace](#replace-function)
-      - [startsWith](#startswith-function)
-      - [endsWith](#endswith-function)
+      - [toLower](#1-tolower-function)
+      - [toUpper](#2-toupper-function)
+      - [contains](#3-contains-function)
+      - [join](#4-join-function)
+      - [split](#5-split-function)
+      - [substring](#6-substring-function)
+      - [replace](#7-replace-function)
+      - [startsWith](#8-startswith-function)
+      - [endsWith](#9-endswith-function)
     - [Date Functions](#date-functions)
-      - [dateFormat](#dateformat-function)
+      - [dateFormat](#1-dateformat-function)
     - [Collection Functions](#collection-functions)
-      - [length](#length-function)
-      - [trans](#trans-function)
+      - [length](#1-length-function)
+      - [trans](#2-trans-function)
     - [Custom Functions](#custom-functions)
   - [Tree Function Reference](#tree-function-reference)
     - [Build Tree](#build-tree)
@@ -46,31 +46,30 @@
 - [Chapter Five: Provider](#chapter-five-provider)
 - [Chapter Six: Scan](#chapter-six-scan)
 - [Chapter Seven: Event](#chapter-seven-event)
-  - [Event Service](#1define-a-eventservice)
-  - [Event Definition](#2define-a-event)
+  - [Event Service](#1-define-a-eventservice)
+  - [Event Definition](#2-define-a-event)
   - [Event Publishing](#3-public-an-event)
 - [Chapter Eight: MyBatis](#chapter-eight-mybatis)
-  - [JDBC Configuration](#1define-the-jdbc-configuration)
+  - [JDBC Configuration](#1-define-the-jdbc-configuration)
   - [CRUD Operations](#crud-operations)
-    - [Insert](#2insert)
-    - [Update](#3updatebyid)
-    - [Select](#4selectbyid)
-    - [Delete](#5deletebyid)
-    - [Query](#6query)
-    - [Update with Conditions](#7update)
-    - [Custom SQL](#8sql)
-    - [Pagination](#10page)
-    - [Single Result](#11one)
-    - [Count](#12count)
+    - [Insert](#2-insert)
+    - [Update](#3-updatebyid)
+    - [Select](#4-selectbyid)
+    - [Delete](#5-deletebyid)
+    - [Query](#6-query)
+    - [Update with Conditions](#7-update)
+    - [Custom SQL](#8-sql)
+    - [Pagination](#10-page)
+    - [Single Result](#11-select-one)
+    - [Count](#12-count)
   - [Conditional Queries](#conditional-queries)
-    - [Like](#13like)
-    - [Equals](#14eq)
-    - [Not Equals](#15ne)
-    - [Greater Than](#16gt)
-    - [Greater or Equal](#17ge)
-    - [Less Than](#18lt)
-    - [Less or Equal](#19le)
-
+    - [Like](#13-like)
+    - [Equals](#14-eq)
+    - [Not Equals](#15-ne)
+    - [Greater Than](#16-gt)
+    - [Greater or Equal](#17-ge)
+    - [Less Than](#18-lt)
+    - [Less or Equal](#19-le)
 ## Chapter One：Overview
 ```string
     javelin is a streamlined, high-performance java framework designed to accelerate 
@@ -525,7 +524,7 @@ private String lastParentMessage;
  context.publishEvent(new AnotherTestEvent(context, "Child Message"));
 ```
 ## Chapter Eight: Mybtatis
-#### 1.define the jdbc configuration
+1. define the jdbc configuration
 ```java
          String userName="root";
          String password="13579admin";
@@ -534,7 +533,7 @@ private String lastParentMessage;
         JDBCBaseConnectionConfig config=new JBasicJDBConnectionConfig(clazz,url,userName,password);
         
 ```
-#### 2.insert
+2. insert
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -546,7 +545,7 @@ private String lastParentMessage;
         int i=userMapper.insert(userPo);
         System.out.println(i);
 ```
-#### 3.updateById
+3. updateById
 ```java
    JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -558,7 +557,7 @@ private String lastParentMessage;
         int i=userMapper.updateById(userPo);
         System.out.println(i);
 ```
-#### 4.selectById
+4. selectById
 ```java
 Map<String, JMappedStatement> map=new HashMap<>();
 JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
@@ -567,7 +566,7 @@ JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
 JUser userPo=userMapper.selectById(1);
 System.out.println(userPo);
 ```
-#### 5.deleteById
+5. deleteById
 ```java
 JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
 JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -575,7 +574,7 @@ JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
 int   userPo=userMapper.deleteById(1);
 System.out.println(userPo);
 ```
-#### 6.query
+6. query
 ```java
     JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -583,7 +582,7 @@ System.out.println(userPo);
         List<JUser> list=userMapper.query().eq(JUser::getAge,12).list();
         System.out.println(list.size());
 ```
-#### 7.update
+7. update
 ```java
       JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -591,7 +590,7 @@ System.out.println(userPo);
         userMapper.update().eq(JUser::getId,1).set(JUser::getAge,18).set(JUser::getName,"admin").execute();
         System.out.println("update");
 ```
-#### 8.sql
+8. sql
 ```java
   JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -602,7 +601,7 @@ System.out.println(userPo);
         List<JUser> list=userMapper.select(sql,map);
         System.out.println(list.size());
 ```
-#### 9.sql
+9. sql
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -614,7 +613,7 @@ System.out.println(userPo);
         List<JUser> list=userMapper.select(sql, Arrays.asList(param));
         System.out.println(list.size());
 ```
-#### 10.page
+10. page
 ```java
  JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -622,7 +621,7 @@ System.out.println(userPo);
         JPage<JUser> list=userMapper.page().orderByDesc(JUser::getAge).page(1,10);
         System.out.println(list);
 ```
-#### 11.one
+11. select one
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -630,7 +629,7 @@ System.out.println(userPo);
         JUser list=userMapper.query().orderByDesc(JUser::getAge).one();
         System.out.println(list);
 ```
-#### 12.count
+12. count
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -638,7 +637,7 @@ System.out.println(userPo);
         Long count=userMapper.query().orderByDesc(JUser::getAge).count();
         System.out.println(count);
 ```
-#### 13.like
+13. like
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -646,7 +645,7 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().like(JUser::getName,"张").list();
         System.out.println(count);
 ```
-#### 14.eq
+14. eq
 ```java
       JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -654,7 +653,7 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().eq(JUser::getName,"张").list();
         System.out.println(count);
 ```
-#### 15.ne
+15. ne
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -662,7 +661,7 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().ne(JUser::getName,"张三").list();
         System.out.println(count);
 ```
-#### 16.gt
+16. gt
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -670,7 +669,7 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().gt(JUser::getAge,40).list();
         System.out.println(count);
 ```
-#### 17.ge
+17. ge
 ```java
     JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
     JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -678,7 +677,7 @@ System.out.println(userPo);
     List<JUser> count=userMapper.query().ge(JUser::getAge,40).list();
     System.out.println(count);
 ```
-#### 18.ge
+18. ge
 ```java
        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -686,7 +685,7 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().lt(JUser::getAge,40).list();
         System.out.println(count);
 ```
-#### 18.le
+18. le
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
