@@ -80,7 +80,7 @@ javelin provides essential infrastructure components without the bloat of full-s
 ---
 | Module       | Description                          |
 |--------------|--------------------------------------|
-| **Core**     | Lightweight DI container (<2MB)      |
+| **Core**     | Lightweight DI container       |
 | **Resource** | Enhanced resource management         |
 | **Provider** | Type-safe configuration binding      |
 | **Scan**     | Automatic component detection        |
