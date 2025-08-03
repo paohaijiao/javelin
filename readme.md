@@ -1,7 +1,6 @@
 # javelin - lightweight java foundational framework
-<!-- 手动编写的目录 -->
 ## 目录
-- [第一章：简介](#第一章简介)
+- [Chapter One：Overview](#第一章简介)
 - [第二章：安装](#第二章安装)
   - [系统要求](#系统要求)
   - [安装步骤](#安装步骤)
@@ -12,8 +11,12 @@
 
 ---
 
-## 第一章：简介
-这里是文档的简介内容...
+## Chapter One：Overview
+```string
+    javelin is a streamlined, high-performance java framework designed to accelerate 
+backend development with minimal overhead. named for its speed and precision, 
+javelin provides essential infrastructure components without the bloat of full-stack solutions.
+```
 
 ## 第二章：安装
 ### 系统要求
@@ -36,11 +39,7 @@
 ## 常见问题
 ### 如何卸载？
 ## overview
-```string
-    javelin is a streamlined, high-performance java framework designed to accelerate 
-backend development with minimal overhead. named for its speed and precision, 
-javelin provides essential infrastructure components without the bloat of full-stack solutions.
-```
+
 ## Features
 ### 
 [TOC]
