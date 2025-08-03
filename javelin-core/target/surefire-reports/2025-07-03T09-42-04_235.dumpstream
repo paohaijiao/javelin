@@ -1,0 +1,5 @@
+# Created at 2025-07-03T09:42:04.550
+Boot Manifest-JAR contains absolute paths in classpath 'D:\my\javelin\javelin-core\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

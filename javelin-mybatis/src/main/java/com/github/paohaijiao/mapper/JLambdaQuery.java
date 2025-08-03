@@ -16,23 +16,106 @@
 package com.github.paohaijiao.mapper;
 
 import com.github.paohaijiao.function.JSFunction;
+import com.github.paohaijiao.model.JPage;
 
 import java.util.Collection;
 import java.util.List;
 
 public interface JLambdaQuery<T>{
+    /***
+     * eq
+     * @param column column
+     * @param value value
+     * @return
+     */
     JLambdaQuery<T> eq(JSFunction<T, ?> column, Object value);
+
+    /**
+     * ne
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> ne(JSFunction<T, ?> column, Object value);
+
+    /**
+     * gt
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> gt(JSFunction<T, ?> column, Object value);
+
+    /**
+     * ge
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> ge(JSFunction<T, ?> column, Object value);
+
+    /**
+     * lt
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> lt(JSFunction<T, ?> column, Object value);
+
+    /**
+     * le
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> le(JSFunction<T, ?> column, Object value);
+
+    /**
+     * like
+     * @param column
+     * @param value
+     * @return
+     */
     JLambdaQuery<T> like(JSFunction<T, ?> column, String value);
-    JLambdaQuery<T> in(JSFunction<T, ?> column, Collection<?> values);
+
+
+    /**
+     * orderByAsc
+     * @param column
+     * @return
+     */
     JLambdaQuery<T> orderByAsc(JSFunction<T, ?> column);
+
+    /**
+     * orderByDesc
+     * @param column
+     * @return
+     */
     JLambdaQuery<T> orderByDesc(JSFunction<T, ?> column);
 
+    /**
+     *
+     * @return
+     */
     List<T> list();
+
+    /**
+     * page
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    JPage<T> page(int pageNum, int pageSize);
+
+    /**
+     * one
+     * @return
+     */
     T one();
+
+    /**
+     * count
+     * @return
+     */
     long count();
 }

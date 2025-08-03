@@ -21,6 +21,8 @@ import com.github.paohaijiao.factory.JLambdaMapperFactory;
 import com.github.paohaijiao.mapper.JLambdaMapper;
 import com.github.paohaijiao.connection.JSqlConnectionFactory;
 import com.github.paohaijiao.connection.impl.DefaultSqlConnectionactory;
+import com.github.paohaijiao.model.JPage;
+import com.github.paohaijiao.model.JParam;
 import com.github.paohaijiao.support.JMappedStatement;
 import com.github.paohaijiao.model.JUser;
 import org.junit.Test;
@@ -29,6 +31,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +118,99 @@ public class JSQLMain {
         List<JUser> list=userMapper.select(sql,map);
         System.out.println(list.size());
     }
+    @Test
+    public void sql1() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        String sql="select * from j_user where id>?";
+        JParam param=new JParam();
+        param.setIndex(1);
+        param.setValue(4L);
+        List<JUser> list=userMapper.select(sql, Arrays.asList(param));
+        System.out.println(list.size());
+    }
+    @Test
+    public void page() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JPage<JUser> list=userMapper.page().orderByDesc(JUser::getAge).page(1,10);
+        System.out.println(list);
+    }
+    @Test
+    public void one() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        JUser list=userMapper.query().orderByDesc(JUser::getAge).one();
+        System.out.println(list);
+    }
+    @Test
+    public void count() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        Long count=userMapper.query().orderByDesc(JUser::getAge).count();
+        System.out.println(count);
+    }
+    @Test
+    public void like() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().like(JUser::getName,"张").list();
+        System.out.println(count);
+    }
+    @Test
+    public void eq() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().eq(JUser::getName,"张").list();
+        System.out.println(count);
+    }
+    @Test
+    public void ne() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().ne(JUser::getName,"张三").list();
+        System.out.println(count);
+    }
+    @Test
+    public void gt() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().gt(JUser::getAge,40).list();
+        System.out.println(count);
+    }
+    @Test
+    public void ge() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().ge(JUser::getAge,40).list();
+        System.out.println(count);
+    }
+    @Test
+    public void lt() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().lt(JUser::getAge,40).list();
+        System.out.println(count);
+    }
+    @Test
+    public void le() throws IOException, SQLException, ClassNotFoundException {
+        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
+        JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
+        JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
+        List<JUser> count=userMapper.query().le(JUser::getAge,40).list();
+        System.out.println(count);
+    }
+
 
 
 }
