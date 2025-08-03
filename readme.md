@@ -1,14 +1,21 @@
 # javelin - lightweight java foundational framework
-## 目录
-- [Chapter One：Overview](#第一章简介)
-- [第二章：安装](#第二章安装)
-  - [系统要求](#系统要求)
-  - [安装步骤](#安装步骤)
-- [第三章：使用指南](#第三章使用指南)
-  - [基础功能](#基础功能)
-  - [高级功能](#高级功能)
-- [常见问题](#常见问题)
-
+## Table of Contents
+- [Chapter One: Overview](#chapter-one-overview)
+- [Chapter Two: Quick Start](#chapter-two-quick-start)
+  - [Requirements](#requirements)
+- [Chapter Three: Core](#chapter-three-core)
+  - [JEvaluator Function Reference](#jevaluator-function-reference)
+    - [Type Conversion Functions](#-type-conversion-functions)
+    - [Math Functions](#-math-functions)
+    - [String Functions](#-string-functions)
+    - [Date Functions](#-date-functions)
+    - [Collection Functions](#-collection-functions)
+  - [Tree Function Reference](#tree-function-reference)
+- [Chapter Four: Resource](#chapter-four-resource)
+- [Chapter Five: Provider](#chapter-five-provider)
+- [Chapter Six: Scan](#chapter-six-scan)
+- [Chapter Seven: Event](#chapter-seven-event)
+- [Chapter Eight: MyBatis](#chapter-eight-mybatis)
 ---
 
 ## Chapter One：Overview
@@ -17,41 +24,6 @@
 backend development with minimal overhead. named for its speed and precision, 
 javelin provides essential infrastructure components without the bloat of full-stack solutions.
 ```
-
-## 第二章：安装
-### 系统要求
-- Windows 10+
-- macOS 10.15+
-- Linux Ubuntu 18.04+
-
-### 安装步骤
-1. 下载安装包
-2. 运行安装程序
-3. 完成配置
-
-## 第三章：使用指南
-### 基础功能
-基础功能说明...
-
-### 高级功能
-高级功能说明...
-
-## 常见问题
-### 如何卸载？
-## overview
-
-## Features
-### 
-[TOC]
-## Catalog
-- [Chapter One：Overview](#Chapter ONE overview)
-- [Chapter TWO：Installation](#Chapter TWO)
-    - [Requirements](#Requirements)
-    - [Installation](#Installation)
-- [Chapter THREE：how to use](#Chapter THREE)
-    - [Requirements](#Requirements)
-    - [other](#other )
-- [FAQ](#FAQ)
 
 ---
 | Module       | Description                          |
@@ -63,13 +35,11 @@ javelin provides essential infrastructure components without the bloat of full-s
 | **Event**    | Pub/sub event system                 |
 | **MyBatis**  | Simplified MyBatis integration       |
 
-## Quick Start
+## Chapter Two: Quick Start
 
 ### Requirements
 - Java 8
 - Maven/Gradle
-
-### Installation
 ```xml
 <!-- Maven -->
 <dependency>
@@ -78,9 +48,9 @@ javelin provides essential infrastructure components without the bloat of full-s
     <version>versionNum</version>
 </dependency>
 ```
-### core 
-#### JEvaluator Function Reference
-##### Basic Usage Pattern
+## Chapter Three: Core
+### JEvaluator Function Reference
+####Basic Usage Pattern
 ```string
 All JEvaluator functions follow the same basic usage pattern:
 ```
@@ -347,7 +317,7 @@ System.out.println(result);
         List<JDept> siblings = JTreeUtil.getSiblings(backendGroup, null, JDept::getId, JDept::getParentId, JDept::getChildren, nodeMap, false);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
 ```
-### resource
+## Chapter Four: Resource
 ####  load the file to string
 ```java
         JReader fileReader = new JFileReader("data/rule.txt");
@@ -372,7 +342,7 @@ System.out.println("DB Username: " + configLoader.getProperty("database.username
 System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
 }
 ```
-### provider
+## Chapter Five: Provider
 ```java
 Properties config = new Properties();
 config.setProperty("bean.container.mode", "simple"); // 或 "simple"
@@ -395,7 +365,8 @@ ProviderUserService service1 = container.getBean(ProviderUserService.class);
 service.sayHello("haha");
 service1.sayHello("haha1");
 ```
-### scan
+## Chapter Six: Scan
+
 ```java
         JAnnotationConfigApplicationContext context =
                 new JAnnotationConfigApplicationContext("com.github.paohaijiao");
@@ -403,7 +374,7 @@ service1.sayHello("haha1");
         System.out.println(userService.findUser(1L));
 ```
 
-### public event to another object
+## Chapter Sevent: Event
 #### 1.define a EventService
 ```java
 @JComponent
@@ -461,7 +432,7 @@ private String lastParentMessage;
  ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
  context.publishEvent(new AnotherTestEvent(context, "Child Message"));
 ```
-### mybatis
+## Chapter Eight: Mybtatis
 #### 1.define the jdbc configuration
 ```java
          String userName="root";
