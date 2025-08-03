@@ -36,7 +36,7 @@
     - [Collection Functions](#collection-functions)
       - [length](#1-length-function)
       - [trans](#2-trans-function)
-    - [Custom Functions](#custom-functions)
+    - [✨ Custom Functions](#custom-functions)  <!-- 已更换图标 -->
   - [Tree Function Reference](#tree-function-reference)
     - [Build Tree](#build-tree)
     - [Access Tree](#access-tree-by-custom-method)
@@ -327,7 +327,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.dateFormat.getMethod(), args);
         System.out.println(result);
 ```
-## 📦 Collection Functions
+## ✨ Collection Functions
 
 | Function | Syntax            | Parameters | Return Type | Description                     |
 |----------|-------------------|------------|-------------|---------------------------------|
@@ -364,7 +364,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
 ```
 
 ## Tree Function Reference
-### build tree
+1. build tree
 ```java
      List<JDept> deptList = new ArrayList<>();
         deptList.add(new JDept(1L, 0L, "总公司"));
@@ -377,7 +377,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         JDept node = JTreeUtil.findNode(tree, 2L, JDept::getId, JDept::getChildren);
         System.out.println(node);
 ```
-###  access tree by custom method
+2.  access tree by specific method
 ```java
     List<JDept> deptList = new ArrayList<>();
         deptList.add(new JDept(1L, 0L, "总公司"));
@@ -409,13 +409,13 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
 ```
 ## Chapter Four: Resource
-####  load the file to string
+1. load the file to string
 ```java
         JReader fileReader = new JFileReader("data/rule.txt");
         JAdaptor context = new JAdaptor(fileReader);
         System.out.println(context.getRuleContent());
 ```
-####  load the spring profiles
+2. load the spring profiles
 ```java
 @Test
 public void test() throws IOException {
