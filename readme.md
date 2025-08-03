@@ -1,5 +1,40 @@
 # javelin - lightweight java foundational framework
+<!-- 手动编写的目录 -->
+## 目录
+- [第一章：简介](#第一章简介)
+- [第二章：安装](#第二章安装)
+  - [系统要求](#系统要求)
+  - [安装步骤](#安装步骤)
+- [第三章：使用指南](#第三章使用指南)
+  - [基础功能](#基础功能)
+  - [高级功能](#高级功能)
+- [常见问题](#常见问题)
 
+---
+
+## 第一章：简介
+这里是文档的简介内容...
+
+## 第二章：安装
+### 系统要求
+- Windows 10+
+- macOS 10.15+
+- Linux Ubuntu 18.04+
+
+### 安装步骤
+1. 下载安装包
+2. 运行安装程序
+3. 完成配置
+
+## 第三章：使用指南
+### 基础功能
+基础功能说明...
+
+### 高级功能
+高级功能说明...
+
+## 常见问题
+### 如何卸载？
 ## overview
 ```string
     javelin is a streamlined, high-performance java framework designed to accelerate 
