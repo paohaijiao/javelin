@@ -23,18 +23,10 @@ import java.util.Objects;
 
 public class JDateCompareUtil {
 
-    /**
-     * 比较两个Date对象
-     * @param date1 第一个日期
-     * @param date2 第二个日期
-     * @param operator 比较操作符
-     * @return 比较结果
-     * @throws IllegalArgumentException 如果任一日期参数为null
-     */
     public static boolean compare(Date date1, Date date2, JOperatorEnums operator) {
-        Objects.requireNonNull(date1, "第一个日期参数不能为null");
-        Objects.requireNonNull(date2, "第二个日期参数不能为null");
-        Objects.requireNonNull(operator, "比较操作符不能为null");
+        Objects.requireNonNull(date1, "the first date parameter cannot be null");
+        Objects.requireNonNull(date2, "the second date parameter cannot be null");
+        Objects.requireNonNull(operator, "operator cannot be null");
         int comparison = date1.compareTo(date2);
         switch (operator) {
             case GREATER_THAN:
@@ -50,17 +42,9 @@ public class JDateCompareUtil {
             case NOT_EQUAL:
                 return comparison != 0;
             default:
-                throw new IllegalArgumentException("不支持的比较操作符: " + operator);
+                throw new IllegalArgumentException("operator not support: " + operator);
         }
     }
-    /**
-     * 重载方法，使用字符串指定比较操作符
-     * @param date1 第一个日期
-     * @param date2 第二个日期
-     * @param operator 比较操作符字符串(>, >=, <, <=, ==, !=)
-     * @return 比较结果
-     * @throws IllegalArgumentException 如果操作符无效
-     */
     public static boolean compare(Date date1, Date date2, String operator) {
         JOperatorEnums op;
         switch (operator) {
@@ -71,8 +55,8 @@ public class JDateCompareUtil {
             case "==": op = JOperatorEnums.EQUAL; break;
             case "!=": op = JOperatorEnums.NOT_EQUAL; break;
             default:
-                throw new IllegalArgumentException("无效的比较操作符: " + operator +
-                        "，支持的比较符有: >, >=, <, <=, ==, !=");
+                throw new IllegalArgumentException("invalid comparison operator: " + operator +
+                        "，the supported ones are quite compatible: >, >=, <, <=, ==, !=");
         }
         return compare(date1, date2, op);
     }

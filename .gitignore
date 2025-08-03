@@ -1,11 +1,8 @@
-# 忽略所有 .class 文件
 *.class
 
-# 忽略 Maven 的 target 目录
 target/
 **/target/
 
-# 忽略 IDE 相关文件
 .idea/
 *.iml
 *.ipr
@@ -16,50 +13,40 @@ target/
 .vscode/
 bin/
 
-# 忽略日志文件
 *.log
 logs/
 
-# 忽略临时文件
 *.tmp
 *.bak
 *.swp
 *.swo
 
-# 忽略 Mac 系统文件
 .DS_Store
 
-# 忽略 Windows 系统文件
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# 忽略测试相关的输出
 **/test-output/
 **/surefire-reports/
 **/failsafe-reports/
 
-# 忽略依赖管理文件 (除非你想跟踪它们)
 # dependency-reduced-pom.xml
 # pom.xml.versionsBackup
 
-# 忽略 Maven 包装器 (如果你不使用)
 # .mvn/
 # mvnw
 # mvnw.cmd
 
-# 忽略环境配置文件
 .env
 .env.local
 
-# 忽略构建产物
 *.jar
 *.war
 *.ear
 *.zip
 *.tar.gz
 
-# 忽略代码覆盖率报告
 **/coverage/
 **/jacoco.exec
 **/jacoco-reports/
