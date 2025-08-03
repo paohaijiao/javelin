@@ -1,11 +1,13 @@
 # javelin - lightweight java foundational framework
 
 ## overview
-javelin is a streamlined, high-performance java framework designed to accelerate 
+```string
+    javelin is a streamlined, high-performance java framework designed to accelerate 
 backend development with minimal overhead. named for its speed and precision, Javelin provides essential infrastructure components without the bloat of full-stack solutions.
-
+```
 ## Features
-### Core Modules
+### 
+[TOC]
 | Module       | Description                          |
 |--------------|--------------------------------------|
 | **Core**     | Lightweight DI container (<2MB)      |
