@@ -75,21 +75,25 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toInteger.getMethod(), args);
         System.out.println(result); 
 ```
-2. ceil floor toString toDouble round function
+2. toDouble function
 ```java   
+  List<Object> args = new ArrayList<>();
+        args.add(1.5);
+        Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toDouble.getMethod(), args);
+```
+3. toFloat
+```java   
+  List<Object> args = new ArrayList<>();
+        args.add(1.5);
+        Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toFloat.getMethod(), args);
+```
+4. toString
+```java
      List<Object> args = new ArrayList<>();
         args.add(1.5);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toString.getMethod(), args);
-        Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toDouble.getMethod(), args);
-        Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
-        Object floor= JEvaluator.evaluateFunction(JMethodEnums.floor.getMethod(), args);
-        List<Object> args1 = new ArrayList<>();
-        args1.add(1.5321321312);
-        args1.add(2);
-        Object round= JEvaluator.evaluateFunction(JMethodEnums.round.getMethod(), args1);
-        System.out.println(result);
 ```
-### parseToDate function
+5. parseToDate
 ```java   
         List<Object> args = new ArrayList<>();
         args.add("2019-04-25 16:23:23");
@@ -97,6 +101,8 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
         Object result = JEvaluator.evaluateFunction(JMethodEnums.parseToDate.getMethod(), args);
         System.out.println(result);
 ```
+### parseToDate function
+
 ## 🔢 Math Functions
 | Function | Syntax              | Parameters            | Return Type | Description                     |
 |----------|---------------------|-----------------------|-------------|---------------------------------|
@@ -107,7 +113,27 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
 | `max`    | `max(values...)`    | ≥1 (Numbers)          | Number      | Returns maximum value           |
 | `min`    | `min(values...)`    | ≥1 (Numbers)          | Number      | Returns minimum value           |
 | `avg`    | `avg(values...)`    | ≥1 (Numbers)          | Double      | Calculates average              |
-### sum function
+1. ceil function
+```java   
+List<Object> args = new ArrayList<>();
+args.add(1.5);
+Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args); 
+```
+2. floor function
+```java   
+        List<Object> args = new ArrayList<>();
+        args.add(1.5);
+        Object floor= JEvaluator.evaluateFunction(JMethodEnums.floor.getMethod(), args); 
+```
+3. round function
+```java   
+        List<Object> args1 = new ArrayList<>();
+        args1.add(1.5321321312);
+        args1.add(2);
+        Object round= JEvaluator.evaluateFunction(JMethodEnums.round.getMethod(), args1);
+        System.out.println(result);
+```
+4. sum function
 ```java
         List<Object> args = new ArrayList<>();
         args.add(10);
@@ -116,18 +142,18 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
         Object result = JEvaluator.evaluateFunction(JMethodEnums.sum.getMethod(), args);
         System.out.println(result);
 ```
-### max function
+5. max function
 ```java
-List<Object> args = new ArrayList<>();
-args.add(1);
-args.add(2);
-args.add(3);
-args.add(4);
-args.add(5);
-Object result = JEvaluator.evaluateFunction(JMethodEnums.max.getMethod(), args);
-System.out.println(result); 
+        List<Object> args = new ArrayList<>();
+        args.add(1);
+        args.add(2);
+        args.add(3);
+        args.add(4);
+        args.add(5);
+        Object result = JEvaluator.evaluateFunction(JMethodEnums.max.getMethod(), args);
+        System.out.println(result); 
 ```
-### min function
+6. min function
 ```java
         List<Object> args = new ArrayList<>();
         args.add(1);
@@ -138,7 +164,7 @@ System.out.println(result);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.min.getMethod(), args);
         System.out.println(result); 
 ```
-### avg function
+7. avg function
 ```java
         List<Object> args = new ArrayList<>();
         args.add(1);
