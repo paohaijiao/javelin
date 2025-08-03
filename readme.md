@@ -45,21 +45,19 @@ javelin provides essential infrastructure components without the bloat of full-s
 <dependency>
     <groupId>io.github.paohaijiao</groupId>
     <artifactId>javelin</artifactId>
-    <version>versionNum</version>
+    <version>${version}</version>
 </dependency>
 ```
 ## Chapter Three: Core
 ### JEvaluator Function Reference
-####Basic Usage Pattern
+#### Basic Usage Pattern
 ```string
 All JEvaluator functions follow the same basic usage pattern:
 ```
 ```java
 List<Object> args = new ArrayList<>();
-// Add arguments in order specified in function signature
 args.add(argument1);
 args.add(argument2);
-// ...
 Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMethod(), args);
 ```
 ## 📊 Type Conversion Functions
@@ -70,14 +68,14 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
 | `toFloat`      | `toFloat(value)`        | 1 (any type)     | Float       | Converts value to Float         |
 | `toString`     | `toString(value)`       | 1 (any type)     | String      | Converts value to String        |
 | `parseToDate`  | `parseToDate(str,format)` | 2 (String)     | Date        | Parses string to Date           |
-### toInteger function
+1. toInteger function
 ```java      
   List<Object> args = new ArrayList<>();
         args.add("1");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toInteger.getMethod(), args);
         System.out.println(result); 
 ```
-### ceil floor toString toDouble round function
+2. ceil floor toString toDouble round function
 ```java   
      List<Object> args = new ArrayList<>();
         args.add(1.5);
