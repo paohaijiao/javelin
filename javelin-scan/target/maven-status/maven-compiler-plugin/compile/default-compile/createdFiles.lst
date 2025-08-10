@@ -1,7 +1,6 @@
 com\github\paohaijiao\anno\JRepository.class
 com\github\paohaijiao\anno\JBean.class
 com\github\paohaijiao\anno\JRule.class
-com\github\paohaijiao\package-info.class
 com\github\paohaijiao\context\JAnnotationConfigApplicationContext.class
 com\github\paohaijiao\service\JUserRule.class
 com\github\paohaijiao\anno\JService.class

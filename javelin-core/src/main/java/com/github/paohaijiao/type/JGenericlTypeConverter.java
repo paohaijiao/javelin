@@ -18,6 +18,8 @@ package com.github.paohaijiao.type;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -305,5 +307,95 @@ public class JGenericlTypeConverter {
 
     private static boolean isWrapperType(Class<?> type) {
         return WRAPPER_TO_PRIMITIVE.containsKey(type);
+    }
+    protected Object convert(String data,JTypeReference<?> typeReference){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            if (data == null || typeReference == null) {
+                return null;
+            }
+            Type type = typeReference.getRawType();
+            JTypeReference stringJTypeReference=JTypeReference.of(String.class);
+            JTypeReference charSequenceJTypeReference=JTypeReference.of(CharSequence.class);
+            boolean isString =type.equals(stringJTypeReference.getRawType());
+            boolean isCharSequence =type.equals(charSequenceJTypeReference.getRawType());
+            if(data instanceof String&&isString){
+                return  data;
+            }
+            if(data instanceof String&&isCharSequence){
+                return  data;
+            }
+            if (data instanceof String) {//data is tring but result not string
+                if(isMapTypeReference(typeReference)){
+                    Gson gson = new Gson();
+                    Type gsonType = convertJacksonTypeToGsonType(typeReference);
+                    return gson.fromJson(data, gsonType);
+                }
+                return objectMapper.readValue(data, typeReference);
+            }else{//data is not tring
+                return objectMapper.convertValue(data, typeReference);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private Type convertJacksonTypeToGsonType(JavaType javaType) {
+        if (javaType.isMapLikeType()) {
+            return TypeToken.getParameterized(
+                    Map.class,
+                    convertJacksonTypeToGsonType(javaType.getKeyType()),
+                    convertJacksonTypeToGsonType(javaType.getContentType())
+            ).getType();
+        }
+
+        if (javaType.isCollectionLikeType()) {
+            return TypeToken.getParameterized(
+                    Collection.class,
+                    convertJacksonTypeToGsonType(javaType.getContentType())
+            ).getType();
+        }
+
+        if (javaType.isArrayType()) {
+            return TypeToken.getArray(
+                    convertJacksonTypeToGsonType(javaType.getContentType())
+            ).getType();
+        }
+
+        return javaType.getRawClass();
+    }
+    private Type convertJacksonTypeToGsonType(TypeReference<?> jacksonTypeRef) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JavaType javaType = objectMapper.constructType(jacksonTypeRef.getType());
+        if (javaType.isMapLikeType()) {
+            JavaType keyType = javaType.getKeyType();
+            JavaType valueType = javaType.getContentType();
+            return TypeToken.getParameterized(
+                    Map.class,
+                    convertJacksonTypeToGsonType(keyType),
+                    convertJacksonTypeToGsonType(valueType)
+            ).getType();
+        }
+        return javaType.getRawClass();
+    }
+
+    public static boolean isMapTypeReference(TypeReference<?> typeReference) {
+        Type type = typeReference.getType();
+        ObjectMapper mapper = new ObjectMapper();
+        JavaType javaType = mapper.constructType(typeReference.getType());
+        if (javaType != null && javaType.isMapLikeType()) {
+            return true;
+        }
+        if (type instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType) type;
+            Type rawType = pType.getRawType();
+            if (rawType instanceof Class<?>) {
+                return Map.class.isAssignableFrom((Class<?>) rawType);
+            }
+        } else if (type instanceof Class<?>) {
+            return Map.class.isAssignableFrom((Class<?>) type);
+        }
+        return false;
+
     }
 }
