@@ -729,7 +729,7 @@ System.out.println(userPo);
 
 ## **🌟 立即支持**
 赞助时欢迎通过 [email](mailto:goudingcheng@gmail.com) 留言。您的名字将被列入项目README文件的 **"特别感谢"** 名单中！
-![Ali Pay](./src/main/resources/pay/alipay.jpg)
-![Wechat Pay](./src/main/resources/pay/wechat.jpg)
+![Ali Pay](./pay/alipay.jpg)
+![Wechat Pay](./pay/wechat.jpg)
 
 ---
