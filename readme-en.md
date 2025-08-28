@@ -1,48 +1,82 @@
-# javelin - 轻量级Java基础框架
-## 目录
-- [第一章：概述](#第一章概述)
-    - [核心模块](#核心模块)
-- [第二章：快速开始](#第二章快速开始)
-    - [环境要求](#环境要求)
-    - [Maven依赖](#maven依赖)
-- [第三章：核心功能](#第三章核心功能)
-    - [JEvaluator函数参考](#jevaluator函数参考)
-        - [类型转换函数](#类型转换函数)
-        - [数学函数](#数学函数)
-        - [字符串函数](#字符串函数)
-        - [日期函数](#日期函数)
-        - [集合函数](#集合函数)
-        - [✨ 自定义函数](#自定义函数)
-    - [树形结构功能](#树形结构功能)
-        - [构建树](#构建树)
-        - [自定义方法访问树](#自定义方法访问树)
-- [第四章：资源管理](#第四章资源管理)
-    - [文件加载](#文件加载)
-    - [配置文件加载](#配置文件加载)
-- [第五章：依赖提供](#第五章依赖提供)
-- [第六章：组件扫描](#第六章组件扫描)
-- [第七章：事件系统](#第七章事件系统)
-    - [定义事件服务](#定义事件服务)
-    - [定义事件](#定义事件)
-    - [发布事件](#发布事件)
-- [第八章：MyBatis集成](#第八章mybatis集成)
-    - [JDBC配置](#jdbc配置)
-    - [CRUD操作](#crud操作)
-        - [插入数据](#插入数据)
-        - [更新数据](#更新数据)
-        - [查询数据](#查询数据)
-        - [删除数据](#删除数据)
-        - [条件查询](#条件查询)
-        - [分页查询](#分页查询)
-        - [自定义SQL](#自定义sql)
-
----
-
-## 第一章：概述
+# javelin - lightweight java foundational framework
+## Table of Contents
+- [Chapter One: Overview](#chapter-one-overview)
+    - [Core Modules](#core-modules)
+- [Chapter Two: Quick Start](#chapter-two-quick-start)
+    - [Requirements](#requirements)
+    - [Maven Dependency](#maven-dependency)
+- [Chapter Three: Core](#chapter-three-core)
+    - [JEvaluator Function Reference](#jevaluator-function-reference)
+        - [Type Conversion Functions](#type-conversion-functions)
+            - [toInteger](#1-tointeger-function)
+            - [toDouble](#2-todouble-function)
+            - [toFloat](#3-tofloat-function)
+            - [toString](#4-tostring-function)
+            - [parseToDate](#5-parsetodate-function)
+        - [Math Functions](#math-functions)
+            - [ceil](#1-ceil-function)
+            - [floor](#2-floor-function)
+            - [round](#3-round-function)
+            - [sum](#4-sum-function)
+            - [max](#5-max-function)
+            - [min](#6-min-function)
+            - [avg](#7-avg-function)
+        - [String Functions](#string-functions)
+            - [toLower](#1-tolower-function)
+            - [toUpper](#2-toupper-function)
+            - [contains](#3-contains-function)
+            - [join](#4-join-function)
+            - [split](#5-split-function)
+            - [substring](#6-substring-function)
+            - [replace](#7-replace-function)
+            - [startsWith](#8-startswith-function)
+            - [endsWith](#9-endswith-function)
+        - [Date Functions](#date-functions)
+            - [dateFormat](#1-dateformat-function)
+        - [Collection Functions](#collection-functions)
+            - [length](#1-length-function)
+            - [trans](#2-trans-function)
+        - [✨ Custom Functions](#custom-functions)  <!-- 已更换图标 -->
+    - [Tree Function Reference](#tree-function-reference)
+        - [Build Tree](#build-tree)
+        - [Access Tree](#access-tree-by-custom-method)
+- [Chapter Four: Resource](#chapter-four-resource)
+    - [File Loading](#load-the-file-to-string)
+    - [Profile Loading](#load-the-spring-profiles)
+- [Chapter Five: Provider](#chapter-five-provider)
+- [Chapter Six: Scan](#chapter-six-scan)
+- [Chapter Seven: Event](#chapter-seven-event)
+    - [Event Service](#1-define-a-eventservice)
+    - [Event Definition](#2-define-a-event)
+    - [Event Publishing](#3-public-an-event)
+- [Chapter Eight: MyBatis](#chapter-eight-mybatis)
+    - [JDBC Configuration](#1-define-the-jdbc-configuration)
+    - [CRUD Operations](#crud-operations)
+        - [Insert](#2-insert)
+        - [Update](#3-updatebyid)
+        - [Select](#4-selectbyid)
+        - [Delete](#5-deletebyid)
+        - [Query](#6-query)
+        - [Update with Conditions](#7-update)
+        - [Custom SQL](#8-sql)
+        - [Pagination](#10-page)
+        - [Single Result](#11-select-one)
+        - [Count](#12-count)
+    - [Conditional Queries](#conditional-queries)
+        - [Like](#13-like)
+        - [Equals](#14-eq)
+        - [Not Equals](#15-ne)
+        - [Greater Than](#16-gt)
+        - [Greater or Equal](#17-ge)
+        - [Less Than](#18-lt)
+        - [Less or Equal](#19-le)
+## Chapter One：Overview
 ```string
-    javelin是一个流线型、高性能的java框架，旨在加速后端开发，开销最小。以其速度和精度命名，
-标枪提供了基本的基础设施组件，而没有全栈解决方案的臃肿。
+    javelin is a streamlined, high-performance java framework designed to accelerate 
+backend development with minimal overhead. named for its speed and precision, 
+javelin provides essential infrastructure components without the bloat of full-stack solutions.
 ```
+
 ---
 | Module       | Description                          |
 |--------------|--------------------------------------|
@@ -53,9 +87,9 @@
 | **Event**    | Pub/sub event system                 |
 | **MyBatis**  | Simplified MyBatis integration       |
 
-## 第二章：快速开始
+## Chapter Two: Quick Start
 
-### 环境要求
+### Requirements
 - Java 8
 - Maven/Gradle
 ```xml
@@ -66,17 +100,19 @@
     <version>${version}</version>
 </dependency>
 ```
-## 第三章：核心功能
-### JEvaluator函数参考
-#### 基础用法
-
+## Chapter Three: Core
+### JEvaluator Function Reference
+#### Basic Usage Pattern
+```string
+All JEvaluator functions follow the same basic usage pattern:
+```
 ```java
 List<Object> args = new ArrayList<>();
 args.add(argument1);
 args.add(argument2);
 Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMethod(), args);
 ```
-## 📊 类型转换函数
+## 📊 Type Conversion Functions
 | Function       | Syntax                  | Parameters       | Return Type | Description                     |
 |----------------|-------------------------|------------------|-------------|---------------------------------|
 | `toInteger`    | `toInteger(value)`      | 1 (any type)     | Integer     | Converts value to Integer       |
@@ -117,8 +153,9 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
         Object result = JEvaluator.evaluateFunction(JMethodEnums.parseToDate.getMethod(), args);
         System.out.println(result);
 ```
+### parseToDate function
 
-## 🔢 数学函数
+## 🔢 Math Functions
 | Function | Syntax              | Parameters            | Return Type | Description                     |
 |----------|---------------------|-----------------------|-------------|---------------------------------|
 | `ceil`   | `ceil(number)`      | 1 (Number)            | Double      | Rounds up to nearest integer    |
@@ -190,7 +227,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.avg.getMethod(), args);
         System.out.println(result); 
 ```
-## 🔤 字符串函数
+## 🔤 String Functions
 | Function     | Syntax                    | Parameters            | Return Type | Description                     |
 |--------------|---------------------------|-----------------------|-------------|---------------------------------|
 | `toLower`    | `toLower(str)`            | 1 (String)            | String      | Converts to lowercase           |
@@ -277,7 +314,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
         System.out.println(result);
 ```
-## 📅 日期函数
+## 📅 Date Functions
 
 | Function      | Syntax                  | Parameters       | Return Type | Description                     |
 |---------------|-------------------------|------------------|-------------|---------------------------------|
@@ -290,7 +327,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.dateFormat.getMethod(), args);
         System.out.println(result);
 ```
-## ✨ 集合函数
+## ✨ Collection Functions
 
 | Function | Syntax            | Parameters | Return Type | Description                     |
 |----------|-------------------|------------|-------------|---------------------------------|
@@ -314,7 +351,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.trans.getMethod(), args);
         System.out.println(result);
 ```
-## 📦 自定义函数(插件函数)
+## 📦 Custume Functions
 ```java
         JEvaluator.registerFunction("daysBetween", (BiFunction<Object, Object, Object>) (date1, date2) -> {
             long diff = ((Date) date2).getTime() - ((Date) date1).getTime();
@@ -326,7 +363,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         System.out.println(result);
 ```
 
-## 树型数据构建
+## Tree Function Reference
 1. build tree
 ```java
      List<JDept> deptList = new ArrayList<>();
@@ -340,7 +377,7 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         JDept node = JTreeUtil.findNode(tree, 2L, JDept::getId, JDept::getChildren);
         System.out.println(node);
 ```
-2.  通过内置函数获取树节点
+2.  access tree by specific method
 ```java
     List<JDept> deptList = new ArrayList<>();
         deptList.add(new JDept(1L, 0L, "总公司"));
@@ -371,14 +408,14 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         List<JDept> siblings = JTreeUtil.getSiblings(backendGroup, null, JDept::getId, JDept::getParentId, JDept::getChildren, nodeMap, false);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
 ```
-## 第四章：资源加载
-1. 文件加载
+## Chapter Four: Resource
+1. load the file to string
 ```java
         JReader fileReader = new JFileReader("data/rule.txt");
         JAdaptor context = new JAdaptor(fileReader);
         System.out.println(context.getRuleContent());
 ```
-2. 配置文件加载
+2. load the spring profiles
 ```java
 @Test
 public void test() throws IOException {
@@ -396,8 +433,7 @@ System.out.println("DB Username: " + configLoader.getProperty("database.username
 System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
 }
 ```
-## 第四章：bean 的加载
-
+## Chapter Five: Provider
 ```java
 Properties config = new Properties();
 config.setProperty("bean.container.mode", "simple"); // 或 "simple"
@@ -420,7 +456,7 @@ ProviderUserService service1 = container.getBean(ProviderUserService.class);
 service.sayHello("haha");
 service1.sayHello("haha1");
 ```
-## 第六章 : bean 扫描
+## Chapter Six: Scan
 
 ```java
         JAnnotationConfigApplicationContext context =
@@ -429,8 +465,8 @@ service1.sayHello("haha1");
         System.out.println(userService.findUser(1L));
 ```
 
-## 第七章：事件系统
-#### 1.定义事件服务
+## Chapter Sevent: Event
+#### 1.define a EventService
 ```java
 @JComponent
 public class ParentEventService {
@@ -452,7 +488,7 @@ private String lastParentMessage;
     }
 }
 ```
-#### 2. 定义一个事件
+#### 2.define a Event
 ```java
     public static class AnotherTestEvent extends JApplicationEvent {
         public AnotherTestEvent(Object source, String message) {
@@ -480,15 +516,15 @@ private String lastParentMessage;
         }
     }
 ```
-#### 3. 发布事件
+#### 3. public an event
 ```java
  JEventSupportedApplicationContext context = new JEventSupportedApplicationContext("com.github.paohaijiao.test");
  System.out.println("Registered beans: " );
  ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
  context.publishEvent(new AnotherTestEvent(context, "Child Message"));
 ```
-## 第八章：MyBatis集成
-1. 定义一个JDBC连接(不对数据源管理，自己控制数据源的开启和关闭)
+## Chapter Eight: Mybtatis
+1. define the jdbc configuration
 ```java
          String userName="root";
          String password="13579admin";
