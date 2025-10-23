@@ -2,8 +2,9 @@ package com.github.paohaijiao;
 
 import com.github.paohaijiao.model.JDept;
 import com.github.paohaijiao.tree.JTreeUtil;
-import org.junit.Ignore;
-import org.junit.Test;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Test;
+
 
 import java.io.IOException;
 import java.util.ArrayList;

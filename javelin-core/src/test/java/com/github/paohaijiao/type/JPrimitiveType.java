@@ -18,7 +18,7 @@ package com.github.paohaijiao.type;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.paohaijiao.map.JMultiValuedMap;
 import com.github.paohaijiao.model.JUserModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;

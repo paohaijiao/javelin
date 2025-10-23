@@ -4,7 +4,8 @@ import com.github.paohaijiao.crypto.exception.CryptoException;
 import com.github.paohaijiao.crypto.impl.AesCryptoService;
 import com.github.paohaijiao.crypto.impl.EccCryptoService;
 import com.github.paohaijiao.crypto.impl.RsaCryptoService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 
 public class RsaCryptoServiceTest {

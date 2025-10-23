@@ -1,4 +1,0 @@
-welcome: Welcome
-greeting: Hello, %s!
-error:
-  not_found: Resource not found

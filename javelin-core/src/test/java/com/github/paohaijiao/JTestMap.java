@@ -1,9 +1,7 @@
 package com.github.paohaijiao;
 
 import com.github.paohaijiao.map.JMultiValuedMap;
-import com.github.paohaijiao.model.JDept;
-import com.github.paohaijiao.tree.JTreeUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;

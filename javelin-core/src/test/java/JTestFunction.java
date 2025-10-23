@@ -1,8 +1,9 @@
 import com.github.paohaijiao.enums.JMethodEnums;
 import com.github.paohaijiao.evalue.JEvaluator;
 import com.github.paohaijiao.param.JContext;
-import org.junit.Ignore;
-import org.junit.Test;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Test;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.function.BiFunction;
 @Ignore // JUnit 4
 public class JTestFunction {
     @Test
-    @Ignore("Ignore")
     public void length() throws IOException {
         List<Object> args = new ArrayList<>();
         args.add("Hello World");

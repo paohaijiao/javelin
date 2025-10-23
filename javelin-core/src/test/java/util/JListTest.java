@@ -2,8 +2,9 @@ package util;
 
 import com.github.paohaijiao.model.JKeyValueModel;
 import com.github.paohaijiao.util.JObjectConverter;
-import org.junit.Ignore;
-import org.junit.Test;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
