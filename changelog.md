@@ -5,3 +5,4 @@
 - 新增 `yoy/JYoYCalculator` 同比环比工具类
 - 实现 `crypto/CryptoService` 实现对称加密解密工具类的封装
 - 实现 `i18n` 国际化语言 
+- 实现 `spi` 服务加载 
