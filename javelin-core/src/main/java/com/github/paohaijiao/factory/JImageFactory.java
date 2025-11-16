@@ -34,9 +34,9 @@ public class JImageFactory {
     public static JBaseImageProvider createProvider(String source) {
         if (source.startsWith("http://") || source.startsWith("https://")) {
             return new JNetworkImageProvider(source);
-        }else if(JBase64Provider.isBase64(source)) {
+        } else if (JBase64Provider.isBase64(source)) {
             return new JBase64ImageProvider(source);
-        } else{
+        } else {
             return new JLocalFileImageProvider(source);
         }
     }

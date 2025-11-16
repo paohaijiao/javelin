@@ -18,7 +18,8 @@ package com.github.paohaijiao.exception;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
-public class JAntlrExecutionException extends RuntimeException{
+public class JAntlrExecutionException extends RuntimeException {
     private final List<JAntlrError> errors;
 }

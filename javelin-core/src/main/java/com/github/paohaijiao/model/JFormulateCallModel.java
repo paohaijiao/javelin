@@ -15,7 +15,6 @@
  */
 package com.github.paohaijiao.model;
 
-import com.github.paohaijiao.enums.JMethodEnums;
 import lombok.Data;
 
 import java.util.List;

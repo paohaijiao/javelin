@@ -1,5 +1,7 @@
 # javelin - lightweight java foundational framework
+
 ## Table of Contents
+
 - [Chapter One: Overview](#chapter-one-overview)
     - [Core Modules](#core-modules)
 - [Chapter Two: Quick Start](#chapter-two-quick-start)
@@ -70,7 +72,9 @@
         - [Greater or Equal](#17-ge)
         - [Less Than](#18-lt)
         - [Less or Equal](#19-le)
+
 ## Chapter One：Overview
+
 ```string
     javelin is a streamlined, high-performance java framework designed to accelerate 
 backend development with minimal overhead. named for its speed and precision, 
@@ -78,20 +82,23 @@ javelin provides essential infrastructure components without the bloat of full-s
 ```
 
 ---
-| Module       | Description                          |
-|--------------|--------------------------------------|
-| **Core**     | Lightweight DI container       |
-| **Resource** | Enhanced resource management         |
-| **Provider** | Type-safe configuration binding      |
-| **Scan**     | Automatic component detection        |
-| **Event**    | Pub/sub event system                 |
-| **MyBatis**  | Simplified MyBatis integration       |
+
+| Module       | Description                     |
+|--------------|---------------------------------|
+| **Core**     | Lightweight DI container        |
+| **Resource** | Enhanced resource management    |
+| **Provider** | Type-safe configuration binding |
+| **Scan**     | Automatic component detection   |
+| **Event**    | Pub/sub event system            |
+| **MyBatis**  | Simplified MyBatis integration  |
 
 ## Chapter Two: Quick Start
 
 ### Requirements
+
 - Java 8
 - Maven/Gradle
+
 ```xml
 <!-- Maven -->
 <dependency>
@@ -100,52 +107,69 @@ javelin provides essential infrastructure components without the bloat of full-s
     <version>${version}</version>
 </dependency>
 ```
+
 ## Chapter Three: Core
+
 ### JEvaluator Function Reference
+
 #### Basic Usage Pattern
+
 ```string
 All JEvaluator functions follow the same basic usage pattern:
 ```
+
 ```java
 List<Object> args = new ArrayList<>();
 args.add(argument1);
 args.add(argument2);
 Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMethod(), args);
 ```
+
 ## 📊 Type Conversion Functions
-| Function       | Syntax                  | Parameters       | Return Type | Description                     |
-|----------------|-------------------------|------------------|-------------|---------------------------------|
-| `toInteger`    | `toInteger(value)`      | 1 (any type)     | Integer     | Converts value to Integer       |
-| `toDouble`     | `toDouble(value)`       | 1 (any type)     | Double      | Converts value to Double        |
-| `toFloat`      | `toFloat(value)`        | 1 (any type)     | Float       | Converts value to Float         |
-| `toString`     | `toString(value)`       | 1 (any type)     | String      | Converts value to String        |
-| `parseToDate`  | `parseToDate(str,format)` | 2 (String)     | Date        | Parses string to Date           |
+
+| Function      | Syntax                    | Parameters   | Return Type | Description               |
+|---------------|---------------------------|--------------|-------------|---------------------------|
+| `toInteger`   | `toInteger(value)`        | 1 (any type) | Integer     | Converts value to Integer |
+| `toDouble`    | `toDouble(value)`         | 1 (any type) | Double      | Converts value to Double  |
+| `toFloat`     | `toFloat(value)`          | 1 (any type) | Float       | Converts value to Float   |
+| `toString`    | `toString(value)`         | 1 (any type) | String      | Converts value to String  |
+| `parseToDate` | `parseToDate(str,format)` | 2 (String)   | Date        | Parses string to Date     |
+
 1. toInteger function
+
 ```java      
   List<Object> args = new ArrayList<>();
         args.add("1");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toInteger.getMethod(), args);
         System.out.println(result); 
 ```
+
 2. toDouble function
+
 ```java   
   List<Object> args = new ArrayList<>();
         args.add(1.5);
         Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toDouble.getMethod(), args);
 ```
+
 3. toFloat
+
 ```java   
   List<Object> args = new ArrayList<>();
         args.add(1.5);
         Object result1 = JEvaluator.evaluateFunction(JMethodEnums.toFloat.getMethod(), args);
 ```
+
 4. toString
+
 ```java
      List<Object> args = new ArrayList<>();
         args.add(1.5);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toString.getMethod(), args);
 ```
+
 5. parseToDate
+
 ```java   
         List<Object> args = new ArrayList<>();
         args.add("2019-04-25 16:23:23");
@@ -153,31 +177,39 @@ Object result = JEvaluator.evaluateFunction(JMethodEnums.[functionName].getMetho
         Object result = JEvaluator.evaluateFunction(JMethodEnums.parseToDate.getMethod(), args);
         System.out.println(result);
 ```
+
 ### parseToDate function
 
 ## 🔢 Math Functions
-| Function | Syntax              | Parameters            | Return Type | Description                     |
-|----------|---------------------|-----------------------|-------------|---------------------------------|
-| `ceil`   | `ceil(number)`      | 1 (Number)            | Double      | Rounds up to nearest integer    |
-| `floor`  | `floor(number)`     | 1 (Number)            | Double      | Rounds down to nearest integer  |
-| `round`  | `round(num,digits)` | 2 (Number, Integer)   | Double      | Rounds to specified decimals    |
-| `sum`    | `sum(values...)`    | ≥1 (Numbers)          | Number      | Sums all arguments              |
-| `max`    | `max(values...)`    | ≥1 (Numbers)          | Number      | Returns maximum value           |
-| `min`    | `min(values...)`    | ≥1 (Numbers)          | Number      | Returns minimum value           |
-| `avg`    | `avg(values...)`    | ≥1 (Numbers)          | Double      | Calculates average              |
+
+| Function | Syntax              | Parameters          | Return Type | Description                    |
+|----------|---------------------|---------------------|-------------|--------------------------------|
+| `ceil`   | `ceil(number)`      | 1 (Number)          | Double      | Rounds up to nearest integer   |
+| `floor`  | `floor(number)`     | 1 (Number)          | Double      | Rounds down to nearest integer |
+| `round`  | `round(num,digits)` | 2 (Number, Integer) | Double      | Rounds to specified decimals   |
+| `sum`    | `sum(values...)`    | ≥1 (Numbers)        | Number      | Sums all arguments             |
+| `max`    | `max(values...)`    | ≥1 (Numbers)        | Number      | Returns maximum value          |
+| `min`    | `min(values...)`    | ≥1 (Numbers)        | Number      | Returns minimum value          |
+| `avg`    | `avg(values...)`    | ≥1 (Numbers)        | Double      | Calculates average             |
+
 1. ceil function
+
 ```java   
 List<Object> args = new ArrayList<>();
 args.add(1.5);
 Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args); 
 ```
+
 2. floor function
+
 ```java   
         List<Object> args = new ArrayList<>();
         args.add(1.5);
         Object floor= JEvaluator.evaluateFunction(JMethodEnums.floor.getMethod(), args); 
 ```
+
 3. round function
+
 ```java   
         List<Object> args1 = new ArrayList<>();
         args1.add(1.5321321312);
@@ -185,7 +217,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object round= JEvaluator.evaluateFunction(JMethodEnums.round.getMethod(), args1);
         System.out.println(result);
 ```
+
 4. sum function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add(10);
@@ -194,7 +228,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.sum.getMethod(), args);
         System.out.println(result);
 ```
+
 5. max function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add(1);
@@ -205,7 +241,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.max.getMethod(), args);
         System.out.println(result); 
 ```
+
 6. min function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add(1);
@@ -216,7 +254,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.min.getMethod(), args);
         System.out.println(result); 
 ```
+
 7. avg function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add(1);
@@ -227,33 +267,41 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.avg.getMethod(), args);
         System.out.println(result); 
 ```
+
 ## 🔤 String Functions
-| Function     | Syntax                    | Parameters            | Return Type | Description                     |
-|--------------|---------------------------|-----------------------|-------------|---------------------------------|
-| `toLower`    | `toLower(str)`            | 1 (String)            | String      | Converts to lowercase           |
-| `toUpper`    | `toUpper(str)`            | 1 (String)            | String      | Converts to uppercase           |
-| `contains`   | `contains(str,substr)`    | 2 (String)            | Boolean     | Checks if contains substring    |
-| `join`       | `join(delimiter,items...)`| ≥2 (String, Objects)  | String      | Joins with delimiter            |
-| `split`      | `split(str,delimiter)`    | 2 (String)            | String[]    | Splits string by delimiter      |
-| `substring`  | `substring(str,start,end)`| 3 (String, int, int)  | String      | Extracts substring              |
-| `replace`    | `replace(str,target,rep)` | 3 (String)            | String      | Replaces all occurrences        |
-| `startsWith` | `startsWith(str,prefix)`  | 2 (String)            | Boolean     | Checks string prefix            |
-| `endsWith`   | `endsWith(str,suffix)`    | 2 (String)            | Boolean     | Checks string suffix            |
+
+| Function     | Syntax                     | Parameters           | Return Type | Description                  |
+|--------------|----------------------------|----------------------|-------------|------------------------------|
+| `toLower`    | `toLower(str)`             | 1 (String)           | String      | Converts to lowercase        |
+| `toUpper`    | `toUpper(str)`             | 1 (String)           | String      | Converts to uppercase        |
+| `contains`   | `contains(str,substr)`     | 2 (String)           | Boolean     | Checks if contains substring |
+| `join`       | `join(delimiter,items...)` | ≥2 (String, Objects) | String      | Joins with delimiter         |
+| `split`      | `split(str,delimiter)`     | 2 (String)           | String[]    | Splits string by delimiter   |
+| `substring`  | `substring(str,start,end)` | 3 (String, int, int) | String      | Extracts substring           |
+| `replace`    | `replace(str,target,rep)`  | 3 (String)           | String      | Replaces all occurrences     |
+| `startsWith` | `startsWith(str,prefix)`   | 2 (String)           | Boolean     | Checks string prefix         |
+| `endsWith`   | `endsWith(str,suffix)`     | 2 (String)           | Boolean     | Checks string suffix         |
+
 1. toLower function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toLower.getMethod(), args);
         System.out.println(result); 
 ```
+
 2. toUpper function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.toUpper.getMethod(), args);
         System.out.println(result); 
 ```
+
 3. contains function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
@@ -261,7 +309,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.contains.getMethod(), args);
         System.out.println(result);
  ```
+
 4. join function
+
 ```java
         List<Object> args = new ArrayList<>();
         List<String> items = new ArrayList<>();
@@ -272,7 +322,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.join.getMethod(), args);
         System.out.println(result);
 ```
+
 5. split function
+
 ```java
    List<Object> args = new ArrayList<>();
    args.add("123,12344");
@@ -280,7 +332,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
    Object result = JEvaluator.evaluateFunction(JMethodEnums.split.getMethod(), args);
    System.out.println(result); 
 ```
+
 6. substring function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("substring");
@@ -289,7 +343,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.substring.getMethod(), args);
         System.out.println(result);
 ```
+
 7. replace function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("replace");
@@ -298,7 +354,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.replace.getMethod(), args);
         System.out.println(result); 
 ```
+
 8. startsWith function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
@@ -306,7 +364,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.startsWith.getMethod(), args);
         System.out.println(result);
 ```
+
 9. endsWith function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
@@ -314,12 +374,15 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.endsWith.getMethod(), args);
         System.out.println(result);
 ```
+
 ## 📅 Date Functions
 
-| Function      | Syntax                  | Parameters       | Return Type | Description                     |
-|---------------|-------------------------|------------------|-------------|---------------------------------|
-| `dateFormat`  | `dateFormat(date,format)` | 2 (Date, String) | String    | Formats date to string          |
+| Function     | Syntax                    | Parameters       | Return Type | Description            |
+|--------------|---------------------------|------------------|-------------|------------------------|
+| `dateFormat` | `dateFormat(date,format)` | 2 (Date, String) | String      | Formats date to string |
+
 1. dateFormat function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add(new Date());
@@ -327,20 +390,25 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.dateFormat.getMethod(), args);
         System.out.println(result);
 ```
+
 ## ✨ Collection Functions
 
-| Function | Syntax            | Parameters | Return Type | Description                     |
-|----------|-------------------|------------|-------------|---------------------------------|
-| `length` | `length(array)`   | 1 (Array)  | Integer     | Returns array/list length       |
-| `trans`  | `trans(src,dest)` | 2 (Objects)| Object      | Transforms between types        |
+| Function | Syntax            | Parameters  | Return Type | Description               |
+|----------|-------------------|-------------|-------------|---------------------------|
+| `length` | `length(array)`   | 1 (Array)   | Integer     | Returns array/list length |
+| `trans`  | `trans(src,dest)` | 2 (Objects) | Object      | Transforms between types  |
+
 1. length function
+
 ```java
         List<Object> args = new ArrayList<>();
         args.add("Hello World");
         Object result = JEvaluator.evaluateFunction(JMethodEnums.length.getMethod(), args);
         System.out.println(result);
 ```
+
 2. trans function
+
 ```java
         JContext contextParams = new JContext();
         contextParams.put("1","男");
@@ -351,7 +419,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         Object result = JEvaluator.evaluateFunction(JMethodEnums.trans.getMethod(), args);
         System.out.println(result);
 ```
+
 ## 📦 Custume Functions
+
 ```java
         JEvaluator.registerFunction("daysBetween", (BiFunction<Object, Object, Object>) (date1, date2) -> {
             long diff = ((Date) date2).getTime() - ((Date) date1).getTime();
@@ -364,7 +434,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
 ```
 
 ## Tree Function Reference
+
 1. build tree
+
 ```java
      List<JDept> deptList = new ArrayList<>();
         deptList.add(new JDept(1L, 0L, "总公司"));
@@ -377,7 +449,9 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         JDept node = JTreeUtil.findNode(tree, 2L, JDept::getId, JDept::getChildren);
         System.out.println(node);
 ```
-2.  access tree by specific method
+
+2. access tree by specific method
+
 ```java
     List<JDept> deptList = new ArrayList<>();
         deptList.add(new JDept(1L, 0L, "总公司"));
@@ -408,14 +482,19 @@ Object ceil= JEvaluator.evaluateFunction(JMethodEnums.ceil.getMethod(), args);
         List<JDept> siblings = JTreeUtil.getSiblings(backendGroup, null, JDept::getId, JDept::getParentId, JDept::getChildren, nodeMap, false);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
 ```
+
 ## Chapter Four: Resource
+
 1. load the file to string
+
 ```java
         JReader fileReader = new JFileReader("data/rule.txt");
         JAdaptor context = new JAdaptor(fileReader);
         System.out.println(context.getRuleContent());
 ```
+
 2. load the spring profiles
+
 ```java
 @Test
 public void test() throws IOException {
@@ -433,7 +512,9 @@ System.out.println("DB Username: " + configLoader.getProperty("database.username
 System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
 }
 ```
+
 ## Chapter Five: Provider
+
 ```java
 Properties config = new Properties();
 config.setProperty("bean.container.mode", "simple"); // 或 "simple"
@@ -456,6 +537,7 @@ ProviderUserService service1 = container.getBean(ProviderUserService.class);
 service.sayHello("haha");
 service1.sayHello("haha1");
 ```
+
 ## Chapter Six: Scan
 
 ```java
@@ -466,7 +548,9 @@ service1.sayHello("haha1");
 ```
 
 ## Chapter Sevent: Event
+
 #### 1.define a EventService
+
 ```java
 @JComponent
 public class ParentEventService {
@@ -488,7 +572,9 @@ private String lastParentMessage;
     }
 }
 ```
+
 #### 2.define a Event
+
 ```java
     public static class AnotherTestEvent extends JApplicationEvent {
         public AnotherTestEvent(Object source, String message) {
@@ -516,15 +602,20 @@ private String lastParentMessage;
         }
     }
 ```
+
 #### 3. public an event
+
 ```java
  JEventSupportedApplicationContext context = new JEventSupportedApplicationContext("com.github.paohaijiao.test");
  System.out.println("Registered beans: " );
  ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
  context.publishEvent(new AnotherTestEvent(context, "Child Message"));
 ```
+
 ## Chapter Eight: Mybtatis
+
 1. define the jdbc configuration
+
 ```java
          String userName="root";
          String password="13579admin";
@@ -533,7 +624,9 @@ private String lastParentMessage;
         JDBCBaseConnectionConfig config=new JBasicJDBConnectionConfig(clazz,url,userName,password);
         
 ```
+
 2. insert
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -545,7 +638,9 @@ private String lastParentMessage;
         int i=userMapper.insert(userPo);
         System.out.println(i);
 ```
+
 3. updateById
+
 ```java
    JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -557,7 +652,9 @@ private String lastParentMessage;
         int i=userMapper.updateById(userPo);
         System.out.println(i);
 ```
+
 4. selectById
+
 ```java
 Map<String, JMappedStatement> map=new HashMap<>();
 JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
@@ -566,7 +663,9 @@ JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
 JUser userPo=userMapper.selectById(1);
 System.out.println(userPo);
 ```
+
 5. deleteById
+
 ```java
 JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
 JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -574,7 +673,9 @@ JLambdaMapper<JUser> userMapper = factory.createMapper(JUser.class);
 int   userPo=userMapper.deleteById(1);
 System.out.println(userPo);
 ```
+
 6. query
+
 ```java
     JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -582,7 +683,9 @@ System.out.println(userPo);
         List<JUser> list=userMapper.query().eq(JUser::getAge,12).list();
         System.out.println(list.size());
 ```
+
 7. update
+
 ```java
       JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -590,7 +693,9 @@ System.out.println(userPo);
         userMapper.update().eq(JUser::getId,1).set(JUser::getAge,18).set(JUser::getName,"admin").execute();
         System.out.println("update");
 ```
+
 8. sql
+
 ```java
   JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -601,7 +706,9 @@ System.out.println(userPo);
         List<JUser> list=userMapper.select(sql,map);
         System.out.println(list.size());
 ```
+
 9. sql
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -613,7 +720,9 @@ System.out.println(userPo);
         List<JUser> list=userMapper.select(sql, Arrays.asList(param));
         System.out.println(list.size());
 ```
+
 10. page
+
 ```java
  JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -621,7 +730,9 @@ System.out.println(userPo);
         JPage<JUser> list=userMapper.page().orderByDesc(JUser::getAge).page(1,10);
         System.out.println(list);
 ```
+
 11. select one
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -629,7 +740,9 @@ System.out.println(userPo);
         JUser list=userMapper.query().orderByDesc(JUser::getAge).one();
         System.out.println(list);
 ```
+
 12. count
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -637,7 +750,9 @@ System.out.println(userPo);
         Long count=userMapper.query().orderByDesc(JUser::getAge).count();
         System.out.println(count);
 ```
+
 13. like
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -645,7 +760,9 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().like(JUser::getName,"张").list();
         System.out.println(count);
 ```
+
 14. eq
+
 ```java
       JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -653,7 +770,9 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().eq(JUser::getName,"张").list();
         System.out.println(count);
 ```
+
 15. ne
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -661,7 +780,9 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().ne(JUser::getName,"张三").list();
         System.out.println(count);
 ```
+
 16. gt
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -669,7 +790,9 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().gt(JUser::getAge,40).list();
         System.out.println(count);
 ```
+
 17. ge
+
 ```java
     JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
     JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -677,7 +800,9 @@ System.out.println(userPo);
     List<JUser> count=userMapper.query().ge(JUser::getAge,40).list();
     System.out.println(count);
 ```
+
 18. ge
+
 ```java
        JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -685,7 +810,9 @@ System.out.println(userPo);
         List<JUser> count=userMapper.query().lt(JUser::getAge,40).list();
         System.out.println(count);
 ```
+
 18. le
+
 ```java
         JSqlConnectionFactory sqlSessionFactory =new DefaultSqlConnectionactory(getDBConfig());
         JLambdaMapperFactory factory = new JLambdaMapperFactory(sqlSessionFactory);
@@ -696,7 +823,8 @@ System.out.println(userPo);
 
 # **Generating Power with Love (and Caffeine) ☕**
 
-Thank you for using this open-source project! It is completely free and will be maintained continuously, but the developers do need your support.
+Thank you for using this open-source project! It is completely free and will be maintained continuously, but the
+developers do need your support.
 
 ---
 
@@ -706,6 +834,7 @@ Thank you for using this open-source project! It is completely free and will be 
    If this project has saved you time or money, please consider supporting me with a small donation.
 
 2. **Where Your Donation Goes**
+
 - Server costs to keep the project running.
 - Feature development to add more value.
 - Documentation optimization for a better user experience.
@@ -713,9 +842,8 @@ Thank you for using this open-source project! It is completely free and will be 
 3. **Every Cent Counts**  
    Even a donation of just 1 cent motivates me to debug late into the night!
 
-
-
 ## **Why Donate?**
+
 ✔️ Keep the project **free and ad-free** forever.  
 ✔️ Support timely responses to issues and community inquiries.  
 ✔️ Enable planned features for the future.
@@ -725,12 +853,16 @@ Thank you for being a partner in making the open-source world better!
 --- 
 
 ### **Additional Notes**
+
 - The project is maintained with love and caffeine.
 - Your support ensures its sustainability and growth.
+
 ---
 
 ## **🌟 Support Now**
-Feel free to leave a message via [email](mailto:goudingcheng@gmail.com) when sponsoring. Your name will be included in the **"Special Thanks"** list in the project's README file!
+
+Feel free to leave a message via [email](mailto:goudingcheng@gmail.com) when sponsoring. Your name will be included in
+the **"Special Thanks"** list in the project's README file!
 ![OCBC Pay Now](./pay/paynow.jpg)
 ![Touch n Go ](./pay/tngGo.jpg)
 ---

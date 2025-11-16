@@ -20,6 +20,7 @@ import java.util.Objects;
 
 public class JInstanceMethodFactory {
     private final Object target;
+
     public JInstanceMethodFactory(Object target) {
         this.target = Objects.requireNonNull(target, "Target object cannot be null");
     }

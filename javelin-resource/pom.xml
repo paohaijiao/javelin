@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -28,7 +28,8 @@
     <name>javelin-resource</name>
     <description>javelin is a lightweight, high-performance rapid development framework designed to accelerate
         the creation of modern applications. whether you're building web apps, apis, or microservices, javelin
-        combines simplicity with power, letting you ship faster without sacrificing scalability or control.</description>
+        combines simplicity with power, letting you ship faster without sacrificing scalability or control.
+    </description>
     <url>https://github.com/paohaijiao/javelin</url>
     <licenses>
         <license>

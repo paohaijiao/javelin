@@ -28,23 +28,24 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JLambdaQueryPageImpl<T> extends JLambdaBaseImpl<T>  {
+public class JLambdaQueryPageImpl<T> extends JLambdaBaseImpl<T> {
     private int pageNum = 1;
 
     private int pageSize = 10;
 
-    public JLambdaQueryPageImpl(Class<T> entityClass, JSqlConnection sqlConnection,int pageNum,int pageSize,List<JCondition> conditions,List<JOrder> orders) {
+    public JLambdaQueryPageImpl(Class<T> entityClass, JSqlConnection sqlConnection, int pageNum, int pageSize, List<JCondition> conditions, List<JOrder> orders) {
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
         this.pageNum = pageNum;
         this.pageSize = pageSize;
-        for(JCondition condition:conditions){
+        for (JCondition condition : conditions) {
             this.conditions.add(condition);
         }
-        for(JOrder order:orders){
+        for (JOrder order : orders) {
             this.orders.add(order);
         }
     }
+
     public JPage<T> page() {
         long total = count();
         int pages = (int) (total / pageSize);
@@ -67,12 +68,12 @@ public class JLambdaQueryPageImpl<T> extends JLambdaBaseImpl<T>  {
                 namedParameterPreparedStatement.setParameter(model);
             }
 
-            JKeyValue limitModel=new JKeyValue();
+            JKeyValue limitModel = new JKeyValue();
             limitModel.setNum(conditions.size() + 1);
             limitModel.setKey("limit");
             limitModel.setValue(pageSize);
             namedParameterPreparedStatement.setParameter(limitModel);
-            JKeyValue offsetModel=new JKeyValue();
+            JKeyValue offsetModel = new JKeyValue();
             offsetModel.setNum(conditions.size() + 2);
             offsetModel.setKey("offset");
             offsetModel.setValue((this.pageNum - 1) * pageSize);
@@ -94,14 +95,16 @@ public class JLambdaQueryPageImpl<T> extends JLambdaBaseImpl<T>  {
             throw new RuntimeException("failed to conduct page query", exception);
         }
     }
+
     protected String buildPageSQL(String originalSql) {
         return originalSql + " LIMIT #{limit} OFFSET #{offset}";
     }
+
     public long count() {
         String originalSql = buildSelectSQL();
         String countSql = "SELECT COUNT(*) FROM (" + originalSql + ") temp_count";
         JConsole console = new JConsole();
-        console.log(JLogLevel.INFO,countSql);
+        console.log(JLogLevel.INFO, countSql);
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement =
                     new JNamedParameterPreparedStatement(sqlConnection.getConnection(), countSql);

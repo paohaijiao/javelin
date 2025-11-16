@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface JImageProvider {
 
-    public  byte[] loadImage() throws IOException;
+    public byte[] loadImage() throws IOException;
 }

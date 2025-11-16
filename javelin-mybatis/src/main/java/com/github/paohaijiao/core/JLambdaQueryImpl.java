@@ -16,13 +16,12 @@
 package com.github.paohaijiao.core;
 
 import com.github.paohaijiao.anno.JColumn;
+import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.exception.JAssert;
-import com.github.paohaijiao.format.JSqlFormatter;
 import com.github.paohaijiao.function.JParameterHandler;
-import com.github.paohaijiao.model.*;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaQuery;
-import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.model.*;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
 
@@ -32,7 +31,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -44,13 +42,14 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
     }
+
     public List<T> select(String sql, List<JParam> params) {
-        List<T> list=new ArrayList<>();
-        Connection connection= sqlConnection.getConnection();
+        List<T> list = new ArrayList<>();
+        Connection connection = sqlConnection.getConnection();
         try {
-            PreparedStatement pstmt= connection.prepareStatement(sql);
+            PreparedStatement pstmt = connection.prepareStatement(sql);
             for (JParam param : params) {
-                JAssert.notNull(param.getIndex(),"the index of param require not null");
+                JAssert.notNull(param.getIndex(), "the index of param require not null");
                 if (param.getValue() == null) {
                     pstmt.setNull(param.getIndex(), Types.NULL);
                     continue;
@@ -65,9 +64,9 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
                 }
             }
 
-            ResultSet r=pstmt.executeQuery();
+            ResultSet r = pstmt.executeQuery();
             while (r.next()) {
-                T t= resultSetToObject(r,entityClass);
+                T t = resultSetToObject(r, entityClass);
                 list.add(t);
             }
         } catch (SQLException e) {
@@ -76,60 +75,62 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
         return list;
     }
 
-    public List<T> select(String sql, Map<String,Object> param) {
-        List<T> list=new ArrayList<>();
-        Connection connection= sqlConnection.getConnection();
+    public List<T> select(String sql, Map<String, Object> param) {
+        List<T> list = new ArrayList<>();
+        Connection connection = sqlConnection.getConnection();
         try {
-          PreparedStatement pstmt= connection.prepareStatement(sql);
-          int i=0;
-          for (Map.Entry<String,Object> entry : param.entrySet()) {
-              i=i+1;
-              if (param == null) {
-                  pstmt.setNull(i, Types.NULL);
-                  continue;
-              }
-              Class<?> paramType = param.getClass();
-              @SuppressWarnings("unchecked")
-              JParameterHandler<Object> handler = (JParameterHandler<Object>) PARAM_HANDLERS.get(paramType);
-              if (handler != null) {
-                  handler.handle(pstmt, param, i);
-              } else {
-                  pstmt.setObject(i, param);
-              }
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            int i = 0;
+            for (Map.Entry<String, Object> entry : param.entrySet()) {
+                i = i + 1;
+                if (param == null) {
+                    pstmt.setNull(i, Types.NULL);
+                    continue;
+                }
+                Class<?> paramType = param.getClass();
+                @SuppressWarnings("unchecked")
+                JParameterHandler<Object> handler = (JParameterHandler<Object>) PARAM_HANDLERS.get(paramType);
+                if (handler != null) {
+                    handler.handle(pstmt, param, i);
+                } else {
+                    pstmt.setObject(i, param);
+                }
             }
 
-            ResultSet r=pstmt.executeQuery();
+            ResultSet r = pstmt.executeQuery();
             while (r.next()) {
-               T t= resultSetToObject(r,entityClass);
-               list.add(t);
-           }
+                T t = resultSetToObject(r, entityClass);
+                list.add(t);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return list;
     }
-    public T selectById(Serializable id){
+
+    public T selectById(Serializable id) {
         String selectSql = "select * from  %s  where %s = %s";
         String tableName = getTableName();
-        String idClause=this.getIdFieldName();
-        String value="#{"+idClause+"}";
-        String sql=String.format(selectSql, tableName, idClause,value);
+        String idClause = this.getIdFieldName();
+        String value = "#{" + idClause + "}";
+        String sql = String.format(selectSql, tableName, idClause, value);
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
-            JKeyValue model=new JKeyValue();
+            JKeyValue model = new JKeyValue();
             model.setNum(1);
             model.setKey(idClause);
             model.setValue(id);
             namedParameterPreparedStatement.setParameter(model);
-            ResultSet resultSet=namedParameterPreparedStatement.executeQuery();
+            ResultSet resultSet = namedParameterPreparedStatement.executeQuery();
             resultSet.next();
-            T t= resultSetToObject(resultSet,entityClass);
-           return t;
-        }catch (Exception exception){
+            T t = resultSetToObject(resultSet, entityClass);
+            return t;
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return null;
     }
+
     @Override
     public JLambdaQuery<T> eq(JSFunction<T, ?> column, Object value) {
         conditions.add(new JCondition(getColumnName(column), "=", value));
@@ -173,41 +174,40 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
     }
 
 
-
     @Override
     public JLambdaQuery<T> orderByAsc(JSFunction<T, ?> column) {
-        orders.add(new JOrder(getColumnName(column),true));
+        orders.add(new JOrder(getColumnName(column), true));
         return this;
     }
 
     @Override
     public JLambdaQuery<T> orderByDesc(JSFunction<T, ?> column) {
-        orders.add(new JOrder(getColumnName(column),false));
+        orders.add(new JOrder(getColumnName(column), false));
         return this;
     }
 
     @Override
     public List<T> list() {
-        List<T> list=new ArrayList<>();
+        List<T> list = new ArrayList<>();
         String sql = buildSelectSQL();
-        List<JCondition> condition=this.conditions;
+        List<JCondition> condition = this.conditions;
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
-            for (int i=0;i<condition.size();i++){
-                JKeyValue model=new JKeyValue();
-                model.setNum(i+1);
+            for (int i = 0; i < condition.size(); i++) {
+                JKeyValue model = new JKeyValue();
+                model.setNum(i + 1);
                 model.setKey(condition.get(i).getColumn());
                 model.setValue(condition.get(i).getValue());
                 namedParameterPreparedStatement.setParameter(model);
             }
-            ResultSet resultSet=namedParameterPreparedStatement.executeQuery();
-            while(resultSet.next()){
-                T t= resultSetToObject(resultSet,entityClass);
+            ResultSet resultSet = namedParameterPreparedStatement.executeQuery();
+            while (resultSet.next()) {
+                T t = resultSetToObject(resultSet, entityClass);
                 list.add(t);
             }
             return list;
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return list;
@@ -215,19 +215,19 @@ public class JLambdaQueryImpl<T> extends JLambdaBaseImpl<T> implements JLambdaQu
 
     @Override
     public JPage<T> page(int pageNum, int pageSize) {
-        JLambdaQueryPageImpl<T> pageImpl=new JLambdaQueryPageImpl<>(this.entityClass,sqlConnection,pageNum,pageSize,conditions,orders);
+        JLambdaQueryPageImpl<T> pageImpl = new JLambdaQueryPageImpl<>(this.entityClass, sqlConnection, pageNum, pageSize, conditions, orders);
         return pageImpl.page();
     }
 
     @Override
     public T one() {
-        List<T>  list=this.list();
-        return list.isEmpty()?null:list.get(0);
+        List<T> list = this.list();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     @Override
     public long count() {
-        List<T>  list=this.list();
+        List<T> list = this.list();
         return list.size();
     }
 

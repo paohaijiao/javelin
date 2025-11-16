@@ -5,7 +5,6 @@ import com.github.paohaijiao.util.JObjectConverter;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class JListTest {
         jk.setKey("test");
         jk.setValue("test1");
         data.add(jk);
-        List<Map<String, Object>> list= JObjectConverter.convert(data);
+        List<Map<String, Object>> list = JObjectConverter.convert(data);
         System.out.println(list);
 
 

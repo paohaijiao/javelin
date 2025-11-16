@@ -14,13 +14,14 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.test;
+
 import com.github.paohaijiao.anno.JComponent;
 import com.github.paohaijiao.anno.JEventListener;
+
 @JComponent
 public class MultiListenerService {
     private int testEventCount = 0;
     private int anotherTestEventCount = 0;
-
 
 
     @JEventListener

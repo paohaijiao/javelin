@@ -15,15 +15,13 @@
  */
 package com.github.paohaijiao.core;
 
+import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.mapper.JLambdaMapper;
 import com.github.paohaijiao.mapper.JLambdaQuery;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
-import com.github.paohaijiao.connection.JSqlConnection;
-import com.github.paohaijiao.model.JPage;
 import com.github.paohaijiao.model.JParam;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,37 +36,38 @@ public class JLambdaMapperImpl<T> implements JLambdaMapper<T> {
 
     @Override
     public int insert(T entity) {
-         LambdaInsertImpl lambdaInsert = new LambdaInsertImpl<>(entityClass, sqlSession);
-         return lambdaInsert.insert(entity);
+        LambdaInsertImpl lambdaInsert = new LambdaInsertImpl<>(entityClass, sqlSession);
+        return lambdaInsert.insert(entity);
     }
 
     @Override
     public int updateById(T entity) {
-        LambdaUpdateImpl lambdaUpdate =  new LambdaUpdateImpl<>(entityClass, sqlSession);
+        LambdaUpdateImpl lambdaUpdate = new LambdaUpdateImpl<>(entityClass, sqlSession);
         return lambdaUpdate.updateById(entity);
     }
 
     @Override
     public int deleteById(Serializable id) {
-        LambdaDeleteImpl<T> lambdaDelete= new LambdaDeleteImpl<>(entityClass, sqlSession);
-        return   lambdaDelete.deleteById(id);
+        LambdaDeleteImpl<T> lambdaDelete = new LambdaDeleteImpl<>(entityClass, sqlSession);
+        return lambdaDelete.deleteById(id);
     }
 
     @Override
     public T selectById(Serializable id) {
-        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
+        JLambdaQueryImpl<T> lambdaQuery = new JLambdaQueryImpl<>(entityClass, sqlSession);
         return lambdaQuery.selectById(id);
     }
+
     @Override
-    public List<T> select(String sql, Map<String,Object> param) {
-        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
-        return lambdaQuery.select(sql,param);
+    public List<T> select(String sql, Map<String, Object> param) {
+        JLambdaQueryImpl<T> lambdaQuery = new JLambdaQueryImpl<>(entityClass, sqlSession);
+        return lambdaQuery.select(sql, param);
     }
 
     @Override
     public List<T> select(String sql, List<JParam> param) {
-        JLambdaQueryImpl<T> lambdaQuery= new JLambdaQueryImpl<>(entityClass, sqlSession);
-        return lambdaQuery.select(sql,param);
+        JLambdaQueryImpl<T> lambdaQuery = new JLambdaQueryImpl<>(entityClass, sqlSession);
+        return lambdaQuery.select(sql, param);
     }
 
     @Override

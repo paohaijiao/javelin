@@ -34,18 +34,21 @@ public class JBase64Provider {
     private static final Pattern BASE64_URL_PATTERN = Pattern.compile(
             "^([A-Za-z0-9-_]{4})*([A-Za-z0-9-_]{3}|[A-Za-z0-9-_]{2})?$"
     );
+
     public static boolean isBase64(String str) {
         if (str == null || str.isEmpty()) {
             return false;
         }
         return BASE64_PATTERN.matcher(str).matches();
     }
+
     public static boolean isBase64Url(String str) {
         if (str == null || str.isEmpty()) {
             return false;
         }
         return BASE64_URL_PATTERN.matcher(str).matches();
     }
+
     public static String encode(String content) {
         String encode = Base64.getEncoder().encodeToString(content.getBytes());
         return encode;
@@ -56,12 +59,14 @@ public class JBase64Provider {
         String decode = new String(decodedBytes);
         return decode;
     }
+
     public static String encode(byte[] data) {
         if (data == null) {
             throw new IllegalArgumentException("input data require not null");
         }
         return Base64.getEncoder().encodeToString(data);
     }
+
     public static byte[] decodeByBase64String(String base64String) {
         if (base64String == null) {
             throw new IllegalArgumentException("input data require not null");
@@ -72,6 +77,7 @@ public class JBase64Provider {
             throw new IllegalArgumentException("invalid the base 64 data", e);
         }
     }
+
     public static boolean isValidBase64(String str) {
         if (str == null || str.trim().isEmpty()) {
             return false;
@@ -84,6 +90,7 @@ public class JBase64Provider {
             return false;
         }
     }
+
     public static boolean isValidBase64Url(String str) {
         if (str == null || str.trim().isEmpty()) {
             return false;

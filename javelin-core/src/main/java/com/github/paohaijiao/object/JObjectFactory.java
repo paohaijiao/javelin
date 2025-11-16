@@ -14,6 +14,7 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.object;
+
 import com.github.paohaijiao.console.JConsole;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -21,7 +22,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class JObjectFactory {
-    public static JConsole console=new JConsole();
+    public static JConsole console = new JConsole();
 
     public static Object createByConstructor(String className, List<Object> args) throws Exception {
         Class<?> clazz = Class.forName(className);
@@ -30,6 +31,7 @@ public class JObjectFactory {
         Object[] methodArgs = prepareConstructorArguments(constructor, args);
         return constructor.newInstance(methodArgs);
     }
+
     private static Object[] prepareConstructorArguments(Constructor<?> constructor, List<Object> args) {
         Type[] genericParameterTypes = constructor.getGenericParameterTypes();
         Class<?>[] parameterTypes = constructor.getParameterTypes();
@@ -100,7 +102,7 @@ public class JObjectFactory {
         return arguments;
     }
 
-    public static Object  createByStaticMethod(String className, String methodName, List<Object> args) throws Exception {
+    public static Object createByStaticMethod(String className, String methodName, List<Object> args) throws Exception {
         Class<?> clazz = Class.forName(className);
         Class<?>[] paramTypes = new Class[args.size()];
         for (int i = 0; i < args.size(); i++) {
@@ -131,6 +133,7 @@ public class JObjectFactory {
         Object[] methodArgs = prepareMethodArguments(method, args);
         return MethodUtils.invokeMethod(target, methodName, methodArgs);
     }
+
     private static Object[] prepareMethodArguments(Method method, List<Object> args) {
         Type[] genericParameterTypes = method.getGenericParameterTypes();
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -209,7 +212,8 @@ public class JObjectFactory {
         }
         return arguments;
     }
-    private static void buildArgs(List<Object> args){
+
+    private static void buildArgs(List<Object> args) {
         for (int i = 0; i < args.size(); i++) {
             Object arg = args.get(i);
             if (arg instanceof List && !(arg instanceof ArrayList)) {
@@ -217,7 +221,7 @@ public class JObjectFactory {
             }
             if (arg instanceof Map && !(arg instanceof HashMap)) {
                 Map m = (Map) arg;
-                HashMap map= new HashMap<>();
+                HashMap map = new HashMap<>();
                 map.putAll(m);
                 args.set(i, map);
             }
@@ -237,18 +241,19 @@ public class JObjectFactory {
             }
             parameterTypes[i] = handlePrimitiveTypes(arg.getClass());
             if (arg instanceof Collection) {
-                if(arg instanceof List) {
+                if (arg instanceof List) {
                     parameterTypes[i] = List.class;
-                }else{
+                } else {
                     parameterTypes[i] = Collection.class;
                 }
 
             } else if (arg instanceof Map) {
-                parameterTypes[i] =Map.class;
+                parameterTypes[i] = Map.class;
             }
         }
         return parameterTypes;
     }
+
     private static Class<?> handlePrimitiveTypes(Class<?> clazz) {
         if (clazz == Integer.class) return int.class;
         if (clazz == Double.class) return double.class;
@@ -263,6 +268,7 @@ public class JObjectFactory {
         }
         return clazz;
     }
+
     public static Class<?> getCollectionType(Collection<?> collection, int paramIndex) {
         try {
             if (collection == null) {
@@ -283,6 +289,7 @@ public class JObjectFactory {
             throw new IllegalArgumentException("Error determining collection type for parameter at index " + paramIndex, e);
         }
     }
+
     public static Class<?> getMapType(Map<?, ?> map, int paramIndex) {
         try {
             if (map == null) {
@@ -303,6 +310,7 @@ public class JObjectFactory {
             throw new IllegalArgumentException("Error determining map type for parameter at index " + paramIndex, e);
         }
     }
+
     public static Type createParameterizedCollectionType(Class<?> collectionClass, Class<?> elementType) {
         return new ParameterizedType() {
             @Override
@@ -321,6 +329,7 @@ public class JObjectFactory {
             }
         };
     }
+
     public static Type createParameterizedMapType(Class<?> mapClass, Class<?> keyType, Class<?> valueType) {
         return new ParameterizedType() {
             @Override

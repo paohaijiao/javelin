@@ -30,6 +30,13 @@ import java.io.IOException;
  * @description
  */
 public class JResourceTest {
+    private static void printConfigs(JEnvironmentAware configLoader) {
+        System.out.println("App Name: " + configLoader.getProperty("app.name"));
+        System.out.println("DB URL: " + configLoader.getProperty("database.url"));
+        System.out.println("DB Username: " + configLoader.getProperty("database.username"));
+        System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
+    }
+
     @Test
     public void test() throws IOException {
         JEnvironmentAware configLoader = new JEnvironmentAware();
@@ -38,11 +45,5 @@ public class JResourceTest {
         configLoader.setActiveProfile("prod");
         System.out.println("\nProd Environment:");
         printConfigs(configLoader);
-    }
-    private static void printConfigs(JEnvironmentAware configLoader) {
-        System.out.println("App Name: " + configLoader.getProperty("app.name"));
-        System.out.println("DB URL: " + configLoader.getProperty("database.url"));
-        System.out.println("DB Username: " + configLoader.getProperty("database.username"));
-        System.out.println("DB Pool Size: " + configLoader.getProperty("database.pool-size"));
     }
 }

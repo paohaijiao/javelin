@@ -328,8 +328,10 @@ public class JBeanCopyUtils {
             throw new RuntimeException("Failed to convert JSON to Map: " + e.getMessage(), e);
         }
     }
+
     /**
      * 将 JSON 字符串转换为 Map
+     *
      * @param json JSON 字符串
      * @return 转换后的 Map 对象
      * @throws RuntimeException 如果转换失败
@@ -340,7 +342,8 @@ public class JBeanCopyUtils {
         }
 
         try {
-            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert JSON to Map: " + e.getMessage(), e);
         }
@@ -348,6 +351,7 @@ public class JBeanCopyUtils {
 
     /**
      * 将 Map 转换为 JSON 字符串
+     *
      * @param map 要转换的 Map
      * @return 转换后的 JSON 字符串
      * @throws RuntimeException 如果转换失败
@@ -366,6 +370,7 @@ public class JBeanCopyUtils {
 
     /**
      * 将 Map 转换为格式化的 JSON 字符串（美化输出）
+     *
      * @param map 要转换的 Map
      * @return 格式化的 JSON 字符串
      * @throws RuntimeException 如果转换失败

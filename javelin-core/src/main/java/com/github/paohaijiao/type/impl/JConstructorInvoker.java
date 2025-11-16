@@ -39,6 +39,7 @@ public class JConstructorInvoker {
             throw new RuntimeException("Failed to invoke constructor for class: " + clazz.getName(), e);
         }
     }
+
     @SuppressWarnings("unchecked")
     private static <T> Constructor<T> findConstructor(Class<T> clazz, Class<?>[] parameterTypes) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();

@@ -42,6 +42,7 @@ public class JContext implements Map<String, Object> {
     public Map<String, Object> getVariables() {
         return variables;
     }
+
     @Override
     public int size() {
         return constants.size() + variables.size();

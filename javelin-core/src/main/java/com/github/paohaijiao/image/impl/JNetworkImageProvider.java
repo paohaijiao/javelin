@@ -58,6 +58,7 @@ public class JNetworkImageProvider extends JBaseImageProvider {
             connection.disconnect();
         }
     }
+
     public String getImageUrl() {
         return this.imageUrl;
     }

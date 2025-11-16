@@ -19,6 +19,7 @@ import com.github.paohaijiao.enums.JFileType;
 import com.github.paohaijiao.reader.JResourceReader;
 import com.github.paohaijiao.reader.impl.JResourcePropertiesReader;
 import com.github.paohaijiao.reader.impl.JResourceYamlReader;
+
 public class JParserFactory {
     public static <T> JResourceReader<T> createParser(JFileType fileType) {
         switch (fileType) {

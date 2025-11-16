@@ -29,7 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -39,148 +38,11 @@ import java.util.stream.Collectors;
 
 import static com.github.paohaijiao.resultSet.JResultSetMapper.TYPE_HANDLERS;
 
-public abstract class JLambdaBaseImpl<T>{
-    protected  Class<T> entityClass;
-
-    protected JSqlConnection sqlConnection;
-
+public abstract class JLambdaBaseImpl<T> {
     protected final List<JCondition> conditions = new ArrayList<>();
-
     protected final List<JOrder> orders = new ArrayList<>();
-
-    protected String getColumnName(Field field) {
-        JColumn columnAnnotation = field.getAnnotation(JColumn.class);
-        return columnAnnotation != null && !columnAnnotation.value().isEmpty()
-                ? columnAnnotation.value()
-                : JStringUtils.camelToUnderline(field.getName());
-    }
-
-    protected String getColumnName(JSFunction<T, ?> column) {
-        try {
-            Method writeReplace = column.getClass().getDeclaredMethod("writeReplace");
-            writeReplace.setAccessible(true);
-            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(column);
-            String methodName = lambda.getImplMethodName();
-            if (methodName.startsWith("get")) {
-                methodName = methodName.substring(3);
-            } else if (methodName.startsWith("is")) {
-                methodName = methodName.substring(2);
-            }
-            String fieldName = JStringUtils.uncapitalize(methodName);
-            Field field = entityClass.getDeclaredField(fieldName);
-            JColumn columnAnnotation = field.getAnnotation(JColumn.class);
-            return columnAnnotation != null && !columnAnnotation.value().isEmpty()
-                    ? columnAnnotation.value()
-                    : JStringUtils.camelToUnderline(fieldName);
-        } catch (Exception e) {
-            throw new RuntimeException("failed to parse Lambda expression", e);
-        }
-    }
-    protected String buildSelectSQL() {
-        String tableName = getTableName();
-        String selectFields = buildSelectFields();
-        String whereClause = buildWhereClause();
-        String orderByClause = buildOrderByClause();
-        StringBuilder sql = new StringBuilder("SELECT ");
-        sql.append(selectFields).append(" FROM ").append(tableName);
-        if (JStringUtils.isNotBlank(whereClause)) {
-            sql.append(" WHERE ").append(whereClause);
-        }
-        if (JStringUtils.isNotBlank(orderByClause)) {
-            sql.append(" ORDER BY ").append(orderByClause);
-        }
-        return sql.toString();
-    }
-    protected String getTableName() {
-        JTable tableAnnotation = entityClass.getAnnotation(JTable.class);
-        if (tableAnnotation != null && !tableAnnotation.value().isEmpty()) {
-            return tableAnnotation.value();
-        }
-        return JStringUtils.camelToUnderline(entityClass.getSimpleName());
-    }
-    protected String buildSelectFields() {
-        Field[] fields = entityClass.getDeclaredFields();
-        return Arrays.stream(fields)
-                .map(field -> {
-                    JColumn columnAnnotation = field.getAnnotation(JColumn.class);
-                    String columnName = columnAnnotation != null && !columnAnnotation.value().isEmpty()
-                            ? columnAnnotation.value()
-                            : JStringUtils.camelToUnderline(field.getName());
-                    return columnName + " AS " + field.getName();
-                })
-                .collect(Collectors.joining(", "));
-    }
-    protected String buildWhereClause() {
-        if (conditions.isEmpty()) {
-            return "";
-        }
-        return conditions.stream()
-                .map(condition -> {
-                    String column = condition.getColumn();
-                    String operator = condition.getOperator();
-                    String paramName = "" + column.replace('.', '_');
-                    if ("IN".equalsIgnoreCase(operator)) {
-                        Collection<?> values = (Collection<?>) condition.getValue();
-                        String placeholders = values.stream()
-                                .map(v -> "#{" + paramName + "}")
-                                .collect(Collectors.joining(", "));
-                        return column + " IN (" + placeholders + ")";
-                    }
-                    if ("LIKE".equalsIgnoreCase(operator)) {
-                        return column + " LIKE CONCAT('%', #{" + paramName + "}, '%')";
-                    }
-                    return column + " " + operator + " #{" + paramName + "}";
-                })
-                .collect(Collectors.joining(" AND "));
-    }
-    private String buildOrderByClause() {
-        if (orders.isEmpty()) {
-            return "";
-        }
-        return orders.stream()
-                .map(order -> {
-                    String column = order.getColumn();
-                    String direction = order.isAsc() ? "ASC" : "DESC";
-                    return column + " " + direction;
-                })
-                .collect(Collectors.joining(", "));
-    }
-    protected Map<String, Object> buildParameterMap() {
-        Map<String, Object> paramMap = new HashMap<>();
-        for (JCondition condition : conditions) {
-            String column = condition.getColumn();
-            String paramName = "" + column.replace('.', '_');
-            if ("IN".equalsIgnoreCase(condition.getOperator())) {
-                Collection<?> values = (Collection<?>) condition.getValue();
-                int index = 0;
-                for (Object value : values) {
-                    paramMap.put(paramName + "_" + index++, value);
-                }
-            } else {
-                paramMap.put(paramName, condition.getValue());
-            }
-        }
-
-        return paramMap;
-    }
-    protected String getIdFieldName() {
-        Field[] fields = entityClass.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getAnnotation(JColumn.class) != null) {
-                JColumn jColumn=field.getAnnotation(JColumn.class);
-                if(jColumn.id()){
-                    String filedName=JStringUtils.camelToUnderline(field.getName());
-                    String value=jColumn.value();
-                    return StringUtils.isEmpty(value) ?filedName:jColumn.value();
-                }
-            }
-        }
-        return "id";
-    }
-    protected PreparedStatement buildPreparedStatement (String sql) throws Throwable {
-        PreparedStatement preparedStatement=this.sqlConnection.getConnection().prepareStatement(sql);
-        return preparedStatement;
-    }
+    protected Class<T> entityClass;
+    protected JSqlConnection sqlConnection;
 
     protected static String fillSqlWithEntity(String sqlTemplate, Object entity) {
         if (sqlTemplate == null || entity == null) {
@@ -219,5 +81,147 @@ public abstract class JLambdaBaseImpl<T>{
         if (value != null || fieldType.isPrimitive()) {
             field.set(obj, value);
         }
+    }
+
+    protected String getColumnName(Field field) {
+        JColumn columnAnnotation = field.getAnnotation(JColumn.class);
+        return columnAnnotation != null && !columnAnnotation.value().isEmpty()
+                ? columnAnnotation.value()
+                : JStringUtils.camelToUnderline(field.getName());
+    }
+
+    protected String getColumnName(JSFunction<T, ?> column) {
+        try {
+            Method writeReplace = column.getClass().getDeclaredMethod("writeReplace");
+            writeReplace.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(column);
+            String methodName = lambda.getImplMethodName();
+            if (methodName.startsWith("get")) {
+                methodName = methodName.substring(3);
+            } else if (methodName.startsWith("is")) {
+                methodName = methodName.substring(2);
+            }
+            String fieldName = JStringUtils.uncapitalize(methodName);
+            Field field = entityClass.getDeclaredField(fieldName);
+            JColumn columnAnnotation = field.getAnnotation(JColumn.class);
+            return columnAnnotation != null && !columnAnnotation.value().isEmpty()
+                    ? columnAnnotation.value()
+                    : JStringUtils.camelToUnderline(fieldName);
+        } catch (Exception e) {
+            throw new RuntimeException("failed to parse Lambda expression", e);
+        }
+    }
+
+    protected String buildSelectSQL() {
+        String tableName = getTableName();
+        String selectFields = buildSelectFields();
+        String whereClause = buildWhereClause();
+        String orderByClause = buildOrderByClause();
+        StringBuilder sql = new StringBuilder("SELECT ");
+        sql.append(selectFields).append(" FROM ").append(tableName);
+        if (JStringUtils.isNotBlank(whereClause)) {
+            sql.append(" WHERE ").append(whereClause);
+        }
+        if (JStringUtils.isNotBlank(orderByClause)) {
+            sql.append(" ORDER BY ").append(orderByClause);
+        }
+        return sql.toString();
+    }
+
+    protected String getTableName() {
+        JTable tableAnnotation = entityClass.getAnnotation(JTable.class);
+        if (tableAnnotation != null && !tableAnnotation.value().isEmpty()) {
+            return tableAnnotation.value();
+        }
+        return JStringUtils.camelToUnderline(entityClass.getSimpleName());
+    }
+
+    protected String buildSelectFields() {
+        Field[] fields = entityClass.getDeclaredFields();
+        return Arrays.stream(fields)
+                .map(field -> {
+                    JColumn columnAnnotation = field.getAnnotation(JColumn.class);
+                    String columnName = columnAnnotation != null && !columnAnnotation.value().isEmpty()
+                            ? columnAnnotation.value()
+                            : JStringUtils.camelToUnderline(field.getName());
+                    return columnName + " AS " + field.getName();
+                })
+                .collect(Collectors.joining(", "));
+    }
+
+    protected String buildWhereClause() {
+        if (conditions.isEmpty()) {
+            return "";
+        }
+        return conditions.stream()
+                .map(condition -> {
+                    String column = condition.getColumn();
+                    String operator = condition.getOperator();
+                    String paramName = "" + column.replace('.', '_');
+                    if ("IN".equalsIgnoreCase(operator)) {
+                        Collection<?> values = (Collection<?>) condition.getValue();
+                        String placeholders = values.stream()
+                                .map(v -> "#{" + paramName + "}")
+                                .collect(Collectors.joining(", "));
+                        return column + " IN (" + placeholders + ")";
+                    }
+                    if ("LIKE".equalsIgnoreCase(operator)) {
+                        return column + " LIKE CONCAT('%', #{" + paramName + "}, '%')";
+                    }
+                    return column + " " + operator + " #{" + paramName + "}";
+                })
+                .collect(Collectors.joining(" AND "));
+    }
+
+    private String buildOrderByClause() {
+        if (orders.isEmpty()) {
+            return "";
+        }
+        return orders.stream()
+                .map(order -> {
+                    String column = order.getColumn();
+                    String direction = order.isAsc() ? "ASC" : "DESC";
+                    return column + " " + direction;
+                })
+                .collect(Collectors.joining(", "));
+    }
+
+    protected Map<String, Object> buildParameterMap() {
+        Map<String, Object> paramMap = new HashMap<>();
+        for (JCondition condition : conditions) {
+            String column = condition.getColumn();
+            String paramName = "" + column.replace('.', '_');
+            if ("IN".equalsIgnoreCase(condition.getOperator())) {
+                Collection<?> values = (Collection<?>) condition.getValue();
+                int index = 0;
+                for (Object value : values) {
+                    paramMap.put(paramName + "_" + index++, value);
+                }
+            } else {
+                paramMap.put(paramName, condition.getValue());
+            }
+        }
+
+        return paramMap;
+    }
+
+    protected String getIdFieldName() {
+        Field[] fields = entityClass.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getAnnotation(JColumn.class) != null) {
+                JColumn jColumn = field.getAnnotation(JColumn.class);
+                if (jColumn.id()) {
+                    String filedName = JStringUtils.camelToUnderline(field.getName());
+                    String value = jColumn.value();
+                    return StringUtils.isEmpty(value) ? filedName : jColumn.value();
+                }
+            }
+        }
+        return "id";
+    }
+
+    protected PreparedStatement buildPreparedStatement(String sql) throws Throwable {
+        PreparedStatement preparedStatement = this.sqlConnection.getConnection().prepareStatement(sql);
+        return preparedStatement;
     }
 }

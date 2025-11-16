@@ -20,11 +20,11 @@ import java.io.InputStream;
 
 /**
  * File Parse to parse the File
+ *
  * @param <T>
  */
-public interface JResourceReader<T>  {
+public interface JResourceReader<T> {
     /**
-     *
      * @param inputStream
      * @param targetClass
      * @return
@@ -33,17 +33,15 @@ public interface JResourceReader<T>  {
     T parse(InputStream inputStream, Class<T> targetClass) throws IOException;
 
     /**
-     *
      * @param inputStream
      * @param targetClass
      * @param key
      * @return
      * @throws IOException
      */
-    T parse(InputStream inputStream, Class<T> targetClass,String key) throws IOException;
+    T parse(InputStream inputStream, Class<T> targetClass, String key) throws IOException;
 
     /**
-     *
      * @param filePath
      * @param targetClass
      * @return
@@ -59,19 +57,18 @@ public interface JResourceReader<T>  {
     }
 
     /**
-     *
      * @param filePath
      * @param targetClass
      * @param key
      * @return
      * @throws IOException
      */
-    default T parse(String filePath, Class<T> targetClass,String key) throws IOException {
+    default T parse(String filePath, Class<T> targetClass, String key) throws IOException {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(filePath)) {
             if (is == null) {
                 throw new IOException("File not found: " + filePath);
             }
-            return parse(is, targetClass,key);
+            return parse(is, targetClass, key);
         }
     }
 

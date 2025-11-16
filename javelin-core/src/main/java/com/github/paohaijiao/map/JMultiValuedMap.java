@@ -3,7 +3,7 @@ package com.github.paohaijiao.map;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class JMultiValuedMap <K, V> implements Map<K, V> {
+public class JMultiValuedMap<K, V> implements Map<K, V> {
 
     private final LinkedList<Entry<K, V>> entries = new LinkedList<>();
 
@@ -113,6 +113,7 @@ public class JMultiValuedMap <K, V> implements Map<K, V> {
         return entriesForKey != null && !entriesForKey.isEmpty() ?
                 entriesForKey.get(0).getValue() : null;
     }
+
     public int totalSize() {
         return entries.size();
     }

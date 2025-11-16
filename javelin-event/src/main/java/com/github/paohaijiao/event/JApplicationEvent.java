@@ -15,7 +15,7 @@
  */
 package com.github.paohaijiao.event;
 
-public class JApplicationEvent extends java.util.EventObject{
+public class JApplicationEvent extends java.util.EventObject {
     private final long timestamp;
 
     public JApplicationEvent(Object source) {

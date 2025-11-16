@@ -45,6 +45,7 @@ public class JMethodInvoker {
             throw new RuntimeException("Method invocation failed: " + methodName, e.getTargetException());
         }
     }
+
     private static Method findMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
         List<Method> methods = Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> m.getName().equals(methodName))
@@ -114,18 +115,21 @@ public class JMethodInvoker {
             return true;
         }
     }
+
     public static Class<?>[] convertToClassArray(JTypeReference<?>[] argTypes) {
         return argTypes == null ? new Class<?>[0] :
                 Arrays.stream(argTypes)
                         .map(JTypeReference::getRawType)
                         .toArray(Class<?>[]::new);
     }
+
     private static boolean isAssignable(Class<?> target, Class<?> source) {
         if (target.isAssignableFrom(source)) return true;
         if (target.isPrimitive()) return getWrapperClass(target).isAssignableFrom(source);
         if (source.isPrimitive()) return target.isAssignableFrom(getWrapperClass(source));
         return false;
     }
+
     private static Class<?> getWrapperClass(Class<?> primitiveType) {
         if (primitiveType == int.class) return Integer.class;
         if (primitiveType == long.class) return Long.class;

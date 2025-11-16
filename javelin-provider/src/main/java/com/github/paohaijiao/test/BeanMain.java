@@ -15,10 +15,10 @@
  */
 package com.github.paohaijiao.test;
 
-import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.context.JBeanProvider;
 import com.github.paohaijiao.context.service.JProxyEnhancedBeanProvider;
 import com.github.paohaijiao.factory.JBeanProviderFactory;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 
 import java.util.Properties;
 

@@ -14,10 +14,12 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.console;
+
 import com.github.paohaijiao.enums.JLogLevel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 public class JConsole {
 
     private static final String ANSI_RESET = "\u001B[0m";
@@ -39,6 +41,20 @@ public class JConsole {
         this(true);
     }
 
+    public static void main(String[] args) {
+        JConsole console = new JConsole();
+        console.debug("hello");
+        console.info("hello");
+        console.warn("hello");
+        console.error("hello");
+
+        try {
+            int result = 10 / 0;
+        } catch (Exception e) {
+            console.error("error", e);
+        }
+    }
+
     private String getTimestamp() {
         return LocalDateTime.now().format(timestampFormatter);
     }
@@ -57,11 +73,16 @@ public class JConsole {
 
     private String getColorCode(JLogLevel level) {
         switch (level) {
-            case DEBUG: return ANSI_DEBUG;
-            case INFO: return ANSI_INFO;
-            case WARN: return ANSI_WARN;
-            case ERROR: return ANSI_ERROR;
-            default: return ANSI_RESET;
+            case DEBUG:
+                return ANSI_DEBUG;
+            case INFO:
+                return ANSI_INFO;
+            case WARN:
+                return ANSI_WARN;
+            case ERROR:
+                return ANSI_ERROR;
+            default:
+                return ANSI_RESET;
         }
     }
 
@@ -83,19 +104,5 @@ public class JConsole {
 
     public void error(String message, Throwable throwable) {
         log(JLogLevel.ERROR, message, throwable);
-    }
-
-    public static void main(String[] args) {
-        JConsole console = new JConsole();
-        console.debug("hello");
-        console.info("hello");
-        console.warn("hello");
-        console.error("hello");
-
-        try {
-            int result = 10 / 0;
-        } catch (Exception e) {
-            console.error("error", e);
-        }
     }
 }

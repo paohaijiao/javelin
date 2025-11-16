@@ -14,6 +14,7 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.config;
+
 import com.github.paohaijiao.reader.impl.JResourceYamlReader;
 
 import java.io.IOException;
@@ -23,18 +24,22 @@ import java.util.Map;
 public class JEnvironmentAware {
     private final Map<String, Object> configMap = new HashMap<>();
     private String activeProfile = "dev"; //default active variable
+
     public JEnvironmentAware() {
         loadConfigurations();
     }
+
     public void setActiveProfile(String profile) {
         this.activeProfile = profile;
         loadConfigurations();
     }
+
     private void loadConfigurations() {
         loadYamlConfig("application.yml");
         String profileConfig = "application-" + activeProfile + ".yml";
         loadYamlConfig(profileConfig);
     }
+
     private void loadYamlConfig(String filename) {
         JResourceYamlReader<HashMap> yamlParser = new JResourceYamlReader<HashMap>();
         try {
@@ -46,6 +51,7 @@ public class JEnvironmentAware {
             e.printStackTrace();
         }
     }
+
     @SuppressWarnings("unchecked")
     private void mergeMaps(Map<String, Object> base, Map<String, Object> toMerge) {
         for (Map.Entry<String, Object> entry : toMerge.entrySet()) {
@@ -58,6 +64,7 @@ public class JEnvironmentAware {
             }
         }
     }
+
     public Object getProperty(String key) {
         String[] keys = key.split("\\.");
         Map<String, Object> current = configMap;
@@ -71,6 +78,7 @@ public class JEnvironmentAware {
         }
         return current.get(keys[keys.length - 1]);
     }
+
     public Object getProperty(String key, Object defaultValue) {
         Object value = getProperty(key);
         return value != null ? value : defaultValue;

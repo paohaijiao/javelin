@@ -17,6 +17,7 @@ package com.github.paohaijiao.test;
 
 import com.github.paohaijiao.anno.JComponent;
 import com.github.paohaijiao.anno.JEventListener;
+
 @JComponent
 public class ParentEventService {
     private boolean parentEventReceived = false;

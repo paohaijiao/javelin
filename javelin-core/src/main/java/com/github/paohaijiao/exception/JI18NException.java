@@ -24,10 +24,11 @@ package com.github.paohaijiao.exception;
  * @date 2025/6/19
  * @description
  */
-public class JI18NException extends RuntimeException{
+public class JI18NException extends RuntimeException {
     public JI18NException(String message) {
         super(message);
     }
+
     public JI18NException(String message, Throwable cause) {
         super(message, cause);
     }

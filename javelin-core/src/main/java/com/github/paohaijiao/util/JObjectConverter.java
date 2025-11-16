@@ -31,11 +31,13 @@ public class JObjectConverter {
         throw new ClassCastException("Cannot assign object of type "
                 + target.getClass().getName() + " to " + clazz.getName());
     }
+
     /**
      * 将目标对象转换为指定类型的List
+     *
      * @param target 目标对象，可以是单个对象、数组、集合等
-     * @param clazz 目标元素类型
-     * @param <T> 泛型类型
+     * @param clazz  目标元素类型
+     * @param <T>    泛型类型
      * @return 转换后的List，如果无法转换则返回空List
      * @throws IllegalArgumentException 如果目标对象无法转换为指定类型
      */
@@ -98,7 +100,8 @@ public class JObjectConverter {
     }
 
     /**
-     *  convert Object List To Map List
+     * convert Object List To Map List
+     *
      * @param list
      * @return
      */
@@ -107,8 +110,8 @@ public class JObjectConverter {
         for (Object object : list) {
             if (object instanceof Map) {
                 mapList.add((Map<String, Object>) object);
-            }else if (object instanceof Object) {
-                Map<String, Object> fieldAndValue= JReflectionUtils.getFieldAndFieldValueByObject(object);
+            } else if (object instanceof Object) {
+                Map<String, Object> fieldAndValue = JReflectionUtils.getFieldAndFieldValueByObject(object);
                 mapList.add(fieldAndValue);
             }
         }

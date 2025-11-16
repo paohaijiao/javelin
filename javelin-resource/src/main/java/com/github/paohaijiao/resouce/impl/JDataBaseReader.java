@@ -63,9 +63,15 @@ public class JDataBaseReader implements JReader {
         } catch (Exception e) {
             throw new RuntimeException("Failed to read from database", e);
         } finally {
-            try { if (rs != null) rs.close(); } catch (SQLException e) { /* ignore */ }
-            try { if (stmt != null) stmt.close(); } catch (SQLException e) { /* ignore */ }
-            try { if (conn != null) conn.close(); } catch (SQLException e) { /* ignore */ }
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) { /* ignore */ }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) { /* ignore */ }
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException e) { /* ignore */ }
         }
 
         return result.toString();

@@ -14,9 +14,10 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.context;
-import com.github.paohaijiao.model.JBeanDefinitionModel;
+
 import com.github.paohaijiao.context.service.JProxyEnhancedBeanProvider;
 import com.github.paohaijiao.factory.JBeanProviderFactory;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.scan.JClassPathScanner;
 
 import java.io.IOException;
@@ -78,6 +79,7 @@ public class JAnnotationConfigApplicationContext {
         if (str == null || str.isEmpty()) return str;
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
+
     protected Set<String> getBeanNames() {
         return new HashSet<>(beanNames);
     }

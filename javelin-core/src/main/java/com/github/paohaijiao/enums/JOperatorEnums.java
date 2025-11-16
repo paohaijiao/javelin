@@ -14,6 +14,7 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.enums;
+
 import com.github.paohaijiao.exception.JAssert;
 
 public enum JOperatorEnums {
@@ -30,10 +31,6 @@ public enum JOperatorEnums {
         this.symbol = symbol;
     }
 
-    @Override
-    public String toString() {
-        return symbol;
-    }
     public static JOperatorEnums symbolOf(String symbol) {
         for (JOperatorEnums jOperatorEnums : JOperatorEnums.values()) {
             if (jOperatorEnums.symbol.equals(symbol)) {
@@ -42,6 +39,11 @@ public enum JOperatorEnums {
         }
         JAssert.throwNewException("No JOperatorEnums found for symbol " + symbol);
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return symbol;
     }
 
 }

@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-public class JResourceYamlReader <T> extends JResourceBaseReader implements JResourceReader<T> {
+public class JResourceYamlReader<T> extends JResourceBaseReader implements JResourceReader<T> {
     @Override
     public T parse(InputStream inputStream, Class<T> targetClass) throws IOException {
         LoaderOptions loaderOptions = new LoaderOptions();
@@ -51,6 +51,7 @@ public class JResourceYamlReader <T> extends JResourceBaseReader implements JRes
         String filteredYaml = targetYaml.dump(configPart);
         return targetYaml.loadAs(filteredYaml, targetClass);
     }
+
     private Object extractConfigPart(Map<String, Object> yamlMap, String key) {
         String[] keyParts = key.split("\\.");
         Object current = yamlMap;

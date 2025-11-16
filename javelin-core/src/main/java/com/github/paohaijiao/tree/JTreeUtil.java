@@ -59,6 +59,7 @@ public class JTreeUtil {
             }
         }
     }
+
     public static <T, K> T findNode(List<T> roots, K id, Function<T, K> idGetter, Function<T, List<T>> childrenGetter) {
         for (T root : roots) {
             if (id.equals(idGetter.apply(root))) {
@@ -74,6 +75,7 @@ public class JTreeUtil {
         }
         return null;
     }
+
     public static <T, K> List<T> getAllChildren(T node, Function<T, List<T>> childrenGetter) {
         List<T> result = new ArrayList<>();
         if (node == null) {
@@ -88,6 +90,7 @@ public class JTreeUtil {
         }
         return result;
     }
+
     public static <T> List<T> getDirectChildren(T node, Function<T, List<T>> childrenGetter) {
         if (node == null) {
             return Collections.emptyList();
@@ -95,6 +98,7 @@ public class JTreeUtil {
         List<T> children = childrenGetter.apply(node);
         return children != null ? new ArrayList<>(children) : Collections.emptyList();
     }
+
     public static <T, K> List<T> getParents(T node, K nodeId, Function<T, K> idGetter, Function<T, K> parentGetter, Map<K, T> nodeMap, boolean includeCurrent) {
         List<T> parents = new ArrayList<>();
         if (node == null && nodeId == null) {
@@ -122,11 +126,13 @@ public class JTreeUtil {
 
         return parents;
     }
+
     public static <T, K> List<T> getParentChain(T node, K nodeId, Function<T, K> idGetter, Function<T, K> parentGetter, Map<K, T> nodeMap, boolean includeCurrent) {
         List<T> parents = getParents(node, nodeId, idGetter, parentGetter, nodeMap, includeCurrent);
         Collections.reverse(parents);
         return parents;
     }
+
     public static <T, K> List<T> getSiblings(T node, K nodeId, Function<T, K> idGetter, Function<T, K> parentGetter, Function<T, List<T>> childrenGetter, Map<K, T> nodeMap, boolean includeSelf) {
         List<T> siblings = new ArrayList<>();
         if (node == null && nodeId == null) {

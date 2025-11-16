@@ -45,15 +45,28 @@ public class JDateCompareUtil {
                 throw new IllegalArgumentException("operator not support: " + operator);
         }
     }
+
     public static boolean compare(Date date1, Date date2, String operator) {
         JOperatorEnums op;
         switch (operator) {
-            case ">":  op = JOperatorEnums.GREATER_THAN; break;
-            case ">=": op = JOperatorEnums.GREATER_THAN_OR_EQUAL; break;
-            case "<":  op = JOperatorEnums.LESS_THAN; break;
-            case "<=": op = JOperatorEnums.LESS_THAN_OR_EQUAL; break;
-            case "==": op = JOperatorEnums.EQUAL; break;
-            case "!=": op = JOperatorEnums.NOT_EQUAL; break;
+            case ">":
+                op = JOperatorEnums.GREATER_THAN;
+                break;
+            case ">=":
+                op = JOperatorEnums.GREATER_THAN_OR_EQUAL;
+                break;
+            case "<":
+                op = JOperatorEnums.LESS_THAN;
+                break;
+            case "<=":
+                op = JOperatorEnums.LESS_THAN_OR_EQUAL;
+                break;
+            case "==":
+                op = JOperatorEnums.EQUAL;
+                break;
+            case "!=":
+                op = JOperatorEnums.NOT_EQUAL;
+                break;
             default:
                 throw new IllegalArgumentException("invalid comparison operator: " + operator +
                         "，the supported ones are quite compatible: >, >=, <, <=, ==, !=");

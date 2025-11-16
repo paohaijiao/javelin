@@ -18,10 +18,9 @@ package com.github.paohaijiao.mapper;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.model.JPage;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface JLambdaQuery<T>{
+public interface JLambdaQuery<T> {
     /***
      * eq
      * @param column column
@@ -32,6 +31,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * ne
+     *
      * @param column
      * @param value
      * @return
@@ -40,6 +40,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * gt
+     *
      * @param column
      * @param value
      * @return
@@ -48,6 +49,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * ge
+     *
      * @param column
      * @param value
      * @return
@@ -56,6 +58,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * lt
+     *
      * @param column
      * @param value
      * @return
@@ -64,6 +67,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * le
+     *
      * @param column
      * @param value
      * @return
@@ -72,6 +76,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * like
+     *
      * @param column
      * @param value
      * @return
@@ -81,6 +86,7 @@ public interface JLambdaQuery<T>{
 
     /**
      * orderByAsc
+     *
      * @param column
      * @return
      */
@@ -88,19 +94,20 @@ public interface JLambdaQuery<T>{
 
     /**
      * orderByDesc
+     *
      * @param column
      * @return
      */
     JLambdaQuery<T> orderByDesc(JSFunction<T, ?> column);
 
     /**
-     *
      * @return
      */
     List<T> list();
 
     /**
      * page
+     *
      * @param pageNum
      * @param pageSize
      * @return
@@ -109,12 +116,14 @@ public interface JLambdaQuery<T>{
 
     /**
      * one
+     *
      * @return
      */
     T one();
 
     /**
      * count
+     *
      * @return
      */
     long count();

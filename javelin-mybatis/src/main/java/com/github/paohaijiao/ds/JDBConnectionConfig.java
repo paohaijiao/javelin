@@ -1,7 +1,5 @@
 package com.github.paohaijiao.ds;
 
-import java.util.Properties;
-
 public interface JDBConnectionConfig {
 
     String getDriverClassName();

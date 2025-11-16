@@ -15,10 +15,10 @@
  */
 package com.github.paohaijiao.context.service;
 
-import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.context.JBeanPostProcessor;
 import com.github.paohaijiao.context.JBeanProvider;
 import com.github.paohaijiao.context.JMethodInterceptor;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
     protected final Map<String, JBeanDefinitionModel> beanDefinitionMap = new ConcurrentHashMap<>();
     protected final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
     protected final List<JBeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
     @Override
     public void registerBeanDefinition(String beanName, JBeanDefinitionModel beanDefinition) {
         if (beanDefinitionMap.containsKey(beanName)) {
@@ -37,6 +38,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
         }
         beanDefinitionMap.put(beanName, beanDefinition);
     }
+
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getBean(String beanName, Class<T> requiredType) {
@@ -49,8 +51,8 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
 
     @Override
     public <T> T getBean(Class<T> requiredType) {
-        for(Object obj:singletonObjects.values()){
-            if( requiredType.isInstance(obj) ){
+        for (Object obj : singletonObjects.values()) {
+            if (requiredType.isInstance(obj)) {
                 return requiredType.cast(obj);
             }
         }
@@ -103,6 +105,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
             throw new RuntimeException("create Bean '" + beanName + "' fail", e);
         }
     }
+
     @Override
     public void addBeanPostProcessor(JBeanPostProcessor processor) {
         this.beanPostProcessors.add(processor);
@@ -112,6 +115,7 @@ public abstract class JBaseBeanProvider implements JBeanProvider {
     public void registerInterceptor(String beanName, JMethodInterceptor interceptor) {
         throw new UnsupportedOperationException("simple container not support registerInterceptor");
     }
+
     protected void addSingleton(String beanName, Object singletonObject) {
         singletonObjects.put(beanName, singletonObject);
     }

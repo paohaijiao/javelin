@@ -21,18 +21,18 @@ import java.math.BigDecimal;
 
 public class JMathUtil {
 
-    public static BigDecimal op(Object obj1, Object obj2,String op) {
-        JAssert.notNull(obj1,"obj1 is null");
-        JAssert.notNull(obj2,"obj2 is null");
+    public static BigDecimal op(Object obj1, Object obj2, String op) {
+        JAssert.notNull(obj1, "obj1 is null");
+        JAssert.notNull(obj2, "obj2 is null");
         BigDecimal b1 = new BigDecimal(obj1.toString());
         BigDecimal b2 = new BigDecimal(obj2.toString());
-        if(op.equals("+")) {
+        if (op.equals("+")) {
             return b1.add(b2);
         } else if (op.equals("-")) {
             return b1.subtract(b2);
-        } else if(op.equals("*")) {
+        } else if (op.equals("*")) {
             return b1.multiply(b2);
-        }else if(op.equals("/")) {
+        } else if (op.equals("/")) {
             return b1.divide(b2);
         }
         JAssert.throwNewException("invalid operator");

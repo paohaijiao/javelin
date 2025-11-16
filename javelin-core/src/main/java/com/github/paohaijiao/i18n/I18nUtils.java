@@ -43,7 +43,7 @@ public class I18nUtils {
                     }
                 }
             } catch (IOException e) {
-                 e.printStackTrace();
+                e.printStackTrace();
             }
             return super.newBundle(baseName, locale, format, loader, reload);
         }
@@ -296,10 +296,12 @@ public class I18nUtils {
     private static class CacheEntry {
         String value;
         long timestamp;
+
         CacheEntry(String value) {
             this.value = value;
             this.timestamp = System.currentTimeMillis();
         }
+
         boolean isExpired() {
             return System.currentTimeMillis() - timestamp > CACHE_EXPIRE_MILLIS;
         }

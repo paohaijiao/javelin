@@ -18,7 +18,7 @@ package com.github.paohaijiao.model;
 import lombok.Data;
 
 @Data
-public class JKeyValueModel <T>{
+public class JKeyValueModel<T> {
 
     private String key;
 

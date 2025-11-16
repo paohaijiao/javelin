@@ -15,9 +15,9 @@
  */
 package com.github.paohaijiao.factory;
 
+import com.github.paohaijiao.connection.JSqlConnectionFactory;
 import com.github.paohaijiao.core.JLambdaMapperImpl;
 import com.github.paohaijiao.mapper.JLambdaMapper;
-import com.github.paohaijiao.connection.JSqlConnectionFactory;
 
 public class JLambdaMapperFactory {
     private final JSqlConnectionFactory sqlConnectionFactory;

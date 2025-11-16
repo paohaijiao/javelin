@@ -14,6 +14,7 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.image.impl;
+
 import com.github.paohaijiao.image.JBaseImageProvider;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 /**
  * packageName com.github.paohaijiao.image
  *

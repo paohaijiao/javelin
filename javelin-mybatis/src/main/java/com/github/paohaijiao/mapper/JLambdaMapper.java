@@ -15,17 +15,14 @@
  */
 package com.github.paohaijiao.mapper;
 
-import com.github.paohaijiao.core.JLambdaQueryPageImpl;
-import com.github.paohaijiao.model.JPage;
 import com.github.paohaijiao.model.JParam;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public interface JLambdaMapper<T>{
+public interface JLambdaMapper<T> {
     /**
-     *
      * @param entity
      * @return
      */
@@ -33,6 +30,7 @@ public interface JLambdaMapper<T>{
 
     /**
      * update
+     *
      * @param entity
      * @return
      */
@@ -40,6 +38,7 @@ public interface JLambdaMapper<T>{
 
     /**
      * deleteById
+     *
      * @param id id
      * @return
      */
@@ -47,39 +46,46 @@ public interface JLambdaMapper<T>{
 
     /**
      * selectById
+     *
      * @param id
      * @return
      */
     T selectById(Serializable id);
 
     /**
-     *  select
+     * select
+     *
      * @param sql
      * @return
      */
-    List<T> select (String sql, Map<String,Object> param);
+    List<T> select(String sql, Map<String, Object> param);
 
     /**
-     *  select
+     * select
+     *
      * @param sql
      * @param param
      * @return
      */
-    List<T> select (String sql, List<JParam> param);
+    List<T> select(String sql, List<JParam> param);
 
     /**
-     *  page
+     * page
+     *
      * @return
      */
-    JLambdaQuery<T> page ();
+    JLambdaQuery<T> page();
+
     /**
      * Lambda query
+     *
      * @return
      */
     JLambdaQuery<T> query();
 
     /**
      * lamdaupte update
+     *
      * @return
      */
     JLambdaUpdate<T> update();

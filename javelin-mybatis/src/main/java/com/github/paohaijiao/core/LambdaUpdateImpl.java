@@ -15,23 +15,20 @@
  */
 package com.github.paohaijiao.core;
 
+import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.format.JSqlFormatter;
-import com.github.paohaijiao.map.JMultiValuedMap;
-import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.function.JSFunction;
 import com.github.paohaijiao.mapper.JLambdaUpdate;
-import com.github.paohaijiao.connection.JSqlConnection;
+import com.github.paohaijiao.model.JCondition;
 import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
-import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.lang.reflect.Field;
-import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaUpdate<T> {
+public class LambdaUpdateImpl<T> extends JLambdaBaseImpl<T> implements JLambdaUpdate<T> {
     private final Map<String, Object> updateValues = new HashMap<>();
 
     public LambdaUpdateImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
@@ -98,22 +95,22 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
     public int execute() {
         String sql = buildUpdateSQL();
         System.out.println("update sql:" + sql);
-        List<JCondition> condition=this.conditions;
-        Map<String, Object> updateCause=this.updateValues;
-        int k=0;
+        List<JCondition> condition = this.conditions;
+        Map<String, Object> updateCause = this.updateValues;
+        int k = 0;
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
             for (String key : updateCause.keySet()) {
-                k=k+1;
-                JKeyValue model=new JKeyValue();
+                k = k + 1;
+                JKeyValue model = new JKeyValue();
                 model.setNum(k);
                 model.setKey(key);
                 model.setValue(updateCause.get(key));
                 namedParameterPreparedStatement.setParameter(model);
             }
-            for (int i=0;i<condition.size();i++){
-                k=k+1;
-                JKeyValue model=new JKeyValue();
+            for (int i = 0; i < condition.size(); i++) {
+                k = k + 1;
+                JKeyValue model = new JKeyValue();
                 model.setNum(k);
                 model.setKey(condition.get(i).getColumn());
                 model.setValue(condition.get(i).getValue());
@@ -121,7 +118,7 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
             }
             return namedParameterPreparedStatement.executeUpdate();
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return 0;
@@ -157,9 +154,9 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
     public int updateById(T entity) {
         String tableName = getTableName();
         String setClause = buildUpdateSetClause();
-        String idClause=getIdFieldName();
+        String idClause = getIdFieldName();
         String whereClause = idClause + " = #{" + idClause + "}";
-        String sql= "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereClause;
+        String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereClause;
         try {
             JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
             List<JKeyValue> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
@@ -168,14 +165,15 @@ public class LambdaUpdateImpl <T> extends JLambdaBaseImpl<T> implements JLambdaU
                 namedParameterPreparedStatement.setParameter(entry);
             }
             namedParameterPreparedStatement.executeUpdate();
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return 0;
     }
+
     private String buildUpdateSetClause() {
         Field[] fields = entityClass.getDeclaredFields();
-        String id=getIdFieldName();
+        String id = getIdFieldName();
         return Arrays.stream(fields)
                 .filter(field -> !field.equals(id)) // 排除主键字段
                 .map(field -> getColumnName(field) + " = #{" + field.getName() + "}")

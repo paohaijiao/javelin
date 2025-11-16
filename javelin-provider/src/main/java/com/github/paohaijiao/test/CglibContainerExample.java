@@ -15,8 +15,8 @@
  */
 package com.github.paohaijiao.test;
 
-import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.context.service.JCglibBeanProvider;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 
 public class CglibContainerExample {
     public static void main(String[] args) {

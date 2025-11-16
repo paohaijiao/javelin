@@ -80,7 +80,7 @@ public class JClassPathScanner {
             value = clazz.getAnnotation(JService.class).value();
         } else if (clazz.isAnnotationPresent(JRepository.class)) {
             value = clazz.getAnnotation(JRepository.class).value();
-        }else if (clazz.isAnnotationPresent(JRule.class)) {
+        } else if (clazz.isAnnotationPresent(JRule.class)) {
             value = clazz.getAnnotation(JRule.class).value();
         }
         return value.isEmpty() ? toLowerFirstCase(clazz.getSimpleName()) : value;

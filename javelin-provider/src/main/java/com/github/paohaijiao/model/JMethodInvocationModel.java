@@ -19,6 +19,8 @@ import java.lang.reflect.Method;
 
 public interface JMethodInvocationModel {
     Object proceed() throws Throwable;
+
     Method getMethod();
+
     Object[] getArguments();
 }

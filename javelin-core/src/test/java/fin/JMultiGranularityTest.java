@@ -3,7 +3,6 @@ package fin;
 import com.github.paohaijiao.yoy.JYoYCalculator;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 import java.time.YearMonth;
 import java.util.ArrayList;

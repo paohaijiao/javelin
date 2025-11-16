@@ -24,9 +24,23 @@ public class JBeanDefinitionModel {
         this.beanClass = beanClass;
     }
 
-    public Class<?> getBeanClass() { return beanClass; }
-    public boolean isSingleton() { return singleton; }
-    public void setSingleton(boolean singleton) { this.singleton = singleton; }
-    public String getInitMethodName() { return initMethodName; }
-    public void setInitMethodName(String initMethodName) { this.initMethodName = initMethodName; }
+    public Class<?> getBeanClass() {
+        return beanClass;
+    }
+
+    public boolean isSingleton() {
+        return singleton;
+    }
+
+    public void setSingleton(boolean singleton) {
+        this.singleton = singleton;
+    }
+
+    public String getInitMethodName() {
+        return initMethodName;
+    }
+
+    public void setInitMethodName(String initMethodName) {
+        this.initMethodName = initMethodName;
+    }
 }

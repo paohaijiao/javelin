@@ -16,9 +16,7 @@
 package com.github.paohaijiao.function;
 
 import com.github.paohaijiao.exception.JAssert;
-import com.github.paohaijiao.param.JContext;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -30,9 +28,6 @@ public class JFunction {
         Object object = ((Map) context).get(key.toString());
         return object;
     };
-
-
-
 
 
 }

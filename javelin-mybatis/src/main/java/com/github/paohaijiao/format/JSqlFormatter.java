@@ -1,11 +1,10 @@
 package com.github.paohaijiao.format;
 
-import com.github.paohaijiao.map.JMultiValuedMap;
 import com.github.paohaijiao.model.JKeyValue;
-import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,9 +15,9 @@ public class JSqlFormatter {
         List<JKeyValue> list = new ArrayList<>();
         Pattern pattern = Pattern.compile("#\\{(\\w+)\\}");
         Matcher matcher = pattern.matcher(sqlTemplate);
-        int num=0;
+        int num = 0;
         while (matcher.find()) {
-            num=num+1;
+            num = num + 1;
             String placeholder = matcher.group(1); //FieldName
             JKeyValue keyValue = new JKeyValue();
             keyValue.setKey(placeholder);
@@ -34,7 +33,7 @@ public class JSqlFormatter {
         Class<?> clazz = entity.getClass();
         try {
             for (JKeyValue e : list) {
-                String fieldName=e.getKey();
+                String fieldName = e.getKey();
                 Field field;
                 try {
                     field = clazz.getDeclaredField(fieldName);//get Value By FieldId
@@ -58,6 +57,7 @@ public class JSqlFormatter {
         }
         return result;
     }
+
     public static String replacePlaceholders(String sqlTemplate, List<JKeyValue> list) {
         String result = sqlTemplate;
         for (JKeyValue entry : list) {

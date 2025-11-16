@@ -1,9 +1,10 @@
 package com.github.paohaijiao.crypto.impl;
+
 import com.github.paohaijiao.crypto.exception.CryptoException;
 
 import javax.crypto.KeyAgreement;
 import java.security.*;
-import java.util.Base64;
+
 public class EccKeyExchange {
 
     /**

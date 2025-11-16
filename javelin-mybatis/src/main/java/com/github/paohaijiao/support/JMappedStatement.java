@@ -32,12 +32,12 @@ public class JMappedStatement {
         return resultGenericType != null ? resultGenericType : resultType;
     }
 
+    public void setResultGenericType(Type resultGenericType) {
+        this.resultGenericType = resultGenericType;
+    }
+
     public void setResultType(Class<?> resultType) {
         this.resultType = resultType;
         this.resultGenericType = resultType;
-    }
-
-    public void setResultGenericType(Type resultGenericType) {
-        this.resultGenericType = resultGenericType;
     }
 }

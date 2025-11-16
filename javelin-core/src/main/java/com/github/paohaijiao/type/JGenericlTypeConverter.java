@@ -56,6 +56,7 @@ public class JGenericlTypeConverter {
             WRAPPER_TO_PRIMITIVE.put(entry.getValue(), entry.getKey());
         }
     }
+
     @SuppressWarnings("unchecked")
     public static <T> T convert(Object value, Class<T> targetType) throws IOException {
         if (value == null) {
@@ -100,6 +101,7 @@ public class JGenericlTypeConverter {
             throw new IllegalArgumentException("cannot convert " + value.getClass() + " to " + targetType, e);
         }
     }
+
     @SuppressWarnings("unchecked")
     public static <T> T convert(Object value, TypeReference<T> typeReference) throws IOException {
         if (value == null || typeReference == null) {
@@ -111,6 +113,7 @@ public class JGenericlTypeConverter {
         }
         return objectMapper.convertValue(value, typeReference);
     }
+
     @SuppressWarnings("unchecked")
     public static <T> T convert(Object value, Type type) throws IOException {
         if (value == null) {
@@ -148,6 +151,7 @@ public class JGenericlTypeConverter {
         }
         return objectMapper.convertValue(value, javaType);
     }
+
     private static <T> T convertPrimitive(Object value, Class<T> targetType) {
         if (value == null) {
             return null;
@@ -179,6 +183,7 @@ public class JGenericlTypeConverter {
         }
         throw new IllegalArgumentException("unsupported primitive type: " + targetType);
     }
+
     @SuppressWarnings("unchecked")
     private static <T, E> T convertToCollection(Object value, Class<T> collectionType, Type elementType) throws IOException {
         if (value == null) {
@@ -219,6 +224,7 @@ public class JGenericlTypeConverter {
         }
         return (T) collection;
     }
+
     @SuppressWarnings("unchecked")
     private static <T, K, V> T convertToMap(Object value, Class<T> mapType, Type keyType, Type valueType) throws IOException {
         if (value == null) {
@@ -226,7 +232,8 @@ public class JGenericlTypeConverter {
         }
         if (keyType == null || valueType == null) {
             if (value instanceof String) {
-                return (T) objectMapper.readValue((String) value, new TypeReference<Map<String, Object>>() {});
+                return (T) objectMapper.readValue((String) value, new TypeReference<Map<String, Object>>() {
+                });
             }
             return (T) objectMapper.convertValue(value, Map.class);
         }
@@ -267,31 +274,31 @@ public class JGenericlTypeConverter {
         if (value instanceof String) {
             if (componentType == String.class) {
                 return (T) objectMapper.readValue((String) value, String[].class);
-            }else if (componentType == short.class) {
+            } else if (componentType == short.class) {
                 return (T) objectMapper.readValue((String) value, short[].class);
-            }else if(componentType == Short.class ){
+            } else if (componentType == Short.class) {
                 return (T) objectMapper.readValue((String) value, Short[].class);
             } else if (componentType == int.class) {
                 return (T) objectMapper.readValue((String) value, int[].class);
-            }else if(componentType == Integer.class ){
+            } else if (componentType == Integer.class) {
                 return (T) objectMapper.readValue((String) value, Integer[].class);
-            }else if (componentType == long.class) {
+            } else if (componentType == long.class) {
                 return (T) objectMapper.readValue((String) value, long[].class);
-            }else if(componentType == Long.class ){
+            } else if (componentType == Long.class) {
                 return (T) objectMapper.readValue((String) value, Long[].class);
-            }else if (componentType == float.class) {
+            } else if (componentType == float.class) {
                 return (T) objectMapper.readValue((String) value, float[].class);
-            }else if(componentType == Float.class ){
+            } else if (componentType == Float.class) {
                 return (T) objectMapper.readValue((String) value, Float[].class);
-            }else if ( componentType == double.class) {
+            } else if (componentType == double.class) {
                 return (T) objectMapper.readValue((String) value, double[].class);
-            }else if(componentType == Double.class ){
+            } else if (componentType == Double.class) {
                 return (T) objectMapper.readValue((String) value, Double[].class);
-            }else if ( componentType == boolean.class) {
+            } else if (componentType == boolean.class) {
                 return (T) objectMapper.readValue((String) value, boolean[].class);
-            }else if(componentType == Boolean.class ){
+            } else if (componentType == Boolean.class) {
                 return (T) objectMapper.readValue((String) value, Boolean[].class);
-            }else {
+            } else {
                 JavaType javaType = objectMapper.getTypeFactory().constructArrayType(componentType);
                 return objectMapper.readValue((String) value, javaType);
             }
@@ -308,38 +315,60 @@ public class JGenericlTypeConverter {
     private static boolean isWrapperType(Class<?> type) {
         return WRAPPER_TO_PRIMITIVE.containsKey(type);
     }
-    protected Object convert(String data,JTypeReference<?> typeReference){
+
+    public static boolean isMapTypeReference(TypeReference<?> typeReference) {
+        Type type = typeReference.getType();
+        ObjectMapper mapper = new ObjectMapper();
+        JavaType javaType = mapper.constructType(typeReference.getType());
+        if (javaType != null && javaType.isMapLikeType()) {
+            return true;
+        }
+        if (type instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType) type;
+            Type rawType = pType.getRawType();
+            if (rawType instanceof Class<?>) {
+                return Map.class.isAssignableFrom((Class<?>) rawType);
+            }
+        } else if (type instanceof Class<?>) {
+            return Map.class.isAssignableFrom((Class<?>) type);
+        }
+        return false;
+
+    }
+
+    protected Object convert(String data, JTypeReference<?> typeReference) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             if (data == null || typeReference == null) {
                 return null;
             }
             Type type = typeReference.getRawType();
-            JTypeReference stringJTypeReference=JTypeReference.of(String.class);
-            JTypeReference charSequenceJTypeReference=JTypeReference.of(CharSequence.class);
-            boolean isString =type.equals(stringJTypeReference.getRawType());
-            boolean isCharSequence =type.equals(charSequenceJTypeReference.getRawType());
-            if(data instanceof String&&isString){
-                return  data;
+            JTypeReference stringJTypeReference = JTypeReference.of(String.class);
+            JTypeReference charSequenceJTypeReference = JTypeReference.of(CharSequence.class);
+            boolean isString = type.equals(stringJTypeReference.getRawType());
+            boolean isCharSequence = type.equals(charSequenceJTypeReference.getRawType());
+            if (data instanceof String && isString) {
+                return data;
             }
-            if(data instanceof String&&isCharSequence){
-                return  data;
+            if (data instanceof String && isCharSequence) {
+                return data;
             }
             if (data instanceof String) {//data is tring but result not string
-                if(isMapTypeReference(typeReference)){
+                if (isMapTypeReference(typeReference)) {
                     Gson gson = new Gson();
                     Type gsonType = convertJacksonTypeToGsonType(typeReference);
                     return gson.fromJson(data, gsonType);
                 }
                 return objectMapper.readValue(data, typeReference);
-            }else{//data is not tring
+            } else {//data is not tring
                 return objectMapper.convertValue(data, typeReference);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     private Type convertJacksonTypeToGsonType(JavaType javaType) {
         if (javaType.isMapLikeType()) {
             return TypeToken.getParameterized(
@@ -364,6 +393,7 @@ public class JGenericlTypeConverter {
 
         return javaType.getRawClass();
     }
+
     private Type convertJacksonTypeToGsonType(TypeReference<?> jacksonTypeRef) {
         ObjectMapper objectMapper = new ObjectMapper();
         JavaType javaType = objectMapper.constructType(jacksonTypeRef.getType());
@@ -377,25 +407,5 @@ public class JGenericlTypeConverter {
             ).getType();
         }
         return javaType.getRawClass();
-    }
-
-    public static boolean isMapTypeReference(TypeReference<?> typeReference) {
-        Type type = typeReference.getType();
-        ObjectMapper mapper = new ObjectMapper();
-        JavaType javaType = mapper.constructType(typeReference.getType());
-        if (javaType != null && javaType.isMapLikeType()) {
-            return true;
-        }
-        if (type instanceof ParameterizedType) {
-            ParameterizedType pType = (ParameterizedType) type;
-            Type rawType = pType.getRawType();
-            if (rawType instanceof Class<?>) {
-                return Map.class.isAssignableFrom((Class<?>) rawType);
-            }
-        } else if (type instanceof Class<?>) {
-            return Map.class.isAssignableFrom((Class<?>) type);
-        }
-        return false;
-
     }
 }

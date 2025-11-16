@@ -4,15 +4,13 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
-
 import java.sql.SQLException;
 
-public abstract class JDBCBaseConnectionConfig implements JDBConnectionConfig{
-
+public abstract class JDBCBaseConnectionConfig implements JDBConnectionConfig {
 
 
     public DataSource createDataSource() throws SQLException, ClassNotFoundException {
-        String driverClassName =this.getDriverClassName();
+        String driverClassName = this.getDriverClassName();
         String url = this.getUrl();
         String user = this.getUsername();
         String password = this.getPassword();

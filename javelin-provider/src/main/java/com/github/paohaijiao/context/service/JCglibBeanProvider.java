@@ -15,12 +15,13 @@
  */
 package com.github.paohaijiao.context.service;
 
-import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.context.JCglibMethodInterceptor;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 import net.sf.cglib.proxy.Enhancer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 public class JCglibBeanProvider extends JSimpleBeanProvider {
     private final Map<String, JCglibMethodInterceptor> interceptors = new ConcurrentHashMap<>();
 

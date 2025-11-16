@@ -18,34 +18,32 @@ package com.github.paohaijiao.core;
 import com.github.paohaijiao.anno.JColumn;
 import com.github.paohaijiao.connection.JSqlConnection;
 import com.github.paohaijiao.format.JSqlFormatter;
-import com.github.paohaijiao.map.JMultiValuedMap;
 import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 import com.github.paohaijiao.util.JStringUtils;
-import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.lang.reflect.Field;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LambdaInsertImpl<T> extends JLambdaBaseImpl<T>  {
+public class LambdaInsertImpl<T> extends JLambdaBaseImpl<T> {
 
 
     public LambdaInsertImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
     }
+
     public String buildInsertSQL() {
         String tableName = getTableName();
         String columns = buildInsertColumns();
         String values = buildInsertValues();
         return "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
     }
+
     private String buildInsertColumns() {
         Field[] fields = entityClass.getDeclaredFields();
         return Arrays.stream(fields)
@@ -73,17 +71,18 @@ public class LambdaInsertImpl<T> extends JLambdaBaseImpl<T>  {
         paramMap.put("entity", entity);
         return paramMap;
     }
+
     public int insert(T entity) {
         String sql = buildInsertSQL();
-        try{
-            JNamedParameterPreparedStatement namedParameterPreparedStatement =new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
+        try {
+            JNamedParameterPreparedStatement namedParameterPreparedStatement = new JNamedParameterPreparedStatement(sqlConnection.getConnection(), sql);
             List<JKeyValue> placeholderMap = JSqlFormatter.parsePlaceholders(sql);
             List<JKeyValue> fieldValueMap = JSqlFormatter.getFieldValues(entity, placeholderMap);
             for (JKeyValue entry : fieldValueMap) {
                 namedParameterPreparedStatement.setParameter(entry);
             }
-            return  namedParameterPreparedStatement.executeUpdate();
-        }catch (Throwable exception){
+            return namedParameterPreparedStatement.executeUpdate();
+        } catch (Throwable exception) {
             exception.printStackTrace();
         }
         return 0;

@@ -2,7 +2,7 @@ package com.github.paohaijiao.model;
 
 import java.util.List;
 
-public class JPage <T> {
+public class JPage<T> {
 
     private List<T> records;
 

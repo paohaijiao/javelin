@@ -27,12 +27,12 @@ import java.util.Objects;
  * @since 2025/8/3
  */
 @Data
-public class JUserModel
-{
+public class JUserModel {
     private String name;
     private int age;
 
-    public JUserModel() {}
+    public JUserModel() {
+    }
 
     public JUserModel(String name, int age) {
         this.name = name;

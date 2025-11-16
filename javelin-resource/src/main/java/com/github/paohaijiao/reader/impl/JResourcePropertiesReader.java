@@ -87,6 +87,7 @@ public class JResourcePropertiesReader<T> extends JResourceBaseReader implements
             throw new IOException("Failed to create or populate instance of " + targetClass.getName(), e);
         }
     }
+
     private <T> void populateObject(T instance, Properties properties) throws Exception {
         for (String propKey : properties.stringPropertyNames()) {
             String[] parts = propKey.split("\\.");

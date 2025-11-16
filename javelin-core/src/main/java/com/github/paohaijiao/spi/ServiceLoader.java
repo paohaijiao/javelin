@@ -89,6 +89,7 @@ public final class ServiceLoader {
         }
         return null;
     }
+
     public static <T> Optional<T> getHighestPriorityService(Class<T> serviceClass) {
         List<T> services = loadServicesByPriority(serviceClass);
         return services.isEmpty() ? Optional.empty() : Optional.of(services.get(0));
@@ -100,9 +101,9 @@ public final class ServiceLoader {
 
     public static <T> List<T> getServicesInPriorityRange(Class<T> serviceClass, int minPriority, int maxPriority) {
         return loadServicesByPriority(serviceClass).stream().filter(service -> {
-                    int priority = getServicePriority(service);
-                    return priority >= minPriority && priority <= maxPriority;
-                }).collect(Collectors.toList());
+            int priority = getServicePriority(service);
+            return priority >= minPriority && priority <= maxPriority;
+        }).collect(Collectors.toList());
     }
 
     public static <T> List<T> getSystemLevelServices(Class<T> serviceClass) {
@@ -116,23 +117,26 @@ public final class ServiceLoader {
     public static <T> List<T> getBusinessLevelServices(Class<T> serviceClass) {
         return getServicesInPriorityRange(serviceClass, PriorityConstants.BUSINESS_HIGHEST, PriorityConstants.BUSINESS_LOW);
     }
+
     public static <T> void printServicePriorities(Class<T> serviceClass) {
         List<T> services = loadServicesByPriority(serviceClass);
-        console.log(JLogLevel.INFO,"=== " + serviceClass.getSimpleName() + " 服务加载信息 ===");
-        console.log(JLogLevel.INFO,"总服务数: " + services.size());
+        console.log(JLogLevel.INFO, "=== " + serviceClass.getSimpleName() + " 服务加载信息 ===");
+        console.log(JLogLevel.INFO, "总服务数: " + services.size());
         for (int i = 0; i < services.size(); i++) {
             T service = services.get(i);
             int priority = getServicePriority(service);
             String level = PriorityConstants.getPriorityName(priority);
-            String info=String.format("%2d. %-40s | Priority: %-5d | Level: %-12s | Class: %s", i + 1, service.getClass().getSimpleName(), priority, level, service.getClass().getName());
-            console.log(JLogLevel.INFO,info);
+            String info = String.format("%2d. %-40s | Priority: %-5d | Level: %-12s | Class: %s", i + 1, service.getClass().getSimpleName(), priority, level, service.getClass().getName());
+            console.log(JLogLevel.INFO, info);
         }
     }
+
     public static <T> void reload(Class<T> serviceClass) {
         SERVICE_LOADER_CACHE.remove(serviceClass);
         SERVICE_INSTANCE_CACHE.remove(serviceClass);
         PRIORITY_SERVICE_CACHE.remove(serviceClass);
     }
+
     @SuppressWarnings("unchecked")
     private static <T> java.util.ServiceLoader<T> getServiceLoader(Class<T> serviceClass, ClassLoader classLoader) {
         return (java.util.ServiceLoader<T>) SERVICE_LOADER_CACHE.computeIfAbsent(serviceClass, key -> java.util.ServiceLoader.load(serviceClass, classLoader));

@@ -104,7 +104,7 @@ public abstract class JAbstractAntlrExecutor<I, O> implements JAntlrExecutor<I, 
             public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
                                     int line, int charPositionInLine,
                                     String msg, RecognitionException e) {
-                List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
+                List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
                 Collections.reverse(stack);
                 JAntlrError error = new JAntlrError(msg, line, charPositionInLine, stack);
                 notifyErrorListeners(error);

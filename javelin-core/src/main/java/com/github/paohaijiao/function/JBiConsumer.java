@@ -1,4 +1,5 @@
 package com.github.paohaijiao.function;
+
 @FunctionalInterface
 public interface JBiConsumer<T, U> {
 

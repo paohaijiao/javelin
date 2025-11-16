@@ -5,7 +5,6 @@ import com.github.paohaijiao.tree.JTreeUtil;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ public class JTestTree {
         JDept node = JTreeUtil.findNode(tree, 2L, JDept::getId, JDept::getChildren);
         System.out.println(node);
     }
+
     @Test
     public void length1() throws IOException {
         List<JDept> deptList = new ArrayList<>();
@@ -58,7 +58,6 @@ public class JTestTree {
         List<JDept> siblings = JTreeUtil.getSiblings(backendGroup, null, JDept::getId, JDept::getParentId, JDept::getChildren, nodeMap, false);
         System.out.println("后端组的兄弟部门: " + siblings.stream().map(JDept::getName).collect(Collectors.toList()));
     }
-
 
 
 }

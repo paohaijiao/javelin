@@ -23,13 +23,14 @@ import java.util.Collection;
 
 public interface JAssert {
 
-    public static void throwNewException( String message) {
+    public static void throwNewException(String message) {
         throw new IllegalArgumentException(message);
     }
 
     /**
      * 断言字符串不为空（不为 null 且长度大于 0）
-     * @param text 要检查的字符串
+     *
+     * @param text    要检查的字符串
      * @param message 异常消息
      * @throws IllegalArgumentException 如果字符串为空
      */
@@ -41,8 +42,9 @@ public interface JAssert {
 
     /**
      * 断言集合不为空（不为 null 且至少包含一个元素）
+     *
      * @param collection 要检查的集合
-     * @param message 异常消息
+     * @param message    异常消息
      * @throws IllegalArgumentException 如果集合为空
      */
     public static void notEmpty(Collection<?> collection, String message) {
@@ -53,8 +55,9 @@ public interface JAssert {
 
     /**
      * 断言对象是特定类型的实例
-     * @param type 期望的类型
-     * @param obj 要检查的对象
+     *
+     * @param type    期望的类型
+     * @param obj     要检查的对象
      * @param message 异常消息
      * @throws IllegalArgumentException 如果对象不是指定类型
      */
@@ -64,13 +67,14 @@ public interface JAssert {
             throw new IllegalArgumentException(message);
         }
     }
-    static void isNull( Object object, String message) {
+
+    static void isNull(Object object, String message) {
         if (object != null) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    static void isNull( Object object, String message, Object... args) {
+    static void isNull(Object object, String message, Object... args) {
         if (object != null) {
             throw new IllegalArgumentException(String.format(message, args));
         }
@@ -82,7 +86,7 @@ public interface JAssert {
         }
     }
 
-    static void notNull( Object object, String message, Object... args) {
+    static void notNull(Object object, String message, Object... args) {
         if (object == null) {
             throw new IllegalArgumentException(String.format(message, args));
         }

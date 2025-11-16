@@ -22,19 +22,22 @@ import java.util.Locale;
 
 public class JDateUtil {
     public static SimpleDateFormat getSimpleDateFormat(String format, Locale locale) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format,locale);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, locale);
         return sdf;
     }
+
     public static SimpleDateFormat getSimpleDateFormat(String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.CHINA);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CHINA);
         return sdf;
     }
+
     public static String format(SimpleDateFormat sdf, Date date) {
-        String dateString= sdf.format(date);
+        String dateString = sdf.format(date);
         return dateString;
     }
+
     public static Date parse(SimpleDateFormat sdf, String dateStr) {
-        Date date= null;
+        Date date = null;
         try {
             date = sdf.parse(dateStr);
         } catch (ParseException e) {

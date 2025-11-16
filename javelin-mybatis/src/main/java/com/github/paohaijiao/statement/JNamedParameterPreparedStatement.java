@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 @Slf4j
 public class JNamedParameterPreparedStatement {
 
@@ -20,17 +21,20 @@ public class JNamedParameterPreparedStatement {
 
     private final LinkedHashMap<String, Integer> parameterIndexes;
 
-    private PreparedStatement stmt=null;
+    private PreparedStatement stmt = null;
 
     public JNamedParameterPreparedStatement(Connection connection, String sql) throws SQLException {
         this.connection = connection;
         this.parameterIndexes = new LinkedHashMap<>();
         this.sql = parseNamedParameters(sql);
         System.out.println(this.sql);
-        String initialSql=this.sql;
-        stmt= connection.prepareStatement(this.sql);
+        String initialSql = this.sql;
+        stmt = connection.prepareStatement(this.sql);
     }
 
+    public static JNamedParameterPreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
+        return new JNamedParameterPreparedStatement(conn, sql);
+    }
 
     private String parseNamedParameters(String sql) {
         Pattern pattern = Pattern.compile("#\\{(\\w+)\\}");
@@ -49,7 +53,7 @@ public class JNamedParameterPreparedStatement {
     public void setParameter(JKeyValue keyValue) throws SQLException {
         Object value = keyValue.getValue();
         int index = keyValue.getNum();
-        try{
+        try {
             if (value == null) {
                 stmt.setNull(index, Types.NULL);
             } else if (value instanceof String) {
@@ -77,7 +81,7 @@ public class JNamedParameterPreparedStatement {
 //            stmt.setLong(4,1);
 //            stmt.execute();
 
-        }catch (Throwable exception){
+        } catch (Throwable exception) {
             exception.printStackTrace();
         }
     }
@@ -95,7 +99,7 @@ public class JNamedParameterPreparedStatement {
                 try {
                     String getterName = "get" + paramName.substring(0, 1).toUpperCase() + paramName.substring(1);
                     Object value = clazz.getMethod(getterName).invoke(entity);
-                   // setParameter(paramName, value);
+                    // setParameter(paramName, value);
                 } catch (Exception ex) {
                     throw new SQLException("could not get  '" + paramName + "'s Value", ex);
                 }
@@ -104,7 +108,7 @@ public class JNamedParameterPreparedStatement {
     }
 
     public ResultSet executeQuery() throws SQLException {
-        JAssert.notNull(stmt,"statement is null");
+        JAssert.notNull(stmt, "statement is null");
         return stmt.executeQuery();
     }
 
@@ -112,11 +116,7 @@ public class JNamedParameterPreparedStatement {
         if (stmt == null) {
             return 0;
         }
-         stmt.execute();
+        stmt.execute();
         return 1;
-    }
-
-    public static JNamedParameterPreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
-        return new JNamedParameterPreparedStatement(conn, sql);
     }
 }

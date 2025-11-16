@@ -19,7 +19,6 @@ import com.github.paohaijiao.function.JParameterHandler;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class JPreparedStatementMapper {
 
         registerHandler(BigDecimal.class, (pstmt, param, index) -> pstmt.setBigDecimal(index, (BigDecimal) param));
         registerHandler(Date.class, (pstmt, param, index) -> pstmt.setTimestamp(index, new Timestamp(((Date) param).getTime())));
-   //     registerHandler(LocalDate.class, (pstmt, param, index) -> pstmt.setDate(index, Date.parse( param.toString()));
+        //     registerHandler(LocalDate.class, (pstmt, param, index) -> pstmt.setDate(index, Date.parse( param.toString()));
         registerHandler(LocalDateTime.class, (pstmt, param, index) -> pstmt.setTimestamp(index, Timestamp.valueOf((LocalDateTime) param)));
         registerHandler(byte[].class, (pstmt, param, index) -> pstmt.setBytes(index, (byte[]) param));
     }

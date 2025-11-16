@@ -15,20 +15,20 @@ public class JBasicJDBConnectionConfig extends JDBCBaseConnectionConfig {
     private String password;
 
 
-    public JBasicJDBConnectionConfig(String driverClassName, String url,String username, String password) {
-           this.driverClassName = driverClassName;
-           this.url = url;
-           this.username = username;
-           this.password = password;
+    public JBasicJDBConnectionConfig(String driverClassName, String url, String username, String password) {
+        this.driverClassName = driverClassName;
+        this.url = url;
+        this.username = username;
+        this.password = password;
     }
 
     private JBasicJDBConnectionConfig(Properties properties) {
         this.driverClassName = properties.getProperty("driverClassName");
         this.url = properties.getProperty(url);
-        this.username =  properties.getProperty(username);;
+        this.username = properties.getProperty(username);
+        ;
         this.password = properties.getProperty(password);
     }
-
 
 
     @Override

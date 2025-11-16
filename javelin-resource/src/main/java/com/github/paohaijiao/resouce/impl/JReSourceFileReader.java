@@ -16,6 +16,7 @@
 package com.github.paohaijiao.resouce.impl;
 
 import com.github.paohaijiao.resouce.JReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,15 +30,6 @@ public class JReSourceFileReader implements JReader {
         this.filePath = filePath;
     }
 
-    @Override
-    public String getRule() {
-        // 实现文件读取逻辑
-        try {
-            return readFileFromClasspath(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read file: " + filePath, e);
-        }
-    }
     public static String readFileFromClasspath(String filePath) throws IOException {
         try (InputStream inputStream = JReSourceFileReader.class.getClassLoader().getResourceAsStream(filePath);
              BufferedReader reader = new BufferedReader(
@@ -49,6 +41,16 @@ public class JReSourceFileReader implements JReader {
                 content.append(line).append("\n");
             }
             return content.toString();
+        }
+    }
+
+    @Override
+    public String getRule() {
+        // 实现文件读取逻辑
+        try {
+            return readFileFromClasspath(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file: " + filePath, e);
         }
     }
 }

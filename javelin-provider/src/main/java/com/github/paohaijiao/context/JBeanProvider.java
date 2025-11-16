@@ -20,7 +20,8 @@ import com.github.paohaijiao.model.JBeanDefinitionModel;
 
 public interface JBeanProvider {
     /**
-     *  register bean
+     * register bean
+     *
      * @param beanName
      * @param beanDefinition
      */
@@ -32,12 +33,11 @@ public interface JBeanProvider {
     <T> T getBean(String beanName, Class<T> requiredType);
 
     /**
-     *
      * @param requiredType
-     * @return
      * @param <T>
+     * @return
      */
-    <T> T getBean( Class<T> requiredType);
+    <T> T getBean(Class<T> requiredType);
 
     /**
      * Add Bean PostProcessor

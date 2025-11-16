@@ -15,9 +15,9 @@
  */
 package com.github.paohaijiao.context.service;
 
+import com.github.paohaijiao.context.JMethodInterceptor;
 import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.model.JMethodInvocationModel;
-import com.github.paohaijiao.context.JMethodInterceptor;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;

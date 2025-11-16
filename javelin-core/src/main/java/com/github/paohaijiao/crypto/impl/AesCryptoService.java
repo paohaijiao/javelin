@@ -1,4 +1,5 @@
 package com.github.paohaijiao.crypto.impl;
+
 import com.github.paohaijiao.crypto.CryptoService;
 import com.github.paohaijiao.crypto.exception.CryptoException;
 
@@ -10,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+
 public class AesCryptoService implements CryptoService {
 
     private static final String ALGORITHM = "AES";

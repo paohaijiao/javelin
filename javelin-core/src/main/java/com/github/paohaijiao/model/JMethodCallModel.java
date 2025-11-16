@@ -19,6 +19,7 @@ import com.github.paohaijiao.enums.JMethodEnums;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class JMethodCallModel {
 

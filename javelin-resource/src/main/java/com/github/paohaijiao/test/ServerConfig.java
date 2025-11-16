@@ -5,7 +5,8 @@ public class ServerConfig {
     private String name;
     private boolean enabled;
 
-    public ServerConfig() {}
+    public ServerConfig() {
+    }
 
     public int getPort() {
         return port;

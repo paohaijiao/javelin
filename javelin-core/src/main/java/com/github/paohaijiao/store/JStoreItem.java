@@ -17,8 +17,8 @@ package com.github.paohaijiao.store;
 
 public class JStoreItem<T> {
     private final String id;
-    private T value;
     private final Class<T> type;
+    private T value;
 
     public JStoreItem(String id, T value, Class<T> type) {
         this.id = id;
@@ -28,6 +28,7 @@ public class JStoreItem<T> {
 
     /**
      * 获取变量ID
+     *
      * @return 变量ID
      */
     public String getId() {
@@ -36,6 +37,7 @@ public class JStoreItem<T> {
 
     /**
      * 获取存储的值
+     *
      * @return 存储的值
      */
     public T getValue() {
@@ -43,15 +45,8 @@ public class JStoreItem<T> {
     }
 
     /**
-     * 获取值的类型
-     * @return 值的Class对象
-     */
-    public Class<T> getType() {
-        return type;
-    }
-
-    /**
      * 设置新的值
+     *
      * @param newValue 新值
      * @throws IllegalArgumentException 如果新值类型不匹配
      */
@@ -60,6 +55,15 @@ public class JStoreItem<T> {
             throw new IllegalArgumentException("Type mismatch. Expected: " + type.getName());
         }
         this.value = newValue;
+    }
+
+    /**
+     * 获取值的类型
+     *
+     * @return 值的Class对象
+     */
+    public Class<T> getType() {
+        return type;
     }
 
     @Override

@@ -20,17 +20,17 @@ import com.github.paohaijiao.model.JKeyValue;
 import com.github.paohaijiao.statement.JNamedParameterPreparedStatement;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LambdaDeleteImpl<T> extends JLambdaBaseImpl<T>  {
+public class LambdaDeleteImpl<T> extends JLambdaBaseImpl<T> {
     private final Map<String, Object> updateValues = new HashMap<>();
 
     public LambdaDeleteImpl(Class<T> entityClass, JSqlConnection sqlConnection) {
         this.entityClass = entityClass;
         this.sqlConnection = sqlConnection;
     }
+
     public int deleteById(Serializable id) {
         String deleteSql = "delete  from  %s  where %s = %s";
         String tableName = getTableName();

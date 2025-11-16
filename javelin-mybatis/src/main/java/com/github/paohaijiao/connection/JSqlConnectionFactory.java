@@ -26,10 +26,7 @@ public interface JSqlConnectionFactory {
 
     public JSqlConnection openConnection(Boolean autoCommit);
 
-    public JSqlConnection openConnection(String userName, String  password);
-
-
-
+    public JSqlConnection openConnection(String userName, String password);
 
 
 }

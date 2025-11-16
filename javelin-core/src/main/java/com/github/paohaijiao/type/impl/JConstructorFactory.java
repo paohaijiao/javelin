@@ -20,7 +20,7 @@ import com.github.paohaijiao.type.JTypeReference;
 
 import java.util.Objects;
 
-public class JConstructorFactory<T>{
+public class JConstructorFactory<T> {
     private final Class<T> clazz;
 
     public JConstructorFactory(Class<T> clazz) {

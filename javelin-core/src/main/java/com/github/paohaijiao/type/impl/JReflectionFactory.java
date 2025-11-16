@@ -30,23 +30,14 @@ public class JReflectionFactory {
     }
 
 
-
     public static JInstanceMethodFactory instanceMethod(Object target) {
         return new JInstanceMethodFactory(target);
     }
 
 
-
     public static <T> JConstructorFactory<T> constructor(Class<T> clazz) {
         return new JConstructorFactory<>(clazz);
     }
-
-
-
-
-
-
-
 
 
 }

@@ -52,6 +52,7 @@ public enum JMethodEnums {
 
     /**
      * 根据传入的方法获取枚举类
+     *
      * @param method
      * @return
      */

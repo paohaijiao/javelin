@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
+
 public class JLambda {
 
     private JLambda() {
@@ -123,6 +124,7 @@ public class JLambda {
         return new Supplier<T>() {
             private volatile boolean initialized;
             private T value;
+
             @Override
             public T get() {
                 if (!initialized) {
@@ -220,16 +222,6 @@ public class JLambda {
         };
     }
 
-    @FunctionalInterface
-    public interface ThrowingFunction<T, R> {
-        R apply(T t) throws Exception;
-    }
-
-    @FunctionalInterface
-    public interface ThrowingSupplier<T> {
-        T get() throws Exception;
-    }
-
     /**
      * 带计时的 Runnable
      */
@@ -286,6 +278,16 @@ public class JLambda {
         } finally {
             executor.shutdownNow();
         }
+    }
+
+    @FunctionalInterface
+    public interface ThrowingFunction<T, R> {
+        R apply(T t) throws Exception;
+    }
+
+    @FunctionalInterface
+    public interface ThrowingSupplier<T> {
+        T get() throws Exception;
     }
 
 }

@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-public class JTypeReference <T> extends TypeReference<T> {
+
+public class JTypeReference<T> extends TypeReference<T> {
 
     protected final Type type;
 
@@ -27,11 +28,146 @@ public class JTypeReference <T> extends TypeReference<T> {
         this.type = type;
         this.rawType = (Class<? super T>) getRawType(type);
     }
-    public static class AccessibleJTypeReference<T> extends JTypeReference<T> {
-        public AccessibleJTypeReference(Type type) {
-            super(type);
+
+    public static <E> JTypeReference<List<E>> listOf(Class<E> elementType) {
+        return new JTypeReference<List<E>>() {
+            @Override
+            public Type getType() {
+                return new ParameterizedType() {
+                    public Type[] getActualTypeArguments() {
+                        return new Type[]{elementType};
+                    }
+
+                    public Type getRawType() {
+                        return List.class;
+                    }
+
+                    public Type getOwnerType() {
+                        return null;
+                    }
+                };
+            }
+        };
+    }
+
+    public static <E> JTypeReference<Set<E>> setOf(Class<E> elementType) {
+        return new JTypeReference<Set<E>>() {
+            @Override
+            public Type getType() {
+                return new ParameterizedType() {
+                    @Override
+                    public Type[] getActualTypeArguments() {
+                        return new Type[]{elementType}; //  E
+                    }
+
+                    @Override
+                    public Type getRawType() {
+                        return Set.class; //  Set
+                    }
+
+                    @Override
+                    public Type getOwnerType() {
+                        return null;
+                    }
+                };
+            }
+        };
+    }
+
+    public static <K, V> JTypeReference<Map<K, V>> mapOf(Class<K> keyType, Class<V> valueType) {
+        return new JTypeReference<Map<K, V>>() {
+        };
+    }
+
+    public static <E> JTypeReference<E[]> arrayOf(Class<E> elementType) {
+        Class<?> arrayClass = Array.newInstance(elementType, 0).getClass();
+        return new JTypeReference<E[]>(arrayClass) {
+        };
+    }
+
+    public static <E> JTypeReference<E[]> varargsOf(Class<E> elementType) {
+        return arrayOf(elementType);
+    }
+
+    private static Class<?>[] convertToClassArray(JTypeReference<?>[] argTypes) {
+        if (argTypes == null) return new Class<?>[0];
+        Class<?>[] result = new Class<?>[argTypes.length];
+        for (int i = 0; i < argTypes.length; i++) {
+            result[i] = argTypes[i].getRawType();
+        }
+        return result;
+    }
+
+    public static <I> JTypeReference<I> interfaceOf(Class<I> interfaceType) {
+        return new JTypeReference<I>(interfaceType);
+    }
+
+    public static <T> JTypeReference<T> of(Class<T> type) {
+        return new JTypeReference<T>(type);
+    }
+
+    public static <T> JTypeReference<T> of(Type type) {
+        return new JTypeReference<T>(type);
+    }
+
+    private static Class<?> getRawType(Type type) {
+        if (type instanceof com.fasterxml.jackson.databind.JavaType) {// special Type
+            return ((com.fasterxml.jackson.databind.JavaType) type).getRawClass();
+        }
+        if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        } else if (type instanceof ParameterizedType) {
+            return getRawType(((ParameterizedType) type).getRawType());
+        } else if (type instanceof WildcardType) {
+            return getRawType(((WildcardType) type).getUpperBounds()[0]);
+        } else if (type instanceof GenericArrayType) {
+            Class<?> componentType = getRawType(((GenericArrayType) type).getGenericComponentType());
+            return Array.newInstance(componentType, 0).getClass();
+        } else if (type instanceof TypeVariable<?>) {
+            TypeVariable<?> tv = (TypeVariable<?>) type;
+            Type[] bounds = tv.getBounds();
+            if (bounds.length > 0) {
+                return getRawType(bounds[0]);
+            }
+            return Object.class;
+        } else {
+            JAssert.throwNewException("unsupported type: " + type + " of " + type.getClass());
+            return null;
         }
     }
+
+    public static Class<?> primitiveToWrapper(Class<?> primitiveType) {
+        if (primitiveType == int.class) return Integer.class;
+        if (primitiveType == long.class) return Long.class;
+        if (primitiveType == double.class) return Double.class;
+        if (primitiveType == float.class) return Float.class;
+        if (primitiveType == boolean.class) return Boolean.class;
+        if (primitiveType == char.class) return Character.class;
+        if (primitiveType == byte.class) return Byte.class;
+        if (primitiveType == short.class) return Short.class;
+        if (primitiveType == void.class) return Void.class;
+        return primitiveType;
+    }
+
+    public static Class<?> wrapperToPrimitive(Class<?> wrapperType) {
+        if (wrapperType == Integer.class) return int.class;
+        if (wrapperType == Long.class) return long.class;
+        if (wrapperType == Double.class) return double.class;
+        if (wrapperType == Float.class) return float.class;
+        if (wrapperType == Boolean.class) return boolean.class;
+        if (wrapperType == Character.class) return char.class;
+        if (wrapperType == Byte.class) return byte.class;
+        if (wrapperType == Short.class) return short.class;
+        if (wrapperType == Void.class) return void.class;
+        return wrapperType;
+    }
+
+    public static boolean isPrimitiveWrapper(Class<?> type) {
+        return type == Integer.class || type == Long.class || type == Double.class
+                || type == Float.class || type == Boolean.class || type == Character.class
+                || type == Byte.class || type == Short.class || type == Void.class;
+    }
+
     public Class<? super T> getRawType() {
         return rawType;
     }
@@ -61,73 +197,6 @@ public class JTypeReference <T> extends TypeReference<T> {
         throw new IllegalStateException("Not an array type: " + type);
     }
 
-    public static <E> JTypeReference<List<E>> listOf(Class<E> elementType) {
-        return new JTypeReference<List<E>>() {
-            @Override
-            public Type getType() {
-                return new ParameterizedType() {
-                    public Type[] getActualTypeArguments() { return new Type[]{elementType}; }
-                    public Type getRawType() { return List.class; }
-                    public Type getOwnerType() { return null; }
-                };
-            }
-        };
-    }
-
-    public static <E> JTypeReference<Set<E>> setOf(Class<E> elementType) {
-        return new JTypeReference<Set<E>>() {
-            @Override
-            public Type getType() {
-                return new ParameterizedType() {
-                    @Override
-                    public Type[] getActualTypeArguments() {
-                        return new Type[]{elementType}; //  E
-                    }
-                    @Override
-                    public Type getRawType() {
-                        return Set.class; //  Set
-                    }
-                    @Override
-                    public Type getOwnerType() {
-                        return null;
-                    }
-                };
-            }
-        };
-    }
-
-    public static <K, V> JTypeReference<Map<K, V>> mapOf(Class<K> keyType, Class<V> valueType) {
-        return new JTypeReference<Map<K, V>>() {};
-    }
-
-    public static <E> JTypeReference<E[]> arrayOf(Class<E> elementType) {
-        Class<?> arrayClass = Array.newInstance(elementType, 0).getClass();
-        return new JTypeReference<E[]>(arrayClass) {};
-    }
-
-    public static <E> JTypeReference<E[]> varargsOf(Class<E> elementType) {
-        return arrayOf(elementType);
-    }
-    private static Class<?>[] convertToClassArray(JTypeReference<?>[] argTypes) {
-        if (argTypes == null) return new Class<?>[0];
-        Class<?>[] result = new Class<?>[argTypes.length];
-        for (int i = 0; i < argTypes.length; i++) {
-            result[i] = argTypes[i].getRawType();
-        }
-        return result;
-    }
-    public static <I> JTypeReference<I> interfaceOf(Class<I> interfaceType) {
-        return new JTypeReference<I>(interfaceType) ;
-    }
-
-    public static <T> JTypeReference<T> of(Class<T> type) {
-        return new JTypeReference<T>(type);
-    }
-
-    public static <T> JTypeReference<T> of(Type type) {
-        return new JTypeReference<T>(type) ;
-    }
-
     @Override
     public boolean equals(Object obj) {
         return obj instanceof JTypeReference<?> && type.equals(((JTypeReference<?>) obj).type);
@@ -143,32 +212,6 @@ public class JTypeReference <T> extends TypeReference<T> {
         return type.toString();
     }
 
-
-    private static Class<?> getRawType(Type type) {
-        if (type instanceof com.fasterxml.jackson.databind.JavaType) {// special Type
-            return ((com.fasterxml.jackson.databind.JavaType) type).getRawClass();
-        }
-        if (type instanceof Class<?>) {
-            return (Class<?>) type;
-        } else if (type instanceof ParameterizedType) {
-            return getRawType(((ParameterizedType) type).getRawType());
-        } else if (type instanceof WildcardType) {
-            return getRawType(((WildcardType) type).getUpperBounds()[0]);
-        } else if (type instanceof GenericArrayType) {
-            Class<?> componentType = getRawType(((GenericArrayType) type).getGenericComponentType());
-            return Array.newInstance(componentType, 0).getClass();
-        } else if (type instanceof TypeVariable<?>) {
-            TypeVariable<?> tv = (TypeVariable<?>) type;
-            Type[] bounds = tv.getBounds();
-            if (bounds.length > 0) {
-                return getRawType(bounds[0]);
-            }
-            return Object.class;
-        } else {
-            JAssert.throwNewException("unsupported type: " + type + " of " + type.getClass());
-            return null;
-        }
-    }
     public boolean isAssignableFrom(JTypeReference<?> targetType) {
         Objects.requireNonNull(targetType, "Target type cannot be null");
         if (targetType.getRawType() == Void.class) {
@@ -185,20 +228,23 @@ public class JTypeReference <T> extends TypeReference<T> {
         }
         return true;
     }
+
     public boolean isParameterizedType() {
         return type instanceof ParameterizedType;
     }
+
     private boolean isRawTypeCompatible(JTypeReference<?> targetType) {
         Class<?> targetRawType = targetType.getRawType();
         if (this.rawType.isPrimitive()) {
             Class<?> boxedType = primitiveToWrapper(this.rawType);
-            return boxedType.isAssignableFrom(targetRawType)||targetRawType.isAssignableFrom(boxedType)||targetRawType==rawType;
+            return boxedType.isAssignableFrom(targetRawType) || targetRawType.isAssignableFrom(boxedType) || targetRawType == rawType;
         } else if (targetRawType.isPrimitive()) {
             Class<?> unboxedType = wrapperToPrimitive(targetRawType);
-            return this.rawType.isAssignableFrom(unboxedType)|| unboxedType.isAssignableFrom(targetType.rawType);
+            return this.rawType.isAssignableFrom(unboxedType) || unboxedType.isAssignableFrom(targetType.rawType);
         }
         return this.rawType.isAssignableFrom(targetRawType);
     }
+
     private boolean isArrayComponentTypeCompatible(JTypeReference<?> targetType) {
         Type thisComponentType = this.getArrayComponentType();
         Type targetComponentType = targetType.getArrayComponentType();
@@ -206,6 +252,7 @@ public class JTypeReference <T> extends TypeReference<T> {
         Class<?> targetComponentClass = getRawType(targetComponentType);
         return thisComponentClass.isAssignableFrom(targetComponentClass);
     }
+
     private boolean areGenericArgsCompatible(JTypeReference<?> targetType) {
         Type thisRawType = ((ParameterizedType) this.type).getRawType();
         Type targetRawType = ((ParameterizedType) targetType.type).getRawType();
@@ -226,6 +273,7 @@ public class JTypeReference <T> extends TypeReference<T> {
         }
         return true;
     }
+
     public boolean targetAssignableFrom(Object target) {
         if (target == null) {
             return !rawType.isPrimitive();
@@ -247,6 +295,7 @@ public class JTypeReference <T> extends TypeReference<T> {
         }
         return rawType.isAssignableFrom(targetClass);
     }
+
     public boolean isTargetArray() {
         if (type instanceof GenericArrayType) {
             return true;
@@ -256,33 +305,10 @@ public class JTypeReference <T> extends TypeReference<T> {
         }
         return false;
     }
-    public static Class<?> primitiveToWrapper(Class<?> primitiveType) {
-        if (primitiveType == int.class) return Integer.class;
-        if (primitiveType == long.class) return Long.class;
-        if (primitiveType == double.class) return Double.class;
-        if (primitiveType == float.class) return Float.class;
-        if (primitiveType == boolean.class) return Boolean.class;
-        if (primitiveType == char.class) return Character.class;
-        if (primitiveType == byte.class) return Byte.class;
-        if (primitiveType == short.class) return Short.class;
-        if (primitiveType == void.class) return Void.class;
-        return primitiveType;
-    }
-    public static Class<?> wrapperToPrimitive(Class<?> wrapperType) {
-        if (wrapperType == Integer.class) return int.class;
-        if (wrapperType == Long.class) return long.class;
-        if (wrapperType == Double.class) return double.class;
-        if (wrapperType == Float.class) return float.class;
-        if (wrapperType == Boolean.class) return boolean.class;
-        if (wrapperType == Character.class) return char.class;
-        if (wrapperType == Byte.class) return byte.class;
-        if (wrapperType == Short.class) return short.class;
-        if (wrapperType == Void.class) return void.class;
-        return wrapperType;
-    }
-    public static boolean isPrimitiveWrapper(Class<?> type) {
-        return type == Integer.class || type == Long.class || type == Double.class
-                || type == Float.class || type == Boolean.class || type == Character.class
-                || type == Byte.class || type == Short.class || type == Void.class;
+
+    public static class AccessibleJTypeReference<T> extends JTypeReference<T> {
+        public AccessibleJTypeReference(Type type) {
+            super(type);
+        }
     }
 }

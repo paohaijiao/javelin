@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class JEventSupportedApplicationContext extends JAnnotationConfigApplicationContext  implements JEventPublisher {
+public class JEventSupportedApplicationContext extends JAnnotationConfigApplicationContext implements JEventPublisher {
     protected static final Map<Class<?>, List<EventListenerMethod>> eventListeners = new ConcurrentHashMap<>();
 
     public JEventSupportedApplicationContext(String... basePackages) {

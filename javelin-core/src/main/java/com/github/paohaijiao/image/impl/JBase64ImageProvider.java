@@ -14,6 +14,7 @@
  * Copyright (c) [2025-2099] Martin (goudingcheng@gmail.com)
  */
 package com.github.paohaijiao.image.impl;
+
 import com.github.paohaijiao.base64.JBase64Provider;
 import com.github.paohaijiao.image.JBaseImageProvider;
 

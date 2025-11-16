@@ -55,6 +55,7 @@ public class RsaCryptoServiceTest {
         }
 
     }
+
     @Test
     public void mixCryptoTest() throws IOException {
         try {
@@ -77,6 +78,7 @@ public class RsaCryptoServiceTest {
         }
 
     }
+
     @Test
     public void eccTest() throws IOException {
         try {

@@ -18,12 +18,14 @@ package com.github.paohaijiao.evalue;
 import com.github.paohaijiao.enums.JMethodEnums;
 import com.github.paohaijiao.function.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
-import java.util.function.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class JEvaluator {
 
@@ -32,6 +34,7 @@ public class JEvaluator {
     static {
         registerEnumMethods();
     }
+
     private static void registerEnumMethods() {
         registerFunction(JMethodEnums.toInteger.getMethod(), (Function<Object, Object>) obj -> Integer.valueOf(obj.toString()));
         registerFunction(JMethodEnums.toString.getMethod(), (Function<Object, Object>) obj -> String.valueOf(obj.toString()));
@@ -65,6 +68,7 @@ public class JEvaluator {
         registerFunction(JMethodEnums.parseToDate.getMethod(), JDateFunction.parseToDate);
         registerFunction(JMethodEnums.trans.getMethod(), JFunction.TRANS);
     }
+
     public static void registerFunction(String functionName, Object function) {
         if (functionName == null || functionName.trim().isEmpty()) {
             throw new IllegalArgumentException("Function name cannot be null or empty");
@@ -74,6 +78,7 @@ public class JEvaluator {
         }
         FUNCTION_REGISTRY.put(functionName, function);
     }
+
     public static Object evaluateFunction(String functionName, List<Object> args) {
         Object function = FUNCTION_REGISTRY.get(functionName);
         if (function == null) {
@@ -102,6 +107,7 @@ public class JEvaluator {
             throw new RuntimeException("Error executing function: " + functionName, e);
         }
     }
+
     private static boolean isListAcceptingFunction(Object function) {
         if (!(function instanceof Function)) {
             return false;

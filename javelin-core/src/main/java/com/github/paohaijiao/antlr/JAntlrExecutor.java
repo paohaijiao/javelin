@@ -17,9 +17,10 @@ package com.github.paohaijiao.antlr;
 
 import com.github.paohaijiao.exception.JAntlrExecutionException;
 
-public interface JAntlrExecutor<I, O>{
+public interface JAntlrExecutor<I, O> {
     /**
      * 执行语法分析
+     *
      * @param input 输入内容
      * @return 分析结果
      * @throws JAntlrExecutionException 执行异常
@@ -28,12 +29,14 @@ public interface JAntlrExecutor<I, O>{
 
     /**
      * 添加错误监听器
+     *
      * @param listener 错误监听器
      */
     void addErrorListener(JAntlrErrorListener listener);
 
     /**
      * 移除错误监听器
+     *
      * @param listener 错误监听器
      */
     void removeErrorListener(JAntlrErrorListener listener);

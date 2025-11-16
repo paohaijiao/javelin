@@ -67,7 +67,7 @@
 //
 //    @Test(expected = IllegalArgumentException.class)
 //    public void testNullOperator() {
-////        JDateCompareUtil.compare(new Date(), new Date(), null);
+/// /        JDateCompareUtil.compare(new Date(), new Date(), null);
 //    }
 //
 //    @Test(expected = IllegalArgumentException.class)

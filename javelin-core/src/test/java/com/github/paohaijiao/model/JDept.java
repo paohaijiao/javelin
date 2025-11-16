@@ -11,6 +11,7 @@ public class JDept implements JTreeNode<JDept, Long> {
     private Long parentId;
     private String name;
     private List<JDept> children;
+
     public JDept(Long id, Long parentId, String name) {
         this.id = id;
         this.parentId = parentId;

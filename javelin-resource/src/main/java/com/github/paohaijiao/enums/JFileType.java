@@ -17,13 +17,14 @@ package com.github.paohaijiao.enums;
 
 import com.github.paohaijiao.reader.impl.JResourcePropertiesReader;
 import com.github.paohaijiao.reader.impl.JResourceYamlReader;
+
 public enum JFileType {
     YAML("yaml", JResourceYamlReader.class),
     PROPERTIES("properties", JResourcePropertiesReader.class);
     private String code;
     private Class clazz;
 
-    private JFileType(String code, Class clazz){
+    private JFileType(String code, Class clazz) {
         this.code = code;
         this.clazz = clazz;
     }

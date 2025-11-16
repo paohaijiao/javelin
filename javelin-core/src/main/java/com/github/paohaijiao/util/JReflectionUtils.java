@@ -74,7 +74,7 @@ public class JReflectionUtils {
             Field field = getDeclaredField(obj.getClass(), fieldName);
             field.setAccessible(true);
             if (field.getType().isPrimitive() && value == null) {
-                throw new IllegalArgumentException("不能为基本类型"+field.getName()+"赋null值");
+                throw new IllegalArgumentException("不能为基本类型" + field.getName() + "赋null值");
             }
             field.set(obj, value);
         } catch (IllegalAccessException e) {
@@ -212,8 +212,8 @@ public class JReflectionUtils {
     /**
      * 获取枚举常量的自定义字段值
      *
-     * @param enumValue  枚举常量
-     * @param fieldName  字段名
+     * @param enumValue 枚举常量
+     * @param fieldName 字段名
      * @return 字段值
      */
     public static Object getEnumFieldValue(Enum<?> enumValue, String fieldName) {
@@ -253,9 +253,9 @@ public class JReflectionUtils {
     /**
      * 获取字段上的指定注解
      *
-     * @param field          字段
+     * @param field           字段
      * @param annotationClass 注解类
-     * @param <A>            注解类型
+     * @param <A>             注解类型
      * @return 注解实例
      */
     public static <A extends Annotation> A getFieldAnnotation(Field field, Class<A> annotationClass) {
@@ -265,9 +265,9 @@ public class JReflectionUtils {
     /**
      * 获取方法上的指定注解
      *
-     * @param method         方法
+     * @param method          方法
      * @param annotationClass 注解类
-     * @param <A>            注解类型
+     * @param <A>             注解类型
      * @return 注解实例
      */
     public static <A extends Annotation> A getMethodAnnotation(Method method, Class<A> annotationClass) {
@@ -277,7 +277,7 @@ public class JReflectionUtils {
     /**
      * 获取带有指定注解的所有字段
      *
-     * @param clazz          类
+     * @param clazz           类
      * @param annotationClass 注解类
      * @return 字段列表
      */
@@ -290,7 +290,7 @@ public class JReflectionUtils {
     /**
      * 获取带有指定注解的所有方法
      *
-     * @param clazz          类
+     * @param clazz           类
      * @param annotationClass 注解类
      * @return 方法列表
      */
@@ -313,7 +313,7 @@ public class JReflectionUtils {
     /**
      * 获取注解的属性值
      *
-     * @param annotation     注解实例
+     * @param annotation    注解实例
      * @param attributeName 属性名
      * @return 属性值
      */
@@ -331,9 +331,9 @@ public class JReflectionUtils {
     /**
      * 获取枚举常量上的注解
      *
-     * @param enumValue      枚举常量
+     * @param enumValue       枚举常量
      * @param annotationClass 注解类
-     * @param <A>            注解类型
+     * @param <A>             注解类型
      * @return 注解实例
      */
     public static <A extends Annotation> A getEnumAnnotation(Enum<?> enumValue, Class<A> annotationClass) {
@@ -348,7 +348,7 @@ public class JReflectionUtils {
     /**
      * 扫描包中带有指定注解的类
      *
-     * @param packageName    包名
+     * @param packageName     包名
      * @param annotationClass 注解类
      * @return 类集合
      */
@@ -358,10 +358,12 @@ public class JReflectionUtils {
                 .filter(clazz -> clazz.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toSet());
     }
+
     /**
      * 根据包名和类名加载类并创建实例
-     * @param packageName 包名
-     * @param className 类名
+     *
+     * @param packageName     包名
+     * @param className       类名
      * @param constructorArgs 构造参数
      * @return 对象实例
      */
@@ -373,12 +375,14 @@ public class JReflectionUtils {
             throw new RuntimeException("类未找到: " + packageName + "." + className, e);
         }
     }
+
     /**
      * 动态调用方法
-     * @param packageName 包名
-     * @param className 类名
-     * @param methodName 方法名
-     * @param methodArgs 方法参数
+     *
+     * @param packageName     包名
+     * @param className       类名
+     * @param methodName      方法名
+     * @param methodArgs      方法参数
      * @param constructorArgs 构造参数(用于创建实例)
      * @return 方法调用结果
      */
@@ -390,6 +394,7 @@ public class JReflectionUtils {
         // 调用方法
         return JReflectionUtils.invokeMethod(instance, methodName, methodArgs);
     }
+
     public static Object preciseInvokeMethod(String packageName, String className,
                                              String methodName, Object[] methodArgs,
                                              Class<?>[] parameterTypes,
@@ -421,6 +426,7 @@ public class JReflectionUtils {
         String packageName = fullClassName.substring(0, lastDotIndex);
         return packageName;
     }
+
     public static String getClassName(String fullClassName) {
         if (fullClassName == null || fullClassName.isEmpty()) {
             throw new IllegalArgumentException("类名不能为空");
@@ -433,7 +439,6 @@ public class JReflectionUtils {
         String className = fullClassName.substring(lastDotIndex + 1);
         return className;
     }
-
 
 
     public static Map<String, Object> getFieldAndFieldValueByObject(Object obj) {

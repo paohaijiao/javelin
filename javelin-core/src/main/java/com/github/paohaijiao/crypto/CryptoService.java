@@ -5,6 +5,7 @@ import com.github.paohaijiao.crypto.exception.CryptoException;
 public interface CryptoService {
     /**
      * 加密数据
+     *
      * @param data 原始数据
      * @return 加密后的数据（Base64编码）
      */
@@ -12,6 +13,7 @@ public interface CryptoService {
 
     /**
      * 解密数据
+     *
      * @param encryptedData 加密数据（Base64编码）
      * @return 解密后的原始数据
      */

@@ -26,7 +26,7 @@ public class JunitTest {
         JEventSupportedApplicationContext context = new JEventSupportedApplicationContext(
                 "com.github.paohaijiao.test"
         );
-        System.out.println("Registered beans: " );
+        System.out.println("Registered beans: ");
         ParentEventService service = context.getBean("parentEventService", ParentEventService.class);
         context.publishEvent(new AnotherTestEvent(context, "Child Message"));
     }

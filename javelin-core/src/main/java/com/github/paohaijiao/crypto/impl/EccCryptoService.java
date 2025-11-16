@@ -1,4 +1,5 @@
 package com.github.paohaijiao.crypto.impl;
+
 import com.github.paohaijiao.crypto.CryptoService;
 import com.github.paohaijiao.crypto.exception.CryptoException;
 
@@ -8,6 +9,7 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+
 public class EccCryptoService implements CryptoService {
 
     private static final String ALGORITHM = "EC";

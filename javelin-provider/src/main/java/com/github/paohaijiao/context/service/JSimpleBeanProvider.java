@@ -16,12 +16,13 @@
 package com.github.paohaijiao.context.service;
 
 import com.github.paohaijiao.anno.JAutowired;
-import com.github.paohaijiao.model.JBeanDefinitionModel;
 import com.github.paohaijiao.context.JBeanPostProcessor;
 import com.github.paohaijiao.context.JBeanProvider;
+import com.github.paohaijiao.model.JBeanDefinitionModel;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvider {
 
 
@@ -83,8 +84,6 @@ public class JSimpleBeanProvider extends JBaseBeanProvider implements JBeanProvi
         }
         return result;
     }
-
-
 
 
 }
