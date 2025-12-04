@@ -56,7 +56,7 @@ public class JAnnotationConfigApplicationContext {
     }
 
     protected void processConfigurationClasses() {
-        // 这里可以扩展处理@Configuration类
+        //todo 扩展处理@Configuration类
         // 目前只处理@Component、@Service、@Repository注解的类
     }
 
@@ -72,7 +72,7 @@ public class JAnnotationConfigApplicationContext {
         if (beanProvider instanceof JProxyEnhancedBeanProvider) {
             ((JProxyEnhancedBeanProvider) beanProvider).registerInterceptor(beanName, interceptor);
         }
-        // 可以扩展支持CglibBeanContainer
+        //todo 可以扩展支持CglibBeanContainer
     }
 
     private String toLowerFirstCase(String str) {
