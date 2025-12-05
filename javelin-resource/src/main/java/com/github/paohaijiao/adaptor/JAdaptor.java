@@ -18,6 +18,7 @@ package com.github.paohaijiao.adaptor;
 import com.github.paohaijiao.resouce.JReader;
 
 public class JAdaptor {
+
     private JReader dataReader;
 
     public JAdaptor(JReader dataReader) {
