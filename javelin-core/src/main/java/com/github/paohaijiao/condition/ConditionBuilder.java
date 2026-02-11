@@ -54,15 +54,11 @@ public class ConditionBuilder {
     /**
      * 创建带类型转换的条件
      */
-    public static <T, U> Condition<T> withConversion(
-            Function<T, U> converter,
-            Condition<U> condition) {
+    public static <T, U> Condition<T> withConversion(Function<T, U> converter, Condition<U> condition) {
         return t -> condition.test(converter.apply(t));
     }
 
-    public static <T, U> Condition<T> withConversion(
-            Function<T, U> converter,
-            Predicate<U> predicate) {
+    public static <T, U> Condition<T> withConversion(Function<T, U> converter, Predicate<U> predicate) {
         return withConversion(converter, Condition.of(predicate));
     }
 
