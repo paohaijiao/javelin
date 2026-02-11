@@ -6,15 +6,30 @@ import java.util.function.Predicate;
 /**
  * 验证器接口
  */
-interface Validator<T> {
+public interface Validator<T> {
 
-    Validator<T> validate(Condition<T> condition, String errorMessage);
+    /**
+     * 使用Condition进行验证
+     */
+    Validator<T> validateWith(Condition<T> condition, String errorMessage);
 
-    Validator<T> validate(Predicate<T> predicate, String errorMessage);
+    /**
+     * 使用Predicate进行验证
+     */
+    Validator<T> validateWithPredicate(Predicate<T> predicate, String errorMessage);
 
+    /**
+     * 是否所有验证都通过
+     */
     boolean isValid();
 
+    /**
+     * 获取所有错误信息
+     */
     List<String> getErrors();
 
+    /**
+     * 获取验证通过的值，如果验证失败则抛出异常
+     */
     T getValidatedValue() throws ValidationException;
 }

@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 
 public class AsyncConditionService<T, R> extends SimpleConditionService<T, R> {
 
+
     private final ExecutorService executor;
 
     public AsyncConditionService() {
@@ -49,15 +50,15 @@ public class AsyncConditionService<T, R> extends SimpleConditionService<T, R> {
         this.executor = executor;
     }
 
-    public CompletableFuture<Boolean> testAsync(T value, Condition<T> condition) {
+    public CompletableFuture<Boolean> testWithAsync(T value, Condition<T> condition) {
         return CompletableFuture.supplyAsync(
-                () -> super.test(value, condition), executor
+                () -> super.testWith(value, condition), executor
         );
     }
 
-    public CompletableFuture<Boolean> testAsync(T value, Predicate<T> predicate) {
+    public CompletableFuture<Boolean> testWithPredicateAsync(T value, Predicate<T> predicate) {
         return CompletableFuture.supplyAsync(
-                () -> super.test(value, predicate), executor
+                () -> super.testWithPredicate(value, predicate), executor
         );
     }
 
@@ -67,9 +68,9 @@ public class AsyncConditionService<T, R> extends SimpleConditionService<T, R> {
         );
     }
 
-    public CompletableFuture<Optional<R>> mapIfAsync(T value, Predicate<T> predicate, Function<T, R> mapper) {
+    public CompletableFuture<Optional<R>> mapIfWithPredicateAsync(T value, Predicate<T> predicate, Function<T, R> mapper) {
         return CompletableFuture.supplyAsync(
-                () -> super.mapIf(value, predicate, mapper), executor
+                () -> super.mapIfWithPredicate(value, predicate, mapper), executor
         );
     }
 
@@ -79,24 +80,26 @@ public class AsyncConditionService<T, R> extends SimpleConditionService<T, R> {
         );
     }
 
-    public CompletableFuture<Void> acceptIfAsync(T value, Predicate<T> predicate, Consumer<T> action) {
+    public CompletableFuture<Void> acceptIfWithPredicateAsync(T value, Predicate<T> predicate, Consumer<T> action) {
         return CompletableFuture.runAsync(
-                () -> super.acceptIf(value, predicate, action), executor
+                () -> super.acceptIfWithPredicate(value, predicate, action), executor
         );
     }
-
     public CompletableFuture<R> getIfAsync(T value, Condition<T> condition, Supplier<R> supplier, R defaultValue) {
         return CompletableFuture.supplyAsync(
                 () -> super.getIf(value, condition, supplier, defaultValue), executor
         );
     }
 
-    public CompletableFuture<R> getIfAsync(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue) {
+    public CompletableFuture<R> getIfWithPredicateAsync(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue) {
         return CompletableFuture.supplyAsync(
-                () -> super.getIf(value, predicate, supplier, defaultValue), executor
+                () -> super.getIfWithPredicate(value, predicate, supplier, defaultValue), executor
         );
     }
 
+    /**
+     * 关闭线程池
+     */
     public void shutdown() {
         if (executor != null && !executor.isShutdown()) {
             executor.shutdown();

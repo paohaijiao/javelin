@@ -33,70 +33,73 @@ import java.util.function.Supplier;
  */
 public interface ConditionService<T, R> {
 
+
     /**
-     * 基本条件判断
-     * @param value
-     * @param condition
-     * @return
+     * 基本条件判断 - 使用Condition
      */
-    boolean test(T value, Condition<T> condition);
-
-    boolean test(T value, Predicate<T> predicate);
+    boolean testWith(T value, Condition<T> condition);
 
     /**
-     * 条件映射
-     * @param value
-     * @param condition
-     * @param mapper
-     * @return
+     * 基本条件判断 - 使用Predicate
+     */
+    boolean testWithPredicate(T value, Predicate<T> predicate);
+    /**
+     * 条件映射 - 使用Condition
      */
     Optional<R> mapIf(T value, Condition<T> condition, Function<T, R> mapper);
 
-    Optional<R> mapIf(T value, Predicate<T> predicate, Function<T, R> mapper);
-
     /**
-     * 条件消费
-     * @param value
-     * @param condition
-     * @param action
+     * 条件映射 - 使用Predicate
+     */
+    Optional<R> mapIfWithPredicate(T value, Predicate<T> predicate, Function<T, R> mapper);
+    /**
+     * 条件消费 - 使用Condition
      */
     void acceptIf(T value, Condition<T> condition, Consumer<T> action);
 
-    void acceptIf(T value, Predicate<T> predicate, Consumer<T> action);
-
     /**
-     * 条件获取
-     * @param value
-     * @param condition
-     * @param supplier
-     * @param defaultValue
-     * @return
+     * 条件消费 - 使用Predicate
+     */
+    void acceptIfWithPredicate(T value, Predicate<T> predicate, Consumer<T> action);
+    /**
+     * 条件获取 - 使用Condition
      */
     R getIf(T value, Condition<T> condition, Supplier<R> supplier, R defaultValue);
 
-    R getIf(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue);
+    /**
+     * 条件获取 - 使用Predicate
+     */
+    R getIfWithPredicate(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue);
+
 
     /**
-     * 多条件组合
-     * @param value
-     * @param conditions
-     * @return
+     * 多条件组合 - 全满足(Condition)
      */
     boolean testAll(T value, Condition<T>... conditions);
 
-    boolean testAll(T value, Predicate<T>... predicates);
+    /**
+     * 多条件组合 - 全满足(Predicate)
+     */
+    boolean testAllWithPredicate(T value, Predicate<T>... predicates);
 
+    /**
+     * 多条件组合 - 任一满足(Condition)
+     */
     boolean testAny(T value, Condition<T>... conditions);
 
-    boolean testAny(T value, Predicate<T>... predicates);
+    /**
+     * 多条件组合 - 任一满足(Predicate)
+     */
+    boolean testAnyWithPredicate(T value, Predicate<T>... predicates);
+
 
     /**
      * 验证器模式
-     * @param value
-     * @return
      */
     Validator<T> validator(T value);
 
-    // 条件链构建
+    /**
+     * 条件链构建
+     */
     ConditionChain<T, R> chain(T value);
 }

@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 /**
  * 条件链接口
  */
-interface ConditionChain<T, R> {
+public interface ConditionChain<T, R> {
 
     ConditionChain<T, R> when(Condition<T> condition);
 

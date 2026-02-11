@@ -22,6 +22,7 @@ package com.github.paohaijiao.condition;
  * @version 1.0.0
  * @since 2026/2/10
  */
+import com.github.paohaijiao.condition.*;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -31,13 +32,14 @@ import java.util.function.Supplier;
 
 public class SimpleConditionService<T, R> implements ConditionService<T, R> {
 
+
     @Override
-    public boolean test(T value, Condition<T> condition) {
+    public boolean testWith(T value, Condition<T> condition) {
         return condition.test(value);
     }
 
     @Override
-    public boolean test(T value, Predicate<T> predicate) {
+    public boolean testWithPredicate(T value, Predicate<T> predicate) {
         return predicate.test(value);
     }
 
@@ -47,7 +49,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     }
 
     @Override
-    public Optional<R> mapIf(T value, Predicate<T> predicate, Function<T, R> mapper) {
+    public Optional<R> mapIfWithPredicate(T value, Predicate<T> predicate, Function<T, R> mapper) {
         return predicate.test(value) ? Optional.ofNullable(value).map(mapper) : Optional.empty();
     }
 
@@ -59,7 +61,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     }
 
     @Override
-    public void acceptIf(T value, Predicate<T> predicate, Consumer<T> action) {
+    public void acceptIfWithPredicate(T value, Predicate<T> predicate, Consumer<T> action) {
         if (predicate.test(value)) {
             action.accept(value);
         }
@@ -71,7 +73,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     }
 
     @Override
-    public R getIf(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue) {
+    public R getIfWithPredicate(T value, Predicate<T> predicate, Supplier<R> supplier, R defaultValue) {
         return predicate.test(value) ? supplier.get() : defaultValue;
     }
 
@@ -81,7 +83,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     }
 
     @Override
-    public boolean testAll(T value, Predicate<T>... predicates) {
+    public boolean testAllWithPredicate(T value, Predicate<T>... predicates) {
         return Arrays.stream(predicates).allMatch(p -> p.test(value));
     }
 
@@ -91,7 +93,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     }
 
     @Override
-    public boolean testAny(T value, Predicate<T>... predicates) {
+    public boolean testAnyWithPredicate(T value, Predicate<T>... predicates) {
         return Arrays.stream(predicates).anyMatch(p -> p.test(value));
     }
 
@@ -104,9 +106,13 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
     public ConditionChain<T, R> chain(T value) {
         return new SimpleConditionChain<>(value);
     }
+    /**
+     * 简单验证器实现 - 已修复重载冲突
+     */
+    private static class SimpleValidator<X> implements Validator<X> {
 
-    private class SimpleValidator<X> implements Validator<X> {
         private final X value;
+
         private final List<String> errors = new ArrayList<>();
 
         SimpleValidator(X value) {
@@ -114,7 +120,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
         }
 
         @Override
-        public Validator<X> validate(Condition<X> condition, String errorMessage) {
+        public Validator<X> validateWith(Condition<X> condition, String errorMessage) {
             if (!condition.test(value)) {
                 errors.add(errorMessage);
             }
@@ -122,7 +128,7 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
         }
 
         @Override
-        public Validator<X> validate(Predicate<X> predicate, String errorMessage) {
+        public Validator<X> validateWithPredicate(Predicate<X> predicate, String errorMessage) {
             if (!predicate.test(value)) {
                 errors.add(errorMessage);
             }
@@ -148,11 +154,14 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
         }
     }
 
-    // 简单条件链实现
+    /**
+     * 简单条件链实现
+     */
     private class SimpleConditionChain<X, Y> implements ConditionChain<X, Y> {
         private final X value;
         private boolean conditionMet = true;
 
+        @SuppressWarnings("unchecked")
         SimpleConditionChain(X value) {
             this.value = value;
         }
@@ -189,16 +198,19 @@ public class SimpleConditionService<T, R> implements ConditionService<T, R> {
             return Optional.empty();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public Y orElse(Y defaultValue) {
             return thenMap(v -> (Y) v).orElse(defaultValue);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public Y orElseGet(Supplier<Y> supplier) {
             return thenMap(v -> (Y) v).orElseGet(supplier);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public <E extends Throwable> Y orElseThrow(Supplier<E> exceptionSupplier) throws E {
             return thenMap(v -> (Y) v).orElseThrow(exceptionSupplier);
