@@ -1,6 +1,7 @@
 # javelin - 轻量级Java基础框架
 
 简体中文 | [英文](./readme-en.md)
+
 javelin - 轻量级 Java 基础框架
 
 ## 目录
