@@ -54,7 +54,6 @@ public class JResult {
     private Reader charStream;
 
 
-
     /**
      * 数据格式标识（如：json、xml、text、binary等，可选）
      */
@@ -121,7 +120,7 @@ public class JResult {
      * 判断是否有流数据
      */
     public boolean hasStream() {
-        return byteStream != null || charStream != null ;
+        return byteStream != null || charStream != null;
     }
 
     /**

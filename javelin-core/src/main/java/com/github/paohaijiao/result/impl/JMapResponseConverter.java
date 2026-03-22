@@ -15,8 +15,8 @@
  */
 package com.github.paohaijiao.result.impl;
 
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -35,9 +35,10 @@ import java.util.Map;
 public class JMapResponseConverter implements JResultConverter<Map> {
     @Override
     public Map convert(JResult response) throws IOException {
-        String string= response.getString();
+        String string = response.getString();
         Gson gson = new Gson();
-        Map<String, Object> map = gson.fromJson(string, new TypeToken<Map<String, Object>>() {}.getType());
+        Map<String, Object> map = gson.fromJson(string, new TypeToken<Map<String, Object>>() {
+        }.getType());
         return map;
     }
 }

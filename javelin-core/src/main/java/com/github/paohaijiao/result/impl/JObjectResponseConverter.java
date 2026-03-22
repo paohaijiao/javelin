@@ -15,8 +15,8 @@
  */
 package com.github.paohaijiao.result.impl;
 
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,7 @@ import java.io.IOException;
 public class JObjectResponseConverter implements JResultConverter<Object> {
     @Override
     public Object convert(JResult response) throws IOException {
-        String string= response.getString();
+        String string = response.getString();
         Gson gson = new Gson();
         Object object = gson.fromJson(string, Object.class);
         return object;

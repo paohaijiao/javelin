@@ -17,8 +17,8 @@ package com.github.paohaijiao.result.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -43,7 +43,7 @@ public class JResultGenericConverter<T> implements JResultConverter<T> {
     }
 
     @Override
-    public T  convert(JResult result) throws IOException {
+    public T convert(JResult result) throws IOException {
         if (result == null) {
             return null;
         }
@@ -74,8 +74,10 @@ public class JResultGenericConverter<T> implements JResultConverter<T> {
         }
         return null;
     }
+
     /**
      * 判断响应内容是否为JSON格式
+     *
      * @param result JResult对象
      * @return true表示是JSON内容，false表示不是
      */

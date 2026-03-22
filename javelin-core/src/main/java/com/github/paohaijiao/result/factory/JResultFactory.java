@@ -47,11 +47,12 @@ public class JResultFactory {
         converters.put(Object.class, new JObjectResponseConverter());
         converters.put(byte[].class, new JByteResponseConverter());
     }
+
     @SuppressWarnings("unchecked")
     public static <T> T createResult(JResult result, Class<T> targetType) throws IOException {
         JResultConverter<T> converter = (JResultConverter<T>) converters.get(targetType);
         if (converter == null) {
-            if (result == null ) {
+            if (result == null) {
                 return null;
             }
             if (isPrimitiveOrWrapper(targetType)) {
@@ -61,6 +62,7 @@ public class JResultFactory {
         }
         return converter.convert(result);
     }
+
     /**
      * Convert response to generic type
      */
@@ -87,6 +89,7 @@ public class JResultFactory {
         }
         throw new IllegalArgumentException("unsupported type: " + type);
     }
+
     private static boolean isPrimitiveOrWrapper(Class<?> clazz) {
         return clazz.isPrimitive() ||
                 clazz == String.class ||
@@ -99,6 +102,7 @@ public class JResultFactory {
                 clazz == Character.class ||
                 clazz == Short.class;
     }
+
     @SuppressWarnings("unchecked")
     private static <T> T convertPrimitive(String value, Class<T> targetType) {
         if (targetType == String.class) {

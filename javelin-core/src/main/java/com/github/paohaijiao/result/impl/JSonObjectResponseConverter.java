@@ -19,11 +19,8 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.paohaijiao.result.JResult;
 import com.github.paohaijiao.result.JResultConverter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * packageName com.github.paohaijiao.result

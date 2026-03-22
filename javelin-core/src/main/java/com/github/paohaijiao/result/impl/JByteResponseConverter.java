@@ -16,8 +16,8 @@
 package com.github.paohaijiao.result.impl;
 
 
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -40,6 +40,5 @@ public class JByteResponseConverter implements JResultConverter<byte[]> {
             return bytes;
         }
         throw new IOException("No byte data or string data available in response");
-
     }
 }

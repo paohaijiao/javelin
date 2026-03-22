@@ -15,8 +15,8 @@
  */
 package com.github.paohaijiao.result.impl;
 
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 
 /**
  * packageName com.github.paohaijiao.result

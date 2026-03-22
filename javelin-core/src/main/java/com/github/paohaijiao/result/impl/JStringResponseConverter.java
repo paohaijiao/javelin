@@ -15,8 +15,8 @@
  */
 package com.github.paohaijiao.result.impl;
 
-import com.github.paohaijiao.result.JResultConverter;
 import com.github.paohaijiao.result.JResult;
+import com.github.paohaijiao.result.JResultConverter;
 
 import java.io.IOException;
 
@@ -32,6 +32,6 @@ import java.io.IOException;
 public class JStringResponseConverter implements JResultConverter<String> {
     @Override
     public String convert(JResult response) throws IOException {
-       return response.getString();
+        return response.getString();
     }
 }
