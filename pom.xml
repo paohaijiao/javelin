@@ -13,7 +13,6 @@
         <module>javelin-resource</module>
         <module>javelin-provider</module>
         <module>javelin-scan</module>
-        <module>javelin-mybatis</module>
         <module>javelin-event</module>
     </modules>
     <properties>
