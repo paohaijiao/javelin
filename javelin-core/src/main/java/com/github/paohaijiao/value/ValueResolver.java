@@ -193,7 +193,7 @@ public class ValueResolver {
             String expression = hashMatcher.group(1);
             String replacement;
             try {
-                Object value = Ognl.getValue(expression, context, context.getRoot());
+                Object value = Ognl.getValue(expression, context, context);
                 replacement = value != null ? String.valueOf(value) : "null";
             } catch (OgnlException e) {
                 replacement = hashMatcher.group(0); // 保持原样
@@ -201,7 +201,6 @@ public class ValueResolver {
             hashMatcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
         }
         hashMatcher.appendTail(sb);
-
         return sb.toString();
     }
 
@@ -237,7 +236,7 @@ public class ValueResolver {
             String expression = hashMatcher.group(1);
             String replacement;
             try {
-                Object value = Ognl.getValue(expression, context, context.getRoot());
+                Object value = Ognl.getValue(expression, context, context);
                 replacement = value != null ? String.valueOf(value) : defaultValue;
             } catch (OgnlException e) {
                 replacement = hashMatcher.group(0);
