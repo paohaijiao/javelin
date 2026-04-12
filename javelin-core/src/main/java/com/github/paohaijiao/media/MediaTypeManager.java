@@ -84,13 +84,10 @@ public class MediaTypeManager {
      * 初始化默认的媒体类型
      */
     private void initDefaultMediaTypes() {
-        if (!codeMap.isEmpty()) {
-            return;
-        }
         register("text/plain", StandardCharsets.UTF_8, JDataType.STRING, Arrays.asList("txt", "text", "conf", "def", "list", "log", "in", "ini"));
         register("text/html", StandardCharsets.UTF_8, JDataType.STRING, Arrays.asList("html", "htm"));
         register("text/css", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("css"));
-        register("text/csv", StandardCharsets.UTF_8, JDataType.BYTE_STREAM, Collections.singletonList("csv"));
+        register("text/csv", StandardCharsets.UTF_8, JDataType.BYTES, Collections.singletonList("csv"));
         register("text/javascript", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("js"));
         register("text/xml", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("xml"));
         register("text/markdown", StandardCharsets.UTF_8, JDataType.STRING, Arrays.asList("md", "markdown"));
@@ -99,7 +96,7 @@ public class MediaTypeManager {
         register("application/pdf", null, JDataType.BYTES, Collections.singletonList("pdf"));
         register("application/zip", null, JDataType.BYTES, Collections.singletonList("zip"));
         register("application/gzip", null, JDataType.BYTES, Collections.singletonList("gz"));
-        register("application/octet-stream", null, JDataType.BYTE_STREAM, Collections.emptyList());
+        register("application/octet-stream", null, JDataType.BYTES, Collections.emptyList());
         register("application/javascript", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("js"));
         register("application/xhtml+xml", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("xhtml"));
         register("application/rss+xml", StandardCharsets.UTF_8, JDataType.STRING, Collections.singletonList("rss"));
@@ -110,7 +107,7 @@ public class MediaTypeManager {
         register("application/vnd.ms-excel", null, JDataType.BYTES, Arrays.asList("xls", "xlt"));
         register("application/vnd.ms-powerpoint", null, JDataType.BYTES, Arrays.asList("ppt", "pot"));
         register("application/x-www-form-urlencoded", StandardCharsets.UTF_8, JDataType.STRING, Collections.emptyList());
-        register("multipart/form-data", StandardCharsets.UTF_8, JDataType.BYTE_STREAM, Collections.emptyList());
+        register("multipart/form-data", StandardCharsets.UTF_8, JDataType.BYTES, Collections.emptyList());
         register("image/jpeg", null, JDataType.BYTES, Arrays.asList("jpeg", "jpg", "jpe"));
         register("image/png", null, JDataType.BYTES, Collections.singletonList("png"));
         register("image/gif", null, JDataType.BYTES, Collections.singletonList("gif"));
@@ -121,24 +118,24 @@ public class MediaTypeManager {
         register("image/vnd.microsoft.icon", null, JDataType.BYTES, Collections.singletonList("ico"));
         register("image/heic", null, JDataType.BYTES, Arrays.asList("heic", "heif"));
         register("image/avif", null, JDataType.BYTES, Collections.singletonList("avif"));
-        register("audio/mpeg", null, JDataType.BYTE_STREAM, Arrays.asList("mp3", "mpga", "mp2", "mp2a", "m2a", "m3a"));
-        register("audio/ogg", null, JDataType.BYTE_STREAM, Arrays.asList("oga", "ogg", "spx"));
-        register("audio/wav", null, JDataType.BYTE_STREAM, Collections.singletonList("wav"));
-        register("audio/webm", null, JDataType.BYTE_STREAM, Collections.singletonList("weba"));
-        register("audio/aac", null, JDataType.BYTE_STREAM, Collections.singletonList("aac"));
+        register("audio/mpeg", null, JDataType.BYTES, Arrays.asList("mp3", "mpga", "mp2", "mp2a", "m2a", "m3a"));
+        register("audio/ogg", null, JDataType.BYTES, Arrays.asList("oga", "ogg", "spx"));
+        register("audio/wav", null, JDataType.BYTES, Collections.singletonList("wav"));
+        register("audio/webm", null, JDataType.BYTES, Collections.singletonList("weba"));
+        register("audio/aac", null, JDataType.BYTES, Collections.singletonList("aac"));
         register("audio/midi", null, JDataType.BYTES, Arrays.asList("mid", "midi", "kar"));
-        register("audio/flac", null, JDataType.BYTE_STREAM, Collections.singletonList("flac"));
-        register("audio/x-ms-wma", null, JDataType.BYTE_STREAM, Collections.singletonList("wma"));
-        register("video/mp4", null, JDataType.BYTE_STREAM, Arrays.asList("mp4", "mp4v", "mpg4"));
-        register("video/ogg", null, JDataType.BYTE_STREAM, Collections.singletonList("ogv"));
-        register("video/webm", null, JDataType.BYTE_STREAM, Collections.singletonList("webm"));
-        register("video/x-msvideo", null, JDataType.BYTE_STREAM, Collections.singletonList("avi"));
-        register("video/mpeg", null, JDataType.BYTE_STREAM, Arrays.asList("mpeg", "mpg", "mpe", "m1v", "m2v"));
-        register("video/quicktime", null, JDataType.BYTE_STREAM, Arrays.asList("qt", "mov"));
-        register("video/3gpp", null, JDataType.BYTE_STREAM, Arrays.asList("3gp", "3gpp"));
-        register("video/x-flv", null, JDataType.BYTE_STREAM, Collections.singletonList("flv"));
-        register("video/x-matroska", null, JDataType.BYTE_STREAM, Arrays.asList("mkv", "mka", "mks"));
-        register("video/x-ms-wmv", null, JDataType.BYTE_STREAM, Collections.singletonList("wmv"));
+        register("audio/flac", null, JDataType.BYTES, Collections.singletonList("flac"));
+        register("audio/x-ms-wma", null, JDataType.BYTES, Collections.singletonList("wma"));
+        register("video/mp4", null, JDataType.BYTES, Arrays.asList("mp4", "mp4v", "mpg4"));
+        register("video/ogg", null, JDataType.BYTES, Collections.singletonList("ogv"));
+        register("video/webm", null, JDataType.BYTES, Collections.singletonList("webm"));
+        register("video/x-msvideo", null, JDataType.BYTES, Collections.singletonList("avi"));
+        register("video/mpeg", null, JDataType.BYTES, Arrays.asList("mpeg", "mpg", "mpe", "m1v", "m2v"));
+        register("video/quicktime", null, JDataType.BYTES, Arrays.asList("qt", "mov"));
+        register("video/3gpp", null, JDataType.BYTES, Arrays.asList("3gp", "3gpp"));
+        register("video/x-flv", null, JDataType.BYTES, Collections.singletonList("flv"));
+        register("video/x-matroska", null, JDataType.BYTES, Arrays.asList("mkv", "mka", "mks"));
+        register("video/x-ms-wmv", null, JDataType.BYTES, Collections.singletonList("wmv"));
 
         register("font/ttf", null, JDataType.BYTES, Collections.singletonList("ttf"));
         register("font/otf", null, JDataType.BYTES, Collections.singletonList("otf"));

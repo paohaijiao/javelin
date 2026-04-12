@@ -66,6 +66,11 @@ public class MediaTypeInfo {
         return new ArrayList<>(extensions);
     }
 
+
+    public JDataType getDataType() {
+        return dataType;
+    }
+
     @Override
     public String toString() {
         return String.format("MediaTypeInfo{code='%s', charset=%s, dataType=%s, extensions=%s}", code, charset != null ? charset.name() : "null", dataType, extensions);
