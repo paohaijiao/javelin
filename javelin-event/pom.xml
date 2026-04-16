@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.paohaijiao</groupId>
         <artifactId>javelin</artifactId>
-        <version>1.5.1</version>
+        <version>1.6.0</version>
     </parent>
     <artifactId>javelin-event</artifactId>
     <properties>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>io.github.paohaijiao</groupId>
             <artifactId>javelin-scan</artifactId>
-            <version>${javelin.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

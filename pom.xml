@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.paohaijiao</groupId>
     <artifactId>javelin</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -16,9 +16,7 @@
         <module>javelin-event</module>
     </modules>
     <properties>
-        <revision>1.1.0</revision>
         <slf4j.version>1.7.36</slf4j.version>
-        <javelin.version>1.1.0</javelin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <hutool.version>5.4.2</hutool.version>
@@ -46,32 +44,32 @@
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-core</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-resource</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-provider</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-scan</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-event</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-mybatis</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>

@@ -29,3 +29,7 @@
 ## [1.5.0] - 2026-4-12
 ### 新增功能
 - 实现 `MediaTypeManager` 实现媒体的定义
+
+## [1.6.0] - 2026-4-16
+### 新增功能
+- 实现 `JQuickStatementResultMapper` 实现statement 和数据的映射
