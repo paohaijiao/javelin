@@ -1,5 +1,7 @@
 package com.github.paohaijiao.i18n;
 
+import com.github.paohaijiao.console.JConsole;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,6 +21,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @since 2025/10/23
  */
 public class I18nUtils {
+    public static JConsole console=new JConsole();
 
     private static final String DEFAULT_BASE_NAME = "i18n/messages";
 
@@ -27,8 +30,11 @@ public class I18nUtils {
     private static final ThreadLocal<Locale> currentLocale = ThreadLocal.withInitial(() -> DEFAULT_LOCALE);
 
     private static final int CACHE_MAX_SIZE = 1000;
+
     private static final long CACHE_EXPIRE_MILLIS = 3600000; // 1小时
+
     private static final Map<String, CacheEntry> messageCache = new ConcurrentHashMap<>();
+
     private static final ReentrantReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
     private static final ResourceBundle.Control UTF8_CONTROL = new ResourceBundle.Control() {
@@ -43,7 +49,7 @@ public class I18nUtils {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                console.error("load resource error",e);
             }
             return super.newBundle(baseName, locale, format, loader, reload);
         }
@@ -120,19 +126,23 @@ public class I18nUtils {
             ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, UTF8_CONTROL);
             Locale actualLocale = bundle.getLocale();
             if (!actualLocale.equals(locale) && !actualLocale.equals(Locale.ROOT)) {
-                System.out.printf("警告: 请求的locale %s 但实际加载的是 %s%n", locale, actualLocale);
+                String infoMsg=String.format("警告: 请求的locale %s 但实际加载的是 %s%n", locale, actualLocale);
+                console.info(infoMsg);
+
             }
             return bundle;
         } catch (MissingResourceException e) {
-            System.out.printf("无法找到资源: %s for %s%n", baseName, locale);
+            String infoMsg=String.format("无法找到资源: %s for %s%n", baseName, locale, locale);
+            console.error(infoMsg,e);
             try {
-                System.out.printf("尝试回退到默认locale: %s%n", DEFAULT_LOCALE);
-                return ResourceBundle.getBundle(baseName, DEFAULT_LOCALE, UTF8_CONTROL);
+                String msg=String.format("尝试回退到默认locale: %s%n", DEFAULT_LOCALE);
+                console.info(msg);
             } catch (MissingResourceException e2) {
-                System.out.println("连默认资源也找不到!");
+                console.error("连默认资源也找不到!",e);
                 throw e2;
             }
         }
+        return null;
     }
 
     /**
@@ -156,16 +166,13 @@ public class I18nUtils {
         } finally {
             cacheLock.readLock().unlock();
         }
-        // 缓存未命中或已过期，重新加载
         String value;
-        try {
+        try {// 缓存未命中或已过期，重新加载
             ResourceBundle bundle = getBundle(baseName);
             value = bundle.getString(key);
-            // 更新缓存
-            cacheLock.writeLock().lock();
+            cacheLock.writeLock().lock();// 更新缓存
             try {
-                // 缓存满时清理过期条目
-                if (messageCache.size() >= CACHE_MAX_SIZE) {
+                if (messageCache.size() >= CACHE_MAX_SIZE) {// 缓存满时清理过期条目
                     cleanupExpiredCache();
                 }
                 messageCache.put(cacheKey, new CacheEntry(value));
@@ -175,7 +182,7 @@ public class I18nUtils {
 
             return value;
         } catch (MissingResourceException e) {
-            System.out.println("键不存在: " + key);
+            console.error("键不存在: " + key);
             return "???" + key + "???";
         }
     }
@@ -195,6 +202,7 @@ public class I18nUtils {
             String pattern = getMessage(baseName, key);
             return MessageFormat.format(pattern, params);
         } catch (Exception e) {
+            console.error("???" + key + "???");
             return "???" + key + "???";
         }
     }
@@ -245,7 +253,7 @@ public class I18nUtils {
         try {
             messageCache.clear();
             ResourceBundle.clearCache();
-            System.out.println("缓存已清除");
+            console.info("缓存已清除");
         } finally {
             cacheLock.writeLock().unlock();
         }
@@ -256,8 +264,7 @@ public class I18nUtils {
      */
     private static void cleanupExpiredCache() {
         long now = System.currentTimeMillis();
-        messageCache.entrySet().removeIf(entry ->
-                now - entry.getValue().timestamp > CACHE_EXPIRE_MILLIS);
+        messageCache.entrySet().removeIf(entry -> now - entry.getValue().timestamp > CACHE_EXPIRE_MILLIS);
     }
 
     /**
@@ -284,6 +291,7 @@ public class I18nUtils {
                 ResourceBundle.getBundle(baseName, locale, UTF8_CONTROL);
                 available.add(locale);
             } catch (MissingResourceException e) {
+                console.error("getAvailableLocales error",e);
                 e.printStackTrace();
             }
         }
@@ -294,14 +302,15 @@ public class I18nUtils {
      * 缓存条目类
      */
     private static class CacheEntry {
+
         String value;
+
         long timestamp;
 
         CacheEntry(String value) {
             this.value = value;
             this.timestamp = System.currentTimeMillis();
         }
-
         boolean isExpired() {
             return System.currentTimeMillis() - timestamp > CACHE_EXPIRE_MILLIS;
         }
