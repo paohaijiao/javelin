@@ -33,3 +33,7 @@
 ## [1.6.0] - 2026-4-16
 ### 新增功能
 - 实现 `JQuickStatementResultMapper` 实现statement 和数据的映射
+
+## [1.6.0] - 2026-4-26
+### 新增功能
+- 实现 `ValueTransformer` 实现value 和数据的映射
