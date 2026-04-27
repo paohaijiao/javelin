@@ -16,10 +16,9 @@
 package com.github.paohaijiao.statement;
 
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import com.github.paohaijiao.util.JReflectionUtils;
+
+import java.util.*;
 
 public class JQuickRow implements Map<String, Object> {
 
@@ -177,6 +176,19 @@ public class JQuickRow implements Map<String, Object> {
     @Override
     public String toString() {
         return "JQuickRow{" + " data=" + data + '}';
+    }
+
+    public static List<JQuickRow> toRows(List<?> list) {
+        List<JQuickRow> mapList = new ArrayList();
+        for(Object object : list) {
+            if (object instanceof Map) {
+                mapList.add((new JQuickRow((Map)object)));
+            } else if (object instanceof Object) {
+                Map<String, Object> fieldAndValue = JReflectionUtils.getFieldAndFieldValueByObject(object);
+                mapList.add(new JQuickRow(fieldAndValue));
+            }
+        }
+        return mapList;
     }
 }
 
