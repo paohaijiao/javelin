@@ -33,6 +33,14 @@ public class JQuickStatementResultMapper {
             return null;
         }
         Class<?> rawType = getActualRawType(typeReference);
+        if (!List.class.isAssignableFrom(rawType) &&
+                !Set.class.isAssignableFrom(rawType) &&
+                !typeReference.isArray() &&
+                !Map.class.isAssignableFrom(rawType)) { // 对于单值类型，需要先移动光标到第一行
+            if (!rs.next()) {
+                return null;
+            }
+            }
         if (rawType == Integer.class || rawType == int.class) {
             return (T) Integer.valueOf(rs.getInt(1));
         }
