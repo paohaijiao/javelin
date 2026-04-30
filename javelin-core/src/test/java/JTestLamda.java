@@ -1,5 +1,4 @@
 import com.github.paohaijiao.lamda.JLambda;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-@Ignore
 public class JTestLamda {
     @Test
     public void length() throws IOException {

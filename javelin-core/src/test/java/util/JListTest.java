@@ -2,14 +2,12 @@ package util;
 
 import com.github.paohaijiao.model.JKeyValueModel;
 import com.github.paohaijiao.util.JObjectConverter;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Ignore
 public class JListTest {
     @Test
     public void testCompareWithEnumOperator() {

@@ -1,7 +1,6 @@
 import com.github.paohaijiao.enums.JMethodEnums;
 import com.github.paohaijiao.evalue.JEvaluator;
 import com.github.paohaijiao.param.JContext;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
-@Ignore // JUnit 4
 public class JTestFunction {
     @Test
     public void length() throws IOException {

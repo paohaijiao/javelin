@@ -4,7 +4,6 @@ import com.github.paohaijiao.model.JDept;
 import com.github.paohaijiao.tree.JSimpleTreeNode;
 import com.github.paohaijiao.tree.JTreeUtil;
 import com.github.paohaijiao.tree.TreeComparators;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Ignore
 public class JTestTree {
     @Test
     public void length() throws IOException {
