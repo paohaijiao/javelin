@@ -404,21 +404,7 @@ public class JQuickRow implements Map<String, Object> {
             data.remove(columnName);
         }
     }
-    /**
-     * Gets the value for the specified column with type safety.
-     *
-     * @param columnName the column name
-     * @param type the expected type class
-     * @param <T> the type parameter
-     * @return the value cast to type T, or null if value is null or type mismatch
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T getAs(String columnName, Class<T> type) {
-        Object value = data.get(columnName);
-        if (value == null) return null;
-        if (type.isInstance(value)) return (T) value;
-        return null;
-    }
+
     /**
      * Gets the value for the specified column with type conversion.
      *
@@ -818,6 +804,49 @@ public class JQuickRow implements Map<String, Object> {
             }
         }
         return mapList;
+    }
+    /**
+     * Converts this row to a map.
+     *
+     * @return a new map containing all data
+     */
+    public Map<String, Object> toMap() {
+        return new HashMap<>(data);
+    }
+
+    /**
+     * Converts this row to a bean of the specified class.
+     *
+     * @param clazz the target class
+     * @param <T> the type parameter
+     * @return the converted bean, or null if conversion fails
+     */
+    public <T> T toBean(Class<T> clazz) {
+        try {
+            T instance = clazz.getDeclaredConstructor().newInstance();
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                JReflectionUtils.setFieldValue(instance, entry.getKey(), entry.getValue());
+            }
+            return instance;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets value as specific type, returns null if type mismatch.
+     *
+     * @param columnName the column name
+     * @param type the expected type
+     * @param <T> the type parameter
+     * @return the value cast to type T, or null
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getAs(String columnName, Class<T> type) {
+        Object value = data.get(columnName);
+        if (value == null) return null;
+        if (type.isInstance(value)) return (T) value;
+        return null;
     }
 }
 

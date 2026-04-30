@@ -23,9 +23,13 @@ import java.time.format.DateTimeFormatter;
 public class JConsole {
 
     private static final String ANSI_RESET = "\u001B[0m";
+
     private static final String ANSI_DEBUG = "\u001B[36m"; // light green
+
     private static final String ANSI_INFO = "\u001B[32m";  // green
+
     private static final String ANSI_WARN = "\u001B[33m";  // yellow
+
     private static final String ANSI_ERROR = "\u001B[31m"; // red
 
     private boolean showTimestamp;
