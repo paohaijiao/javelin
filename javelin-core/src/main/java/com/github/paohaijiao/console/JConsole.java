@@ -155,6 +155,12 @@ public class JConsole {
         return defaultInstance;
     }
 
+    public static JConsole initConsoleEnvironment (){
+        JConsoleConfig config = JConsoleConfigLoader.load();
+        JConsole.init(config);
+        JConsole console = JConsole.getInstance();
+        return console;
+    }
     /**
      * 获取指定名称的实例（如果不存在则创建）
      *

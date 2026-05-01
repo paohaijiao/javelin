@@ -16,6 +16,8 @@
 package com.github.paohaijiao.statement;
 
 import com.github.paohaijiao.console.JConsole;
+import com.github.paohaijiao.console.JConsoleConfig;
+import com.github.paohaijiao.console.JConsoleConfigLoader;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,7 +38,6 @@ public class JQuickDataSet {
 
     private final List<JQuickRow> rows;
 
-    private final JConsole console=new JConsole();
 
     public JQuickDataSet(List<JQuickColumnMeta> columns, List<JQuickRow> rows) {
         this.columns = Collections.unmodifiableList(new ArrayList<>(columns));
@@ -399,6 +400,7 @@ public class JQuickDataSet {
      * @param maxRows maximum number of rows to print
      */
     public void printTable(int maxRows) {
+        JConsole console=JConsole.initConsoleEnvironment();
         if (columns.isEmpty()) {
             console.warn("Empty dataset (no columns)");
             return;
@@ -465,6 +467,7 @@ public class JQuickDataSet {
      * Prints a summary of the dataset.
      */
     public void printSummary() {
+        JConsole console=JConsole.initConsoleEnvironment();
         if (columns.isEmpty()) {
             console.warn("Empty dataset (no columns)");
             return;
@@ -492,6 +495,7 @@ public class JQuickDataSet {
      * @param maxRows maximum number of rows to print
      */
     public void printTableDebug(int maxRows) {
+        JConsole console=JConsole.initConsoleEnvironment();
         if (columns.isEmpty()) {
             console.debug("Empty dataset (no columns)");
             return;
