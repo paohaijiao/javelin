@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.paohaijiao</groupId>
         <artifactId>javelin</artifactId>
-        <version>1.7.8</version>
+        <version>1.7.9</version>
     </parent>
     <artifactId>javelin-core</artifactId>
     <properties>
@@ -109,6 +109,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <name>javelin-core</name>
