@@ -16,5 +16,28 @@
 package com.github.paohaijiao.enums;
 
 public enum JLogLevel {
-    DEBUG, INFO, WARN, ERROR
+
+    DEBUG(0),
+
+    INFO(1),
+
+    WARN(2),
+
+    ERROR(3),
+
+    OFF(4);
+
+    private final int level;
+
+    JLogLevel(int level) {
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public boolean isEnabled(JLogLevel configuredLevel) {
+        return this.level >= configuredLevel.level;
+    }
 }
