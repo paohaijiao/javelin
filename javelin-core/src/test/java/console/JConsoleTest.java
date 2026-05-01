@@ -38,19 +38,13 @@ public class JConsoleTest {
         console.info("This is an info message");
         console.warn("This is a warning message");
         console.error("This is an error message");
-
-        // 带异常的输出
         try {
             int result = 10 / 0;
         } catch (Exception e) {
             console.error("An error occurred", e);
         }
-
-        // 动态修改日志级别
         console.setLevel(JLogLevel.DEBUG);
         console.debug("Now debug messages are visible");
-
-        // 关闭日志系统
         console.shutdown();
     }
     @Test
