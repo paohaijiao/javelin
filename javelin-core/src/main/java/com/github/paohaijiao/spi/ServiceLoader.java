@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * 增强的 ServiceLoader 工具类
  * 支持 @Priority 注解和 PriorityConstants 优先级管理
  */
-public final class ServiceLoader {
+public  class ServiceLoader {
 
     private static final Map<Class<?>, java.util.ServiceLoader<?>> SERVICE_LOADER_CACHE = new ConcurrentHashMap<>();
 
@@ -24,7 +24,7 @@ public final class ServiceLoader {
 
     private static final JConsole console = new JConsole();
 
-    private ServiceLoader() {
+    public ServiceLoader() {
         throw new AssertionError("工具类不允许实例化");
     }
 
