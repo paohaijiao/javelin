@@ -39,4 +39,8 @@
 - 实现 `ValueTransformer` 实现value 和数据的映射
 ## [1.7.5] - 2026-5-1
 ### 新增功能
-- 实现 `enable the console` 
+- 实现 `enable the console`
+
+## [1.8.0] - 2026-5-8
+### 新增功能
+- 实现 beanutils 
