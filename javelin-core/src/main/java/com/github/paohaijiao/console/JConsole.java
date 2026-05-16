@@ -442,4 +442,84 @@ public class JConsole {
     public void setEnableColor(boolean enableColor) {
         this.config.setEnableColor(enableColor);
     }
+
+    /**
+     * 格式化消息，将 {} 替换为对应的参数
+     * @param message 包含 {} 占位符的消息模板
+     * @param args 参数数组
+     * @return 格式化后的消息
+     */
+    private String formatWithPlaceholders(String message, Object... args) {
+        if (args == null || args.length == 0) {
+            return message;
+        }
+        StringBuilder result = new StringBuilder();
+        int lastIndex = 0;
+        int argIndex = 0;
+        int placeholderIndex;
+        while ((placeholderIndex = message.indexOf("{}", lastIndex)) != -1 && argIndex < args.length) {
+            result.append(message, lastIndex, placeholderIndex);
+            Object arg = args[argIndex];
+            result.append(arg != null ? arg.toString() : "null");
+            lastIndex = placeholderIndex + 2;
+            argIndex++;
+        }
+        if (lastIndex < message.length()) {
+            result.append(message.substring(lastIndex));
+        }
+        return result.toString();
+    }
+    public void log(JLogLevel level, String message, Object... args) {
+        if (!isLevelEnabled(level)) return;
+        String formattedMessage = formatWithPlaceholders(message, args);
+        String finalMessage = formatMessage(level, formattedMessage);
+        output(level, finalMessage);
+    }
+
+    public void log(JLogLevel level, String message, Throwable throwable, Object... args) {
+        if (!isLevelEnabled(level)) return;
+        String formattedMessage = formatWithPlaceholders(message, args);
+        String finalMessage = formatMessage(level, formattedMessage);
+        output(level, finalMessage);
+        if (config.isConsoleOutput() && throwable != null) {
+            String color = config.isEnableColor() ? getColorCode(level) : "";
+            String reset = config.isEnableColor() ? ANSI_RESET : "";
+            System.err.println(color + formatStackTrace(throwable) + reset);
+        }
+        if (fileWriter != null && !fileWriterError && throwable != null) {
+            throwable.printStackTrace(fileWriter);
+            fileWriter.flush();
+        }
+    }
+    public void debug(String message, Object... args) {
+        log(JLogLevel.DEBUG, message, args);
+    }
+
+    public void debug(String message, Throwable throwable, Object... args) {
+        log(JLogLevel.DEBUG, message, throwable, args);
+    }
+
+    public void info(String message, Object... args) {
+        log(JLogLevel.INFO, message, args);
+    }
+
+    public void info(String message, Throwable throwable, Object... args) {
+        log(JLogLevel.INFO, message, throwable, args);
+    }
+
+    public void warn(String message, Object... args) {
+        log(JLogLevel.WARN, message, args);
+    }
+
+    public void warn(String message, Throwable throwable, Object... args) {
+        log(JLogLevel.WARN, message, throwable, args);
+    }
+
+    public void error(String message, Object... args) {
+        log(JLogLevel.ERROR, message, args);
+    }
+
+    public void error(String message, Throwable throwable, Object... args) {
+        log(JLogLevel.ERROR, message, throwable, args);
+    }
 }

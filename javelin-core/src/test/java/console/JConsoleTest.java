@@ -53,4 +53,34 @@ public class JConsoleTest {
         console.info("This is a debug message");
 
     }
+    @Test
+    public void test2(){
+        JConsole console = new JConsole();
+        String userName = "张三";
+        int age = 25;
+        console.info("用户 {} 的年龄是 {} 岁", userName, age);
+        String orderId = "ORD-12345";
+        double amount = 99.99;
+        String status = "SUCCESS";
+        console.info("订单 {} 金额 {} 状态 {}", orderId, amount, status);
+        try {
+            int result = 10 / 0;
+        } catch (Exception e) {
+            console.error("计算失败，用户: {}, 操作: {}", e, userName, "除法运算");
+        }
+        console.debug("调试信息: 变量值 = {}", "debug value");
+        console.warn("配置项 {} 未设置，使用默认值 {}", "timeout", 5000);
+        String nullValue = null;
+        console.info("空值测试: {}", nullValue);
+        User user = new User("李四", 30);
+        console.info("用户信息: {}", user);
+
+    }
+    static class User {
+        String name;
+        int age;
+        User(String name, int age) { this.name = name; this.age = age; }
+        @Override
+        public String toString() { return "User{name='" + name + "', age=" + age + "}"; }
+    }
 }
