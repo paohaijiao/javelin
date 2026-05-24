@@ -18,10 +18,13 @@ package com.github.paohaijiao.statement;
 
 import com.github.paohaijiao.util.JReflectionUtils;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class JQuickRow implements Map<String, Object> {
+public class JQuickRow implements Map<String, Object> , Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Map<String, Object> data;
 
