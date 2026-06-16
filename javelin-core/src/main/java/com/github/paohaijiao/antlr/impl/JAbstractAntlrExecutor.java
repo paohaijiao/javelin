@@ -66,7 +66,6 @@ public abstract class JAbstractAntlrExecutor<I, O> implements JAntlrExecutor<I, 
             return parse(parser);
         } catch (Exception e) {
             e.printStackTrace();
-            //throw new AntlrExecutionException("ANTLR执行失败", e);
         }
         return null;
     }

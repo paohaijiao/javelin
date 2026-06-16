@@ -18,5 +18,7 @@ package com.github.paohaijiao.antlr;
 import com.github.paohaijiao.exception.JAntlrError;
 
 public interface JAntlrErrorListener {
+
     void onError(JAntlrError error);
+
 }
