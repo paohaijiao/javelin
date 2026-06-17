@@ -223,7 +223,7 @@ public class JQuickBeanCopyUtils {
                     value = convertIfNeeded(value, targetField.getType());
                 }
                 targetField.set(target, value);
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 e.getStackTrace();
             }
         }

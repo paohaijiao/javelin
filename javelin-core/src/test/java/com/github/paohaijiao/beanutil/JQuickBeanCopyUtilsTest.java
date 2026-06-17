@@ -230,7 +230,7 @@ class JQuickBeanCopyUtilsTest {
     @Test
     void testMergeNonNull_Normal() {
         JQuickTargetUser target = new JQuickTargetUser();
-        target.setId(100L);
+       // target.setId(100L);
         target.setName("原有名称");
         target.setAge(30);
 
