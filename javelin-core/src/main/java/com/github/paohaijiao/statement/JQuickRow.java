@@ -16,6 +16,7 @@
 package com.github.paohaijiao.statement;
 
 
+import com.github.paohaijiao.console.JConsole;
 import com.github.paohaijiao.util.JReflectionUtils;
 
 import java.io.Serializable;
@@ -850,6 +851,61 @@ public class JQuickRow implements Map<String, Object> , Serializable {
         if (value == null) return null;
         if (type.isInstance(value)) return (T) value;
         return null;
+    }
+    /**
+     * 使用 JConsole 打印 JQuickRow 的数据
+     * 以表格格式展示单行数据
+     */
+    public void show() {
+        JConsole console = JConsole.initConsoleEnvironment();
+        if (data.isEmpty()) {
+            console.warn("Empty row (no data)");
+            return;
+        }
+        Map<String, Integer> columnWidths = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String colName = entry.getKey();
+            String strValue = entry.getValue() != null ? entry.getValue().toString() : "null";
+            int width = Math.max(colName.length(), strValue.length());
+            columnWidths.put(colName, Math.min(width, 50)); // 限制最大宽度50
+        }
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int width : columnWidths.values()) {
+            formatBuilder.append(" %-").append(width).append("s |");
+        }
+        String rowFormat = formatBuilder.toString();
+        StringBuilder separatorBuilder = new StringBuilder("+");
+        for (int width : columnWidths.values()) {
+            separatorBuilder.append("-").append(repeatChar('-', width)).append("-+");
+        }
+        String separator = separatorBuilder.toString();
+        console.info(separator);
+        console.info(String.format(rowFormat, columnWidths.keySet().toArray()));
+        console.info(separator);
+        Object[] values = new Object[columnWidths.size()];
+        int idx = 0;
+        for (String colName : columnWidths.keySet()) {
+            Object value = data.get(colName);
+            String strValue = value != null ? value.toString() : "null";
+            int width = columnWidths.get(colName);
+            if (strValue.length() > width) {
+                strValue = strValue.substring(0, width - 3) + "...";
+            }
+            values[idx++] = strValue;
+        }
+        console.info(String.format(rowFormat, values));
+        console.info(separator);
+    }
+    /**
+     * 重复字符的辅助方法
+     */
+    private static String repeatChar(char c, int count) {
+        if (count <= 0) return "";
+        StringBuilder sb = new StringBuilder(count);
+        for (int i = 0; i < count; i++) {
+            sb.append(c);
+        }
+        return sb.toString();
     }
 }
 
