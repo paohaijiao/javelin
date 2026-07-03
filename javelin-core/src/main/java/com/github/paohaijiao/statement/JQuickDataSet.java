@@ -679,4 +679,44 @@ public class JQuickDataSet {
         }
         return sb.toString();
     }
+    /**
+     * 更新列元数据的类型和来源（按名称匹配）
+     * 列名和数量保持不变
+     *
+     * @param columnUpdates 列名到新元数据的映射
+     * @return 新的数据集
+     */
+    public JQuickDataSet withColumnMeta(Map<String, JQuickColumnMeta> columnUpdates) {
+        List<JQuickColumnMeta> newColumns = this.columns.stream()
+                .map(col -> {
+                    JQuickColumnMeta update = columnUpdates.get(col.getName());
+                    if (update != null) {
+                        return new JQuickColumnMeta(col.getName(), update.getType() != null ? update.getType() : col.getType(), update.getSource() != null ? update.getSource() : col.getSource());
+                    }
+                    return col;
+                })
+                .collect(Collectors.toList());
+
+        return new JQuickDataSet(newColumns, this.rows);
+    }
+
+    /**
+     * 批量更新列元数据的类型
+     *
+     * @param typeUpdates 列名到新类型的映射
+     * @return 新的数据集
+     */
+    public JQuickDataSet withColumnTypes(Map<String, Class<?>> typeUpdates) {
+        List<JQuickColumnMeta> newColumns = this.columns.stream()
+                .map(col -> {
+                    Class<?> newType = typeUpdates.get(col.getName());
+                    if (newType != null) {
+                        return new JQuickColumnMeta(col.getName(), newType, col.getSource());
+                    }
+                    return col;
+                })
+                .collect(Collectors.toList());
+
+        return new JQuickDataSet(newColumns, this.rows);
+    }
 }
