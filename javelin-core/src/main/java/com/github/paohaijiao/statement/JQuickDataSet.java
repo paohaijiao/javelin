@@ -34,9 +34,9 @@ import java.util.stream.Stream;
  */
 public class JQuickDataSet {
 
-    private final List<JQuickColumnMeta> columns;
+    private  List<JQuickColumnMeta> columns;
 
-    private final List<JQuickRow> rows;
+    private  List<JQuickRow> rows;
 
 
     public JQuickDataSet(List<JQuickColumnMeta> columns, List<JQuickRow> rows) {
@@ -718,5 +718,8 @@ public class JQuickDataSet {
                 .collect(Collectors.toList());
 
         return new JQuickDataSet(newColumns, this.rows);
+    }
+    public void setColumns(List<JQuickColumnMeta> columns) {
+      this.columns=columns;
     }
 }
