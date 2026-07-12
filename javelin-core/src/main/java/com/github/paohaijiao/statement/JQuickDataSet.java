@@ -395,6 +395,15 @@ public class JQuickDataSet {
         printTable(Integer.MAX_VALUE);
     }
     /**
+     * Prints the dataset as a table to console.
+     */
+    public void show() {
+        printTable(Integer.MAX_VALUE);
+    }
+    public void show(int maxRows) {
+        printTable(maxRows);
+    }
+    /**
      * Prints the dataset as a table to console with row limit using JConsole.
      *
      * @param maxRows maximum number of rows to print
@@ -405,11 +414,6 @@ public class JQuickDataSet {
             console.warn("Empty dataset (no columns)");
             return;
         }
-        if (rows.isEmpty()) {
-            console.info("Empty dataset (no rows)");
-            return;
-        }
-        // Calculate column widths
         Map<String, Integer> columnWidths = new LinkedHashMap<>();
         for (JQuickColumnMeta col : columns) {
             String colName = col.getName();
