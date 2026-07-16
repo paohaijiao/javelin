@@ -17,11 +17,14 @@ package dataset;
 
 import com.github.paohaijiao.crypto.exception.CryptoException;
 import com.github.paohaijiao.crypto.impl.EccCryptoService;
+import com.github.paohaijiao.model.JUserModel;
 import com.github.paohaijiao.statement.JQuickRow;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * packageName dataset
@@ -42,5 +45,23 @@ public class JQuickRowTest {
         row.put("createTime", new Date());
         row.show();
 
+    }
+    @Test
+    public void testPerformance() {
+        List<JUserModel> users = new ArrayList<>();
+        for (int i = 0; i < 30000; i++) {
+            users.add(new JUserModel("User_" + i, 20 + i % 50));
+        }
+        long start = System.currentTimeMillis();
+        List<JQuickRow> rows = JQuickRow.toRows(users);
+        long end = System.currentTimeMillis();
+        System.out.println("转换 " + users.size() + " 条数据耗时: " + (end - start) + "ms");
+        System.out.println("结果数量: " + rows.size());
+        if (!rows.isEmpty()) {
+            JQuickRow first = rows.get(0);
+            System.out.println("第一条数据: " + first);
+            System.out.println("  name: " + first.get("name"));
+            System.out.println("  age: " + first.get("age"));
+        }
     }
 }

@@ -18,16 +18,23 @@ package com.github.paohaijiao.statement;
 
 import com.github.paohaijiao.console.JConsole;
 import com.github.paohaijiao.util.JReflectionUtils;
+import net.sf.cglib.beans.BeanMap;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class JQuickRow implements Map<String, Object> , Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final Map<String, Object> data;
+
+    private static final Map<Class<?>, List<Field>> FIELD_CACHE = new ConcurrentHashMap<>();
+
+    private static final JConsole console = JConsole.initConsoleEnvironment();
 
 
     /**
@@ -803,11 +810,21 @@ public class JQuickRow implements Map<String, Object> , Serializable {
             if (object instanceof Map) {
                 mapList.add((new JQuickRow((Map)object)));
             } else if (object instanceof Object) {
-                Map<String, Object> fieldAndValue = JReflectionUtils.getFieldAndFieldValueByObject(object);
-                mapList.add(new JQuickRow(fieldAndValue));
+                Map<String, Object> map = beanToMap(object);
+                mapList.add(new JQuickRow(map));
             }
         }
         return mapList;
+    }
+    public static Map<String, Object> beanToMap(Object bean) {
+        Map<String, Object> map = new HashMap<>();
+        if (bean != null) {
+            BeanMap beanMap = BeanMap.create(bean);
+            for (Object key : beanMap.keySet()) {
+                map.put(key.toString(), beanMap.get(key));
+            }
+        }
+        return map;
     }
     /**
      * Converts this row to a map.
