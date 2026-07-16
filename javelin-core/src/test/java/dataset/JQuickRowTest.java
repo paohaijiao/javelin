@@ -17,11 +17,14 @@ package dataset;
 
 import com.github.paohaijiao.crypto.exception.CryptoException;
 import com.github.paohaijiao.crypto.impl.EccCryptoService;
+import com.github.paohaijiao.model.JUserModel;
 import com.github.paohaijiao.statement.JQuickRow;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * packageName dataset
@@ -43,4 +46,42 @@ public class JQuickRowTest {
         row.show();
 
     }
+    /**
+     * 测试 JQuickRow.toRows() 性能（优化后）
+     */
+    @Test
+    public void testToRowsPerformance() {
+        int dataSize = 30000;
+        List<JUserModel> users = generateTestUsers(dataSize);
+        List<JQuickRow> list=JQuickRow.toRows(users);
+
+        for (int i = 0; i < 3; i++) {
+            JQuickRow.toRows(users.subList(0, Math.min(100, users.size())));
+        }
+        int testRuns = 5;
+        long totalTime = 0;
+        for (int i = 0; i < testRuns; i++) {
+            long start = System.nanoTime();
+            List<JQuickRow> rows = JQuickRow.toRows(users);
+            long end = System.nanoTime();
+            long timeMs = (end - start) / 1_000_000;
+            totalTime += timeMs;
+            if (i == 0 && rows.size() > 0) {
+                JQuickRow first = rows.get(0);
+            }
+        }
+
+        long avgTime = totalTime / testRuns;
+    }
+    /**
+     * 生成测试用户数据
+     */
+    private List<JUserModel> generateTestUsers(int count) {
+        List<JUserModel> users = new ArrayList<>(count);
+        for (int i = 1; i <= count; i++) {
+            users.add(new JUserModel("User_" + i, 20 + (i % 50)));
+        }
+        return users;
+    }
+
 }

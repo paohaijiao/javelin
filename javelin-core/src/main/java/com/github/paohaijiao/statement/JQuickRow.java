@@ -18,10 +18,14 @@ package com.github.paohaijiao.statement;
 
 import com.github.paohaijiao.console.JConsole;
 import com.github.paohaijiao.util.JReflectionUtils;
+import net.sf.cglib.beans.BeanMap;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class JQuickRow implements Map<String, Object> , Serializable {
 
@@ -29,7 +33,10 @@ public class JQuickRow implements Map<String, Object> , Serializable {
 
     private final Map<String, Object> data;
 
+    private static final Map<Class<?>, List<Field>> FIELD_CACHE = new ConcurrentHashMap<>();
 
+
+    private static final JConsole console =JConsole.initConsoleEnvironment();
     /**
      * Creates an empty JRow with no associated table name.
      */
@@ -798,16 +805,73 @@ public class JQuickRow implements Map<String, Object> , Serializable {
     }
 
     public static List<JQuickRow> toRows(List<?> list) {
-        List<JQuickRow> mapList = new ArrayList();
-        for(Object object : list) {
+        if (list == null || list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<JQuickRow> mapList = new ArrayList<>(list.size());
+        for (Object object : list) {
+            if (object == null) {
+                continue;
+            }
             if (object instanceof Map) {
-                mapList.add((new JQuickRow((Map)object)));
-            } else if (object instanceof Object) {
-                Map<String, Object> fieldAndValue = JReflectionUtils.getFieldAndFieldValueByObject(object);
-                mapList.add(new JQuickRow(fieldAndValue));
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = (Map<String, Object>) object;
+                mapList.add(new JQuickRow(map));
+            } else {
+                Map<String, Object> map = convertToMap(object);
+                mapList.add(new JQuickRow(map));
             }
         }
         return mapList;
+    }
+    /**
+     * 转换对象为Map（优先MapStruct，失败时降级到反射）
+     */
+    private static Map<String, Object> convertToMap(Object obj) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            if (obj != null) {
+                BeanMap beanMap = BeanMap.create(obj);
+                for (Object key : beanMap.keySet()) {
+                    map.put(key.toString(), beanMap.get(key));
+                }
+            }
+            return map;
+        } catch (Exception e) {
+            console.error("convertToMap error",e);
+            return convertByReflection(obj);
+        }
+    }
+    /**
+     * 反射转换（带缓存）- 作为降级方案
+     */
+    private static Map<String, Object> convertByReflection(Object obj) {
+        Class<?> clazz = obj.getClass();
+        List<Field> fields = FIELD_CACHE.computeIfAbsent(clazz, c -> {
+            List<Field> fieldList = new ArrayList<>();
+            Class<?> current = c;
+            while (current != null && current != Object.class) {
+                for (Field field : current.getDeclaredFields()) {
+                    int mod = field.getModifiers();
+                    if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
+                        continue;
+                    }
+                    field.setAccessible(true);
+                    fieldList.add(field);
+                }
+                current = current.getSuperclass();
+            }
+            return fieldList;
+        });
+        Map<String, Object> result = new HashMap<>(fields.size() * 2);
+        try {
+            for (Field field : fields) {
+                result.put(field.getName(), field.get(obj));
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to convert object to map", e);
+        }
+        return result;
     }
     /**
      * Converts this row to a map.
