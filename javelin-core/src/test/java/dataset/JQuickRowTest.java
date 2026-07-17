@@ -46,42 +46,22 @@ public class JQuickRowTest {
         row.show();
 
     }
-    /**
-     * 测试 JQuickRow.toRows() 性能（优化后）
-     */
     @Test
-    public void testToRowsPerformance() {
-        int dataSize = 30000;
-        List<JUserModel> users = generateTestUsers(dataSize);
-        List<JQuickRow> list=JQuickRow.toRows(users);
-
-        for (int i = 0; i < 3; i++) {
-            JQuickRow.toRows(users.subList(0, Math.min(100, users.size())));
+    public void testPerformance() {
+        List<JUserModel> users = new ArrayList<>();
+        for (int i = 0; i < 30000; i++) {
+            users.add(new JUserModel("User_" + i, 20 + i % 50));
         }
-        int testRuns = 5;
-        long totalTime = 0;
-        for (int i = 0; i < testRuns; i++) {
-            long start = System.nanoTime();
-            List<JQuickRow> rows = JQuickRow.toRows(users);
-            long end = System.nanoTime();
-            long timeMs = (end - start) / 1_000_000;
-            totalTime += timeMs;
-            if (i == 0 && rows.size() > 0) {
-                JQuickRow first = rows.get(0);
-            }
+        long start = System.currentTimeMillis();
+        List<JQuickRow> rows = JQuickRow.toRows(users);
+        long end = System.currentTimeMillis();
+        System.out.println("转换 " + users.size() + " 条数据耗时: " + (end - start) + "ms");
+        System.out.println("结果数量: " + rows.size());
+        if (!rows.isEmpty()) {
+            JQuickRow first = rows.get(0);
+            System.out.println("第一条数据: " + first);
+            System.out.println("  name: " + first.get("name"));
+            System.out.println("  age: " + first.get("age"));
         }
-
-        long avgTime = totalTime / testRuns;
     }
-    /**
-     * 生成测试用户数据
-     */
-    private List<JUserModel> generateTestUsers(int count) {
-        List<JUserModel> users = new ArrayList<>(count);
-        for (int i = 1; i <= count; i++) {
-            users.add(new JUserModel("User_" + i, 20 + (i % 50)));
-        }
-        return users;
-    }
-
 }
