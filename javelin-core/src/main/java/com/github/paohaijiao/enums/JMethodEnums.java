@@ -62,7 +62,6 @@ public enum JMethodEnums {
                 return jMethodEnums;
             }
         }
-        JAssert.throwNewException("invalid method ");
         return null;
     }
 
