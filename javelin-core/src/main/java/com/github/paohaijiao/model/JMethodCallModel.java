@@ -18,12 +18,17 @@ package com.github.paohaijiao.model;
 import com.github.paohaijiao.enums.JMethodEnums;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
 public class JMethodCallModel {
 
     private JMethodEnums method;
+
+    private String methodName;
+
+    private HashMap<String,Object> attr=new HashMap<>();
 
     private List<Object> list;
 }
