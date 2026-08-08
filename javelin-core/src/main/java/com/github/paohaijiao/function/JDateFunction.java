@@ -15,6 +15,7 @@
  */
 package com.github.paohaijiao.function;
 
+import com.github.paohaijiao.date.JDateUtil;
 import com.github.paohaijiao.exception.JAssert;
 
 import java.text.SimpleDateFormat;
@@ -31,12 +32,11 @@ import java.util.function.BiFunction;
  * @description
  */
 public class JDateFunction {
-    public static final BiFunction<Date, String, String> DATEFORMAT = (date, format) -> {
+    public static final BiFunction<Object, String, String> DATEFORMAT = (date, format) -> {
         JAssert.notNull(date, "date  must not be null");
         JAssert.notNull(format, "format  must not be null");
-        JAssert.isTrue(date instanceof Date, "parameter 1 must be a date");
         JAssert.isTrue(format instanceof String, "parameter 2 must be a date");
-        Date d = (Date) date;
+        Date d= JDateUtil.toDate(date);
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(d);
     };
