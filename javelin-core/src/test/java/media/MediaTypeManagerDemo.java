@@ -31,7 +31,6 @@ public class MediaTypeManagerDemo {
     public static void main(String[] args) {
         MediaTypeManager manager = MediaTypeManager.getInstance();
 
-        System.out.println("========== 1. 基础查询 ==========");
         MediaTypeInfo info = manager.getByExtension("json");
         System.out.println("JSON 类型: " + info.getCode());
         System.out.println("  - 字符集: " + info.getCharset());
@@ -48,14 +47,12 @@ public class MediaTypeManagerDemo {
         mimeType = manager.getMimeTypeByFileName("style.css");
         System.out.println("style.css -> " + mimeType);
 
-        System.out.println("\n========== 2. 动态添加媒体类型 ==========");
         manager.addMediaType("application/manifest+json", StandardCharsets.UTF_8, JDataType.STRING, "webmanifest", "manifest");
         manager.addMediaType("video/x-matroska", null, JDataType.BYTE_STREAM, "mkv", "mka");
 
         info = manager.getByExtension("mkv");
         System.out.println("MKV 类型: " + (info != null ? info.getCode() : "未找到"));
 
-        System.out.println("\n========== 3. 更新媒体类型 ==========");
         // 更新字符集
         boolean updated = manager.updateCharset("application/manifest+json", StandardCharsets.UTF_8);
         System.out.println("更新字符集: " + updated);
@@ -70,7 +67,6 @@ public class MediaTypeManagerDemo {
         info = manager.getByCode("application/octet-stream");
         System.out.println("更新后的数据类型: " + info.getDataType());
 
-        System.out.println("\n========== 4. 删除媒体类型 ==========");
         // 删除单个
         boolean removed = manager.removeByCode("application/manifest+json");
         System.out.println("删除 manifest+json: " + removed);
@@ -79,7 +75,6 @@ public class MediaTypeManagerDemo {
         int count = manager.removeByCodes("video/x-matroska", "application/wasm");
         System.out.println("批量删除数量: " + count);
 
-        System.out.println("\n========== 5. 查询和筛选 ==========");
         // 根据数据类型筛选
         List<MediaTypeInfo> stringTypes = manager.getByDataType(JDataType.STRING);
         System.out.println("STRING 类型数量: " + stringTypes.size());
@@ -99,7 +94,6 @@ public class MediaTypeManagerDemo {
                 System.out.println("  - " + t.getCode() + " (扩展名: " + t.getExtensions() + ")")
         );
 
-        System.out.println("\n========== 6. 统计信息 ==========");
         System.out.println("总类型数: " + manager.size());
         System.out.println("总扩展名数: " + manager.extensionSize());
         System.out.println("是否存在 text/html: " + manager.exists("text/html"));
@@ -115,7 +109,6 @@ public class MediaTypeManagerDemo {
         // 打印详细统计
         manager.printStatistics();
 
-        System.out.println("\n========== 7. 获取所有信息 ==========");
         Set<String> allCodes = manager.getAllCodes();
         System.out.println("所有 MIME 类型（前20个）:");
         allCodes.stream().limit(20).forEach(code ->
@@ -128,7 +121,6 @@ public class MediaTypeManagerDemo {
                 System.out.println("  - ." + ext)
         );
 
-        System.out.println("\n========== 8. 批量操作 ==========");
         // 批量添加
         List<MediaTypeDefinition> definitions = Arrays.asList(
                 new MediaTypeDefinition("application/custom1", JDataType.BYTES, Arrays.asList("c1")),
@@ -142,7 +134,6 @@ public class MediaTypeManagerDemo {
         List<MediaTypeDefinition> exported = manager.exportDefinitions();
         System.out.println("导出定义数量: " + exported.size());
 
-        System.out.println("\n========== 9. 文件类型判断示例 ==========");
         String[] testFiles = {
                 "document.pdf", "image.jpg", "video.mp4", "audio.mp3",
                 "script.js", "data.json", "style.css", "font.ttf",
@@ -157,7 +148,6 @@ public class MediaTypeManagerDemo {
             System.out.printf("  %-20s -> %-35s [%s]%n", file, mime, dataType);
         }
 
-        System.out.println("\n========== 10. SPI 重新加载 ==========");
         manager.reloadProviders();
         System.out.println("SPI 重新加载完成，当前类型数: " + manager.size());
     }

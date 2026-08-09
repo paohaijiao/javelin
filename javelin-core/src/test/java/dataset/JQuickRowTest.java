@@ -17,6 +17,7 @@ package dataset;
 
 import com.github.paohaijiao.crypto.exception.CryptoException;
 import com.github.paohaijiao.crypto.impl.EccCryptoService;
+import com.github.paohaijiao.model.JBenchMarkUserModel;
 import com.github.paohaijiao.model.JUserModel;
 import com.github.paohaijiao.statement.JQuickRow;
 import org.junit.jupiter.api.Test;
@@ -48,10 +49,7 @@ public class JQuickRowTest {
     }
     @Test
     public void testPerformance() {
-        List<JUserModel> users = new ArrayList<>();
-        for (int i = 0; i < 30000; i++) {
-            users.add(new JUserModel("User_" + i, 20 + i % 50));
-        }
+        List<JBenchMarkUserModel> users = JBenchMarkUserModel.createSampleUsers(1000000);
         long start = System.currentTimeMillis();
         List<JQuickRow> rows = JQuickRow.toRows(users);
         long end = System.currentTimeMillis();

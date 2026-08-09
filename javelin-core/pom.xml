@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.paohaijiao</groupId>
         <artifactId>javelin</artifactId>
-        <version>2.1.2</version>
+        <version>2.2.0</version>
     </parent>
     <artifactId>javelin-core</artifactId>
     <properties>
@@ -16,10 +16,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.3.0</version>
+            <groupId>io.github.paohaijiao</groupId>
+            <artifactId>javelin</artifactId>
+            <version>2.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.paohaijiao</groupId>
+            <artifactId>jquick-asm</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

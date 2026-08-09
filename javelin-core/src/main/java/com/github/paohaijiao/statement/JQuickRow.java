@@ -17,8 +17,9 @@ package com.github.paohaijiao.statement;
 
 
 import com.github.paohaijiao.console.JConsole;
+import com.github.paohaijiao.statement.asm.JQuickRowOptimizer;
+import com.github.paohaijiao.statement.asm.JQuickRowToRowsEnhancer;
 import com.github.paohaijiao.util.JReflectionUtils;
-import net.sf.cglib.beans.BeanMap;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -45,12 +46,36 @@ public class JQuickRow implements Map<String, Object> , Serializable {
     }
 
     /**
+     * Creates a JRow with the specified initial capacity for the underlying HashMap.
+     * 用于已知字段数量的场景，避免 HashMap 扩容开销（ASM 转换、批量转换等）
+     *
+     * @param initialCapacity HashMap 初始容量
+     */
+    public JQuickRow(int initialCapacity) {
+        this.data = new HashMap<>(initialCapacity);
+    }
+
+    /**
      * Creates a JRow initialized with the given map data.
      *
      * @param data the initial data for this row
      */
     public JQuickRow(Map<String, Object> data) {
         this.data = new HashMap<>(data);
+    }
+
+    /**
+     * 【高性能内部 API，请勿业务使用】返回内部 HashMap 直接引用。
+     * 供 ASM 动态生成的转换器、BeanIntrospector 等批量转换场景使用，
+     * 用于跳过 JQuickRow.put 接口方法的虚分派开销，以及避免中间 HashMap 对象。
+     * <p>
+     * <b>注意：业务代码请勿调用，直接修改返回的 Map 会绕过 JQuickRow 封装逻辑！</b>
+     *
+     * @return 内部持有的 HashMap 引用
+     */
+    @Deprecated
+    public Map<String, Object> internalMap() {
+        return this.data;
     }
 
 
@@ -805,27 +830,19 @@ public class JQuickRow implements Map<String, Object> , Serializable {
     }
 
     public static List<JQuickRow> toRows(List<?> list) {
-        List<JQuickRow> mapList = new ArrayList();
-        for(Object object : list) {
-            if (object instanceof Map) {
-                mapList.add((new JQuickRow((Map)object)));
-            } else if (object instanceof Object) {
-                Map<String, Object> map = beanToMap(object);
-                mapList.add(new JQuickRow(map));
-            }
+        if (list == null || list.isEmpty()) {
+            return new ArrayList<>();
         }
-        return mapList;
+      return JQuickRowOptimizer.toRows(list);
     }
-    public static Map<String, Object> beanToMap(Object bean) {
-        Map<String, Object> map = new HashMap<>();
-        if (bean != null) {
-            BeanMap beanMap = BeanMap.create(bean);
-            for (Object key : beanMap.keySet()) {
-                map.put(key.toString(), beanMap.get(key));
-            }
+    public static List<JQuickRow> toRowsCopy(List<?> list) {
+        if (list == null || list.isEmpty()) {
+            return new ArrayList<>();
         }
-        return map;
+        return JQuickRowOptimizer.toRowsCopy(list);
     }
+
+
     /**
      * Converts this row to a map.
      *
