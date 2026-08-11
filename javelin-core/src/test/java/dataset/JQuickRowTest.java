@@ -61,5 +61,10 @@ public class JQuickRowTest {
             System.out.println("  name: " + first.get("name"));
             System.out.println("  age: " + first.get("age"));
         }
+        long start1 = System.currentTimeMillis();
+        List<JBenchMarkUserModel> list=JQuickRow.toBeanList(rows,JBenchMarkUserModel.class);
+        long end2 = System.currentTimeMillis();
+        System.out.println("转换2 " + list.size() + " 条数据耗时: " + (end2  - start1) + "ms");
+
     }
 }

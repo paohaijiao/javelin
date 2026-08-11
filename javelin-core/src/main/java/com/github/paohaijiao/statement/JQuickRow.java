@@ -18,6 +18,7 @@ package com.github.paohaijiao.statement;
 
 import com.github.paohaijiao.console.JConsole;
 import com.github.paohaijiao.statement.asm.JQuickRowOptimizer;
+import com.github.paohaijiao.statement.asm.JQuickRowToBeanConverter;
 import com.github.paohaijiao.statement.asm.JQuickRowToRowsEnhancer;
 import com.github.paohaijiao.util.JReflectionUtils;
 
@@ -860,15 +861,24 @@ public class JQuickRow implements Map<String, Object> , Serializable {
      * @return the converted bean, or null if conversion fails
      */
     public <T> T toBean(Class<T> clazz) {
-        try {
-            T instance = clazz.getDeclaredConstructor().newInstance();
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                JReflectionUtils.setFieldValue(instance, entry.getKey(), entry.getValue());
-            }
-            return instance;
-        } catch (Exception e) {
-            return null;
+        return JQuickRowToBeanConverter.toBean(this, clazz);
+    }
+    public static <T> List<T> toBeanList(List<JQuickRow> rows, Class<T> clazz) {
+        if (rows == null || rows.isEmpty() || clazz == null) {
+            return new ArrayList<>();
         }
+        return JQuickRowToBeanConverter.toBeanList(rows, clazz);
+    }
+    @Deprecated
+    public <T> List<T> toBeans(List<JQuickRow> rows, Class<T> clazz) {
+        return toBeanList(rows, clazz);
+    }
+    @SafeVarargs
+    public static <T> List<T> toBeanList(Class<T> clazz, JQuickRow... rows) {
+        if (rows == null || rows.length == 0 || clazz == null) {
+            return new ArrayList<>();
+        }
+        return JQuickRowToBeanConverter.toBeanList(Arrays.asList(rows), clazz);
     }
 
     /**
