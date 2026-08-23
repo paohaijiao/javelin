@@ -97,6 +97,14 @@ class JQuickBeanCopyUtilsTest {
     }
 
     @Test
+    void testCopy_ObjectToObject_UseGetterSetterPath() {
+        JQuickGetterOnlySource source = new JQuickGetterOnlySource();
+        JQuickSetterOnlyTarget target = new JQuickSetterOnlyTarget();
+        JQuickBeanCopyUtils.copy(source, target);
+        assertEquals("getter-value-setter", target.getName());
+    }
+
+    @Test
     void testCopy_ObjectToObject_IgnoreProperties() {
         JQuickTargetUser target = new JQuickTargetUser();
         JQuickBeanCopyUtils.copy(sourceUser, target, "name", "age", "email");
@@ -230,7 +238,7 @@ class JQuickBeanCopyUtilsTest {
     @Test
     void testMergeNonNull_Normal() {
         JQuickTargetUser target = new JQuickTargetUser();
-       // target.setId(100L);
+        target.setId(100L);
         target.setName("原有名称");
         target.setAge(30);
 
