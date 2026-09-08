@@ -91,8 +91,7 @@ public class JQuickRowToRowsEnhancer {
     }
 
     private static String buildDotName(Class<?> elementClass) {
-        return "com.github.paohaijiao.statement.generated.Converter_"
-                + elementClass.getSimpleName() + "_" + System.identityHashCode(elementClass);
+        return "com.github.paohaijiao.statement.generated.Converter_" + elementClass.getSimpleName() + "_" + System.identityHashCode(elementClass);
     }
 
     /**

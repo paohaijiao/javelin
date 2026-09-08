@@ -38,26 +38,23 @@ public final class JQuickJavaBeanIntrospection {
 
     private JQuickJavaBeanIntrospection() {}
 
-    /** 类 → getter 元信息 缓存 */
     private static final Map<Class<?>, PropertyInfo[]> CACHE = new ConcurrentHashMap<>();
 
-    /**
-     * 单个 getter/属性的描述符（并行数组方案：反射和 ASM 都读同一份，保证一致）
-     */
+
     public static final class PropertyInfo {
-        /** getter 方法（反射直接 invoke，ASM 直接取 methodName/methodDesc） */
+
         public final Method method;
-        /** getter 方法名（ASM 字节码 INVOKEVIRTUAL 用） */
+
         public final String methodName;
-        /** getter 描述符，如 (I)V（ASM 用） */
+
         public final String methodDesc;
-        /** JavaBean 属性名（JQuickRow Map 的 key） */
+
         public final String propertyName;
-        /** 返回类型（引用类型直接赋值，基本类型调用 boxPrimitive） */
+
         public final Class<?> returnType;
-        /** 是否基本类型（byte/short/int/long/float/double/boolean/char → 需要装箱） */
+
         public final boolean primitive;
-        /** 为 true 表示该 getter 在任意类加载器上下文都是 public → ASM 可访问 */
+
         public final boolean publiclyAccessible;
 
         PropertyInfo(Method m) {

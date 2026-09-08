@@ -338,9 +338,6 @@ public final class JQuickRowToBeanConverter {
         }
     }
 
-    /**
-     * 反射内省器（降级路径 + 少量数据场景）。
-     */
     static class BeanIntrospector {
 
         private static final Map<Class<?>, Setter[]> SETTER_CACHE = new ConcurrentHashMap<>();

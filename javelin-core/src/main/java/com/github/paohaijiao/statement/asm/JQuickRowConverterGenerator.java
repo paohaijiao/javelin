@@ -35,15 +35,11 @@ import org.objectweb.asm.Type;
  */
 public class JQuickRowConverterGenerator {
 
-    /** 生成的转换器内部名前缀（斜杠分隔） */
     private static final String GENERATED_PREFIX = "com/github/paohaijiao/statement/generated/Converter_";
-    /** 对应的点分隔前缀（用于 ClassLoader.defineClass 的 name 参数） */
+
     private static final String GENERATED_PREFIX_DOT = "com.github.paohaijiao.statement.generated.Converter_";
 
-    /**
-     * 生成转换器字节码。返回 (converterName, bytecode) 二元组，
-     * 让调用者使用同一个 converterName 做 defineClass，避免名称错位。
-     */
+
     public static GeneratedConverter generate(Class<?> targetClass) {
         String idSuffix = targetClass.getSimpleName() + "_" + System.identityHashCode(targetClass);
         String internalName = GENERATED_PREFIX + idSuffix;      // ASM 需要的 / 分隔
@@ -67,8 +63,6 @@ public class JQuickRowConverterGenerator {
         mv.visitInsn(Opcodes.RETURN);
         mv.visitMaxs(0, 0);  // COMPUTE_MAXS：传 0 即可，ASM 自动重算
         mv.visitEnd();
-
-        // convert(Ljava/util/List;)Ljava/util/List;
         MethodVisitor cmv = cw.visitMethod(
                 Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL,
                 "convert",
@@ -119,8 +113,6 @@ public class JQuickRowConverterGenerator {
         // 5: row (JQuickRow)    — Bean 路径
         // 6: internalMap (Map)   — Bean 路径
         final int L_THIS = 0, L_LIST = 1, L_RESULT = 2, L_ITER = 3, L_ELEM = 4, L_ROW = 5, L_MAP = 6;
-
-        // result = new ArrayList<>(list.size())
         mv.visitVarInsn(Opcodes.ALOAD, L_LIST);
         mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/List", "size", "()I", true);
         mv.visitTypeInsn(Opcodes.NEW, "java/util/ArrayList");

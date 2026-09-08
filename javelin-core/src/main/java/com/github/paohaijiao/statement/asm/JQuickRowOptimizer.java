@@ -295,9 +295,7 @@ public class JQuickRowOptimizer {
         JQuickJavaBeanIntrospection.CACHE_BYPASS_CLEAR__DO_NOT_USE_DIRECTLY();
     }
 
-    /**
-     * 行转换器接口（必须是 public，ASM 生成的类实现它时需要访问权限）
-     */
+
     public interface RowConverter {
         List<JQuickRow> convert(List<?> list);
     }
@@ -354,12 +352,10 @@ public class JQuickRowOptimizer {
             int lastCount = 0;
             for (Object bean : list) {
                 if (bean == null) continue;
-                // Map 类型：直接包装
                 if (bean instanceof Map) {
                     result.add(new JQuickRow((Map<String, Object>) bean));
                     continue;
                 }
-                // Bean 类型：解析 getter 缓存（同类型直接复用，避免每次 Map 查找）
                 Class<?> cls = bean.getClass();
                 JQuickJavaBeanIntrospection.PropertyInfo[] props;
                 int propertyCount;
@@ -390,16 +386,11 @@ public class JQuickRowOptimizer {
         }
     }
 
-    /**
-     * 深拷贝版本的 Bean 反射内省器：与 {@link BeanIntrospector} 同样的 getter 规则，
-     * 但每个 getter 返回值都会通过 {@link #deepCopyValue(Object, IdentityHashMap)} 递归拷贝，
-     * 从而保证 JQuickRow 内任何嵌套引用都不会和原 bean 共享。
-     */
+
     static class DeepCopyingBeanIntrospector {
 
         static List<JQuickRow> convertList(List<?> list) {
             List<JQuickRow> result = new ArrayList<>(list.size());
-
             Class<?> lastClass = null;
             JQuickJavaBeanIntrospection.PropertyInfo[] lastProps = null;
             int lastCount = 0;
