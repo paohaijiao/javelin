@@ -55,6 +55,14 @@ javelin - 轻量级 Java 基础框架
     - [事件服务](#1-定义一个-eventservice)
     - [事件定义](#2-定义一个-event)
     - [事件发布](#3-发布一个事件)
+- [第八章：国际化（i18n）](#第八章国际化i18n)
+    - [资源文件约定](#1-资源文件约定)
+    - [调用方式](#2-调用方式)
+    - [查找顺序](#3-查找顺序)
+    - [切换语言](#4-切换语言)
+    - [全局配置](#5-全局配置)
+    - [SPI 扩展点](#6-spi-扩展点)
+    - [注意事项](#7-注意事项)
 
 ## 第一章：概述
 
@@ -589,6 +597,179 @@ private String lastParentMessage;
 ```
 
 
+
+## 第八章：国际化（i18n）
+
+javelin 的 i18n 采用与 `Messages` 一致的 **包级资源包 + 逐级回溯** 模型：
+
+- 资源文件按 Java 包存放，**同一包下所有类共享同一个 bundle**；
+- `key` 是人工手写的业务语义字符串，**不会根据类名、字段名自动拼接生成**；
+- 查找时从 `refClass` 所在包开始，**就近优先**，命中即返回；未命中则逐级向上回溯父包，最后落到全局兜底 bundle；
+- 任何层级都找不到时返回 `key` 原文并打印 DEBUG 日志，**不抛异常**。
+
+### 1. 资源文件约定
+
+在 `src/main/resources` 下按包路径建目录，放 `messages_{locale}.properties`：
+
+```text
+src/main/resources/
+└── com/github/paohaijiao/util/
+    ├── messages_zh_CN.properties
+    └── messages_en_US.properties
+```
+
+`com/github/paohaijiao/util/messages_zh_CN.properties`：
+
+```properties
+# 同包共享，key 人工维护
+welcome=欢迎使用 javelin
+greeting=你好，{0}！当前共有 {1} 个任务
+```
+
+`com/github/paohaijiao/util/messages_en_US.properties`：
+
+```properties
+welcome=Welcome to javelin
+greeting=Hello {0}! You have {1} tasks
+```
+
+> 文件必须用 **UTF-8** 保存，中文可直接书写，不需要 `\uXXXX` 转义。
+
+### 2. 调用方式
+
+```java
+// 1. 取本包文案：refClass 只用于提取所在包
+String text = Messages.getString(JQuickStringUtils.class, "welcome");
+
+// 2. 带占位符（JDK MessageFormat 语法 {0} {1}）
+String greeting = Messages.getString(JQuickStringUtils.class, "greeting", "张三", 3);
+// 结果：你好，张三！当前共有 3 个任务
+
+// 3. 只有包信息时使用 Package 重载
+Package pkg = JQuickStringUtils.class.getPackage();
+String fromPackage = Messages.getString(pkg, "greeting", "李四", 5);
+
+// 4. 未命中返回 key 原文，不抛异常
+String raw = Messages.getString(JQuickStringUtils.class, "not.exists.key");
+// 结果：not.exists.key
+
+// 5. 清空资源包缓存（语言包热更新或测试隔离）
+Messages.clearCache();
+```
+
+| 方法 | 说明 |
+|------|------|
+| `Messages.getString(Class<?> refClass, String key)` | 按 refClass 所在包获取文案 |
+| `Messages.getString(Class<?> refClass, String key, Object... args)` | 同上，并替换 `{0}`、`{1}` 占位符 |
+| `Messages.getString(Package pkg, String key, Object... args)` | 按包名获取文案 |
+| `Messages.clearCache()` | 清空资源包缓存 |
+
+### 3. 查找顺序
+
+假设 `JQuickStringUtils` 位于 `com.github.paohaijiao.util`，Locale 为 `zh_CN`：
+
+```text
+com.github.paohaijiao.util.messages_zh_CN   ① 就近优先，命中即返回，不再向上查找
+com.github.paohaijiao.messages_zh_CN        ② 未命中，回溯父包
+com.github.messages_zh_CN                   ③
+com.messages_zh_CN                          ④ 逐级上溯直到顶级包
+i18n/messages_zh                            ⑤ 全局兜底 bundle
+─────────────────────────────────────────────
+全部未命中 → 返回 key 原文 + DEBUG 日志，不抛异常
+```
+
+### 4. 切换语言
+
+`Messages` 复用原有 `I18nUtils` 的 Locale 设置，两者共享同一套语言环境，原有代码无需改动：
+
+```java
+I18nUtils.setLocale(Locale.SIMPLIFIED_CHINESE);
+System.out.println(Messages.getString(JQuickStringUtils.class, "welcome"));  // 欢迎使用 javelin
+
+I18nUtils.setLocale(Locale.US);
+System.out.println(Messages.getString(JQuickStringUtils.class, "welcome"));  // Welcome to javelin
+
+// 线程级 Locale 清理
+I18nUtils.clearThreadLocale();
+```
+
+> 资源包缓存键为 `(包名, Locale)`，切换语言只是换缓存键，天然隔离，无需手动刷新。
+
+### 5. 全局配置
+
+```java
+// 关闭逐级回溯：只查 refClass 所在包，随后直接走全局兜底。默认 true
+I18nConfig.setEnablePackageLookup(false);
+
+// 更换全局兜底 bundle 名称，默认 i18n/messages
+I18nConfig.setFallbackBundleName("i18n/global-messages");
+
+// 恢复全部默认配置
+I18nConfig.reset();
+```
+
+| 配置项 | 默认值 | 说明 |
+|--------|--------|------|
+| `enablePackageLookup` | `true` | 是否开启逐级向上回溯父包查找 |
+| `fallbackBundleName` | `i18n/messages` | 全局兜底 bundle 名称 |
+
+### 6. SPI 扩展点
+
+#### ① PackageLookupSPI —— 自定义包回溯遍历策略
+
+```java
+// 父包优先：适合“父包统一覆盖子包文案”的场景
+PackageLookupSPI parentFirst = startPackage -> {
+    List<String> packages = new ArrayList<>();
+    String parent = JQuickPackageUtils.getParentPackage(startPackage);
+    if (!parent.isEmpty()) {
+        packages.add(parent);
+    }
+    packages.add(startPackage);
+    return packages;
+};
+I18nConfig.setPackageLookupSPI(parentFirst);
+```
+
+#### ② BundleLoaderSPI —— 自定义资源加载
+
+把文案来源换成数据库、配置中心或远程服务：
+
+```java
+public class DatabaseBundleLoaderSPI implements BundleLoaderSPI {
+    @Override
+    public ResourceBundle load(String baseName, Locale locale, ClassLoader classLoader) {
+        Map<String, String> rows = messageDao.select(baseName, locale.toString());
+        return rows.isEmpty() ? null : new MapResourceBundle(rows);
+    }
+}
+
+I18nConfig.setBundleLoaderSPI(new DatabaseBundleLoaderSPI());
+```
+
+> 约定：找不到资源时返回 `null`，不要抛 `MissingResourceException`，由 `Messages` 统一决定是否继续回溯或走兜底。
+
+#### ③ 注册方式
+
+1. **显式注册**（优先级最高）：`I18nConfig.setPackageLookupSPI(...)` / `I18nConfig.setBundleLoaderSPI(...)`；
+2. **SPI 自动发现**：在 `src/main/resources/META-INF/services/` 下新建文件，文件名为接口全限定名，内容为实现类全限定名：
+
+```text
+src/main/resources/META-INF/services/com.github.paohaijiao.i18n.spi.BundleLoaderSPI
+```
+
+```text
+com.example.mybatis.DatabaseBundleLoaderSPI
+```
+
+### 7. 注意事项
+
+- **就近优先可能不符合“统一覆盖子包”的预期**：父子包存在同名 key 时子包胜出；需要反过来就注册父包优先的 `PackageLookupSPI`。
+- **包内放 `messages.properties`（无 locale 后缀）会在所有语种下作为最后候选命中**，这是 JDK 标准语义，容易被忽略。
+- **未命中的包不会进缓存**：只有成功加载的 bundle 才缓存，未命中 key 的包每次都会重新探测，包层级深且有高频未命中时有额外开销。
+- **缓存使用 `SoftReference`**：内存紧张时会被 GC 回收并重新加载，这是防止类加载器泄漏的设计代价。
+- **`Locale` 与 `I18nUtils` 共享**：这是为向后兼容刻意设计的，无法独立于 `I18nUtils` 设置语言。
+- **向后兼容**：原有 `I18nUtils` 的 `getMessage` / `containsKey` / `getKeys` / `clearCache` 等 API 全部保留，`Messages` 是新增入口，存量调用无需修改。
 
 # **捐献 ☕**
 
