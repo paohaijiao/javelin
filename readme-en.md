@@ -27,10 +27,6 @@
 
 ---
 
-# javelin - lightweight java foundational framework
-
-## Table of Contents
-
 - [Chapter One: Overview](#chapter-one-overview)
     - [Core Modules](#core-modules)
 - [Chapter Two: Quick Start](#chapter-two-quick-start)
