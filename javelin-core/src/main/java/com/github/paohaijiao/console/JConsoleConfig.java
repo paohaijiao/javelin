@@ -85,6 +85,15 @@ public class JConsoleConfig {
         return enableColor;
     }
 
+    /**
+     * 设置是否允许输出 ANSI 颜色码。
+     *
+     * <p>该开关表示"允许着色"：置为 false 时一定不输出颜色码；
+     * 置为 true 时还需要终端具备 ANSI 能力，容器 / CI / 输出重定向等非交互式场景下不会着色，
+     * 可通过 {@code -Djquick.color=true} 强制开启。</p>
+     *
+     * @param enableColor true 表示允许着色
+     */
     public void setEnableColor(boolean enableColor) {
         this.enableColor = enableColor;
     }
