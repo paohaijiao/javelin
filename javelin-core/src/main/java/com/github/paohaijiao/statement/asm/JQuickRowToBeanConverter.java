@@ -16,7 +16,10 @@
 package com.github.paohaijiao.statement.asm;
 
 
+import com.github.paohaijiao.date.JDateUtil;
 import com.github.paohaijiao.statement.JQuickRow;
+import com.github.paohaijiao.type.JQuickTypeConverter;
+import com.github.paohaijiao.type.JQuickTypeConverterManager;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -26,6 +29,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -222,12 +235,7 @@ public final class JQuickRowToBeanConverter {
         mv.visitLdcInsn(p.propertyName);
         mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/Map", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", true);
 
-        // 类型转换（基本类型需要拆箱）
-        if (isPrimitive) {
-            unboxPrimitive(mv, returnType);
-        } else {
-            mv.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(returnType));
-        }
+        emitCoerce(mv, returnType, isPrimitive);
 
         // 调用 setter
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetInternal, setterName, setterDesc, false);
@@ -244,15 +252,25 @@ public final class JQuickRowToBeanConverter {
         mv.visitLdcInsn(fieldName);
         mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/Map", "get",
                 "(Ljava/lang/Object;)Ljava/lang/Object;", true);
-        // 拆箱或类型转换
-        if (isPrimitive) {
-            unboxPrimitive(mv, fieldType);
-        } else {
-            mv.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(fieldType));
-        }
+        emitCoerce(mv, fieldType, isPrimitive);
         // PUTFIELD
         String fieldDesc = Type.getDescriptor(fieldType);
         mv.visitFieldInsn(Opcodes.PUTFIELD, targetInternal, fieldName, fieldDesc);
+    }
+
+    /** 生成 coerce 调用，栈顶 Object → 目标类型（引用类型 CHECKCAST / 基本类型拆箱）。 */
+    private static void emitCoerce(MethodVisitor mv, Class<?> targetType, boolean isPrimitive) {
+        Class<?> classConstant = isPrimitive ? box(targetType) : targetType;
+        mv.visitLdcInsn(Type.getType(classConstant));
+        mv.visitInsn(isPrimitive ? Opcodes.ICONST_1 : Opcodes.ICONST_0);
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC,
+                Type.getInternalName(JQuickRowToBeanConverter.class), "coerce",
+                "(Ljava/lang/Object;Ljava/lang/Class;Z)Ljava/lang/Object;", false);
+        if (isPrimitive) {
+            unboxPrimitive(mv, targetType);
+        } else {
+            mv.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(targetType));
+        }
     }
 
     /**
@@ -284,6 +302,213 @@ public final class JQuickRowToBeanConverter {
             mv.visitTypeInsn(Opcodes.CHECKCAST, "java/lang/Character");
             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
         }
+    }
+
+    /**
+     * 统一类型转换，ASM 路径与反射降级共用。内置规则优先，无法处理时通过 SPI 扩展
+     * {@link com.github.paohaijiao.type.JQuickTypeConverter} 兜底。
+     */
+    public static Object coerce(Object value, Class<?> targetType, boolean primitive) {
+        if (targetType == null) {
+            return value;
+        }
+        if (value == null) {
+            return primitive ? primitiveDefault(targetType) : null;
+        }
+        Class<?> type = box(targetType);
+        if (type.isInstance(value)) {
+            return value;
+        }
+        if (type == String.class) {
+            return value.toString();
+        }
+        if (type == Boolean.class) {
+            if (value instanceof Boolean) {
+                return value;
+            }
+            if (value instanceof Number) {
+                return ((Number) value).longValue() != 0L;
+            }
+            String text = value.toString().trim();
+            return "true".equalsIgnoreCase(text) || "1".equals(text) || "y".equalsIgnoreCase(text)
+                    || "yes".equalsIgnoreCase(text) || "on".equalsIgnoreCase(text);
+        }
+        if (type == Character.class) {
+            if (value instanceof Number) {
+                return (char) ((Number) value).intValue();
+            }
+            String text = value.toString();
+            return text.isEmpty() ? primitiveDefault(char.class) : text.charAt(0);
+        }
+        if (type == BigDecimal.class) {
+            return new BigDecimal(value.toString().trim());
+        }
+        if (type == BigInteger.class) {
+            return new BigDecimal(value.toString().trim()).toBigInteger();
+        }
+        if (Number.class.isAssignableFrom(type)) {
+            BigDecimal number = toBigDecimal(value);
+            if (number == null) {
+                return convertBySpi(value, type, value);
+            }
+            if (type == Integer.class) {
+                return number.intValue();
+            }
+            if (type == Long.class) {
+                return number.longValue();
+            }
+            if (type == Double.class) {
+                return number.doubleValue();
+            }
+            if (type == Float.class) {
+                return number.floatValue();
+            }
+            if (type == Short.class) {
+                return number.shortValue();
+            }
+            if (type == Byte.class) {
+                return number.byteValue();
+            }
+            return number;
+        }
+        if (Date.class.isAssignableFrom(type)) {
+            Date date = toDate(value);
+            if (date == null) {
+                return convertBySpi(value, type, new IllegalArgumentException("Cannot convert [" + value + "] to " + type.getName()));
+            }
+            return toSqlDate(date, type);
+        }
+        if (type.isEnum()) {
+            String name = value.toString().trim();
+            for (Object constant : type.getEnumConstants()) {
+                if (((Enum<?>) constant).name().equalsIgnoreCase(name)) {
+                    return constant;
+                }
+            }
+            return convertBySpi(value, type, value);
+        }
+        return convertBySpi(value, type, value);
+    }
+
+    /** SPI 兜底，fallback 为 RuntimeException 时抛出。 */
+    private static Object convertBySpi(Object value, Class<?> targetType, Object fallback) {
+        JQuickTypeConverter converter = JQuickTypeConverterManager.getConverter(targetType);
+        if (converter != null) {
+            return converter.convert(value, targetType);
+        }
+        if (fallback instanceof RuntimeException) {
+            throw (RuntimeException) fallback;
+        }
+        return fallback;
+    }
+
+    private static BigDecimal toBigDecimal(Object value) {
+        try {
+            if (value instanceof BigDecimal) {
+                return (BigDecimal) value;
+            }
+            if (value instanceof BigInteger) {
+                return new BigDecimal((BigInteger) value);
+            }
+            return new BigDecimal(value.toString().trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static Date toDate(Object value) {
+        Date date;
+        if (value instanceof Date) {
+            date = (Date) value;
+        } else if (value instanceof Calendar) {
+            date = ((Calendar) value).getTime();
+        } else if (value instanceof Instant) {
+            date = Date.from((Instant) value);
+        } else if (value instanceof OffsetDateTime) {
+            date = Date.from(((OffsetDateTime) value).toInstant());
+        } else if (value instanceof ZonedDateTime) {
+            date = Date.from(((ZonedDateTime) value).toInstant());
+        } else if (value instanceof LocalDateTime) {
+            date = Date.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant());
+        } else if (value instanceof LocalDate) {
+            date = Date.from(((LocalDate) value).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } else {
+            date = JDateUtil.toDate(value);
+        }
+        return date;
+    }
+
+    private static Date toSqlDate(Date date, Class<?> targetType) {
+        if (targetType == java.sql.Timestamp.class) {
+            return new java.sql.Timestamp(date.getTime());
+        }
+        if (targetType == java.sql.Date.class) {
+            return new java.sql.Date(date.getTime());
+        }
+        if (targetType == java.sql.Time.class) {
+            return new java.sql.Time(date.getTime());
+        }
+        return date;
+    }
+
+    private static Class<?> box(Class<?> type) {
+        if (type == null || !type.isPrimitive()) {
+            return type;
+        }
+        if (type == int.class) {
+            return Integer.class;
+        }
+        if (type == long.class) {
+            return Long.class;
+        }
+        if (type == double.class) {
+            return Double.class;
+        }
+        if (type == float.class) {
+            return Float.class;
+        }
+        if (type == boolean.class) {
+            return Boolean.class;
+        }
+        if (type == short.class) {
+            return Short.class;
+        }
+        if (type == byte.class) {
+            return Byte.class;
+        }
+        if (type == char.class) {
+            return Character.class;
+        }
+        return type;
+    }
+
+    private static Object primitiveDefault(Class<?> type) {
+        Class<?> boxed = box(type);
+        if (boxed == Boolean.class) {
+            return Boolean.FALSE;
+        }
+        if (boxed == Character.class) {
+            return '\0';
+        }
+        if (boxed == Byte.class) {
+            return (byte) 0;
+        }
+        if (boxed == Short.class) {
+            return (short) 0;
+        }
+        if (boxed == Integer.class) {
+            return 0;
+        }
+        if (boxed == Long.class) {
+            return 0L;
+        }
+        if (boxed == Float.class) {
+            return 0F;
+        }
+        if (boxed == Double.class) {
+            return 0D;
+        }
+        return null;
     }
 
     /**
@@ -386,24 +611,7 @@ public final class JQuickRowToBeanConverter {
         }
 
         private static Object convertValue(Object value, Class<?> targetType) {
-            if (targetType.isInstance(value)) return value;
-            if (targetType == int.class || targetType == Integer.class) {
-                return ((Number) value).intValue();
-            }
-            if (targetType == long.class || targetType == Long.class) {
-                return ((Number) value).longValue();
-            }
-            if (targetType == double.class || targetType == Double.class) {
-                return ((Number) value).doubleValue();
-            }
-            if (targetType == boolean.class || targetType == Boolean.class) {
-                return value.toString().equalsIgnoreCase("true")
-                        || value.toString().equals("1");
-            }
-            if (targetType == String.class) {
-                return value.toString();
-            }
-            return value;
+            return coerce(value, targetType, targetType.isPrimitive());
         }
 
         /**
