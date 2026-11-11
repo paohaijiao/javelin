@@ -20,6 +20,7 @@ import com.github.paohaijiao.crypto.impl.EccCryptoService;
 import com.github.paohaijiao.model.JBenchMarkUserModel;
 import com.github.paohaijiao.model.JUserModel;
 import com.github.paohaijiao.statement.JQuickRow;
+import dataset.model.DataStatistics;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -63,8 +64,10 @@ public class JQuickRowTest {
         }
         long start1 = System.currentTimeMillis();
         List<JBenchMarkUserModel> list=JQuickRow.toBeanList(rows,JBenchMarkUserModel.class);
+
         long end2 = System.currentTimeMillis();
         System.out.println("转换2 " + list.size() + " 条数据耗时: " + (end2  - start1) + "ms");
 
     }
+
 }

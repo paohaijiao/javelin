@@ -32,7 +32,7 @@ Desktop.ini
 **/failsafe-reports/
 
 # dependency-reduced-pom.xml
-# pom.xml.versionsBackup
+pom.xml.versionsBackup
 
 # .mvn/
 # mvnw
