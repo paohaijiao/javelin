@@ -1,6 +1,40 @@
-# javelin - lightweight java foundational framework
+<p align="center">
+  <img src="./images/jquick-logo.svg" width="680" alt="jquick-pdf logo" />
+</p>
 
-## Table of Contents
+<h1 align="center">javelin</h1>
+
+<p align="center">
+  A lean, high-performance Java foundation framework — essential infrastructure components without the bloat.
+</p>
+
+<p align="center">
+  <b>简体中文</b> | <a href="./readme-en.md">English</a>
+</p>
+<p align="center">
+  🌐 <a href="https://www.jquick.org">JQuick Website</a> ·
+  📖 <a href="https://github.com/paohaijiao">GitHub</a> ·
+  📦 <a href="https://central.sonatype.com/artifact/io.github.paohaijiao/javelin">Maven Central</a>
+</p>
+<p align="center">
+  🔗 <a href="https://github.com/paohaijiao/jquick-curl">jquick-curl</a> ·
+  📂 <a href="https://github.com/paohaijiao/jquick-path">jquick-path</a> ·
+  📊 <a href="https://github.com/paohaijiao/jquick-excel">jquick-excel</a> ·
+  📄 <a href="https://github.com/paohaijiao/jquick-pdf">jquick-pdf</a> ·
+  ☕ <a href="https://github.com/paohaijiao/jquick-java">jquick-java</a> ·
+  🗄️ <a href="https://github.com/paohaijiao/jquick-sql">jquick-sql</a>
+</p>
+<p align="center">
+ <a href="https://central.sonatype.com/artifact/io.github.paohaijiao/javelin"><img src="https://img.shields.io/maven-central/v/io.github.paohaijiao/javelin.svg?style=for-the-badge&label=Maven%20Central" alt="Maven Central" /></a>
+ <a href="https://github.com/paohaijiao/javelin/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=for-the-badge" alt="License" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-8%2B-orange.svg" alt="Java 8+" />
+</p>
+
+
+---
 
 - [Chapter One: Overview](#chapter-one-overview)
     - [Core Modules](#core-modules)

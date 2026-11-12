@@ -21,6 +21,19 @@ public class JConsole {
 
     private static final String ANSI_ERROR = "\u001B[31m"; // red
 
+    /**
+     * 系统属性开关名：{@code -Djquick.color=true/false}，优先级高于环境变量与终端探测
+     */
+    private static final String COLOR_PROPERTY = "jquick.color";
+
+    /**
+     * 终端是否支持 ANSI 颜色码，JVM 生命周期内只探测一次。
+     *
+     * <p>容器内（docker logs）、CI 控制台、输出重定向等非交互式场景下为 false，
+     * 避免 {@code ESC[32m} 被原样打印成 {@code [32m} 之类的乱码。</p>
+     */
+    private static final boolean TERMINAL_SUPPORTS_COLOR = detectTerminalColorSupport();
+
     private static final ReentrantLock lock = new ReentrantLock();
 
     private static final ConcurrentHashMap<JConsole, Boolean> allInstances = new ConcurrentHashMap<>();
@@ -280,9 +293,86 @@ public class JConsole {
     }
 
     /**
-     * 获取颜色代码
+     * 判断是否真正输出 ANSI 颜色码。
+     *
+     * <p>{@link JConsoleConfig#isEnableColor()} 作为总开关的语义保持不变，需要同时满足两个条件：</p>
+     * <ul>
+     *     <li>配置层面允许着色，即 {@code config.isEnableColor()} 为 true；</li>
+     *     <li>当前终端具备 ANSI 能力，即非容器 / 非 CI / 非重定向输出。</li>
+     * </ul>
+     *
+     * @return true 表示可以向控制台写入颜色码
+     */
+    private boolean isColorEnabled() {
+        return config.isEnableColor() && TERMINAL_SUPPORTS_COLOR;
+    }
+
+    /**
+     * 探测当前终端是否支持 ANSI 颜色码，按优先级依次判断：
+     *
+     * <ol>
+     *     <li>系统属性 {@code -Djquick.color=true/false}：显式指定，最高优先级；</li>
+     *     <li>环境变量 {@code NO_COLOR}：存在且非空字符串即关闭，参见 https://no-color.org/；</li>
+     *     <li>环境变量 {@code TERM} 为 {@code dumb}：明确表示不支持；</li>
+     *     <li>Windows：老 cmd（conhost）默认不解析 VT 序列，仅认明确支持的终端；</li>
+     *     <li>非 Windows 且 {@code TERM} 未设置：视为非交互式终端；</li>
+     *     <li>{@link System#console()} 为 null：非交互式，例如 docker logs、Jenkins、重定向到文件。</li>
+     * </ol>
+     *
+     * @return true 表示终端支持 ANSI 颜色码
+     */
+    private static boolean detectTerminalColorSupport() {
+        String property = System.getProperty(COLOR_PROPERTY);
+        if (property != null && !property.trim().isEmpty()) {
+            return Boolean.parseBoolean(property.trim());
+        }
+        String noColor = System.getenv("NO_COLOR");
+        if (noColor != null && !noColor.isEmpty()) {
+            return false;
+        }
+        String term = System.getenv("TERM");
+        if (term != null && "dumb".equalsIgnoreCase(term.trim())) {
+            return false;
+        }
+        if (isWindows()) {
+            return supportsColorOnWindows();
+        }
+        if (term == null) {
+            return false;
+        }
+        return System.console() != null;
+    }
+
+    /**
+     * 判断当前操作系统是否为 Windows
+     *
+     * @return true 表示 Windows
+     */
+    private static boolean isWindows() {
+        return System.getProperty("os.name", "").toLowerCase().contains("win");
+    }
+
+    /**
+     * 判断 Windows 是否运行在支持 ANSI 的终端中。
+     *
+     * <p>Windows Terminal、ConEmu、ANSICON 会设置各自的标识环境变量；
+     * 原生老 cmd / conhost 默认不解析 VT 序列，因此返回 false。</p>
+     *
+     * @return true 表示当前 Windows 终端支持 ANSI 颜色码
+     */
+    private static boolean supportsColorOnWindows() {
+        return System.getenv("WT_SESSION") != null
+                || System.getenv("ConEmuANSI") != null
+                || System.getenv("ANSICON") != null;
+    }
+
+    /**
+     * 获取颜色代码，终端不支持颜色或配置关闭颜色时返回空字符串
      */
     private String getColorCode(JLogLevel level) {
+        if (!isColorEnabled()) {
+            return "";
+        }
         switch (level) {
             case DEBUG:
                 return ANSI_DEBUG;
@@ -318,8 +408,9 @@ public class JConsole {
      */
     private void output(JLogLevel level, String formattedMessage) {
         if (config.isConsoleOutput()) {
-            String color = config.isEnableColor() ? getColorCode(level) : "";
-            String reset = config.isEnableColor() ? ANSI_RESET : "";
+            // 颜色只在此处拼接，formattedMessage 保持纯净，保证写入文件的内容不含任何转义码
+            String color = getColorCode(level);
+            String reset = color.isEmpty() ? "" : ANSI_RESET;
             System.out.println(color + formattedMessage + reset);
         }
         if (fileWriter != null && !fileWriterError) {
@@ -355,8 +446,8 @@ public class JConsole {
         String formattedMessage = formatMessage(level, message);
         output(level, formattedMessage);
         if (config.isConsoleOutput() && throwable != null) {
-            String color = config.isEnableColor() ? getColorCode(level) : "";
-            String reset = config.isEnableColor() ? ANSI_RESET : "";
+            String color = getColorCode(level);
+            String reset = color.isEmpty() ? "" : ANSI_RESET;
             System.err.println(color + formatStackTrace(throwable) + reset);
         }
         if (fileWriter != null && !fileWriterError && throwable != null) {
@@ -482,8 +573,8 @@ public class JConsole {
         String finalMessage = formatMessage(level, formattedMessage);
         output(level, finalMessage);
         if (config.isConsoleOutput() && throwable != null) {
-            String color = config.isEnableColor() ? getColorCode(level) : "";
-            String reset = config.isEnableColor() ? ANSI_RESET : "";
+            String color = getColorCode(level);
+            String reset = color.isEmpty() ? "" : ANSI_RESET;
             System.err.println(color + formatStackTrace(throwable) + reset);
         }
         if (fileWriter != null && !fileWriterError && throwable != null) {
