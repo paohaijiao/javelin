@@ -16,7 +16,6 @@
         <module>javelin-event</module>
     </modules>
     <properties>
-        <javelin.version>2.7.0</javelin.version>
         <jquick.asm.version>1.3.0</jquick.asm.version>
         <slf4j.version>1.7.36</slf4j.version>
         <maven.compiler.source>8</maven.compiler.source>
@@ -51,32 +50,27 @@
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-core</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-resource</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-provider</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-scan</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.paohaijiao</groupId>
                 <artifactId>javelin-event</artifactId>
-                <version>${javelin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.paohaijiao</groupId>
-                <artifactId>javelin-mybatis</artifactId>
-                <version>${javelin.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -237,6 +231,32 @@
     </scm>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <flattenMode>oss</flattenMode>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenedPomFilename>.flattened-pom.xml</flattenedPomFilename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
