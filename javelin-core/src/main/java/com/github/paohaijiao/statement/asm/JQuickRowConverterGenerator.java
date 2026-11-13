@@ -93,9 +93,7 @@ public class JQuickRowConverterGenerator {
         GeneratedConverter(String name, byte[] b) { this.converterName = name; this.bytes = b; }
     }
 
-    private static void writeConvertBody(MethodVisitor mv,
-                                         Class<?> targetClass,
-                                         String selfInternal) {
+    private static void writeConvertBody(MethodVisitor mv, Class<?> targetClass, String selfInternal) {
         JQuickJavaBeanIntrospection.PropertyInfo[] props = JQuickJavaBeanIntrospection.resolvePublic(targetClass);
         int propertyCount = props.length;
         String targetInternal = Type.getInternalName(targetClass);
@@ -103,21 +101,11 @@ public class JQuickRowConverterGenerator {
         String mapInternal = "java/util/Map";
 
         mv.visitCode();
-
-        // ---- 局部变量索引分配
-        // 0: this
-        // 1: list (List)
-        // 2: result (List)
-        // 3: it (Iterator)
-        // 4: element (Object)
-        // 5: row (JQuickRow)    — Bean 路径
-        // 6: internalMap (Map)   — Bean 路径
         final int L_THIS = 0, L_LIST = 1, L_RESULT = 2, L_ITER = 3, L_ELEM = 4, L_ROW = 5, L_MAP = 6;
-        mv.visitVarInsn(Opcodes.ALOAD, L_LIST);
-        mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/List", "size", "()I", true);
         mv.visitTypeInsn(Opcodes.NEW, "java/util/ArrayList");
         mv.visitInsn(Opcodes.DUP);
-        mv.visitInsn(Opcodes.SWAP);
+        mv.visitVarInsn(Opcodes.ALOAD, L_LIST);
+        mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/List", "size", "()I", true);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/util/ArrayList", "<init>", "(I)V", false);
         mv.visitVarInsn(Opcodes.ASTORE, L_RESULT);
 
@@ -197,11 +185,12 @@ public class JQuickRowConverterGenerator {
         mv.visitJumpInsn(Opcodes.GOTO, addAndContinue);
 
         mv.visitLabel(isMap);
-        mv.visitVarInsn(Opcodes.ALOAD, L_ELEM);
-        mv.visitTypeInsn(Opcodes.CHECKCAST, mapInternal);
+        // 修正：同上，NEW + DUP 之后再压入 Map 参数（原来是 ALOAD → CHECKCAST → NEW → DUP → SWAP，
+        // SWAP 无效，<init>(Ljava/util/Map;)V 收到的是未初始化对象引用）
         mv.visitTypeInsn(Opcodes.NEW, jquickRowInternal);
         mv.visitInsn(Opcodes.DUP);
-        mv.visitInsn(Opcodes.SWAP);
+        mv.visitVarInsn(Opcodes.ALOAD, L_ELEM);
+        mv.visitTypeInsn(Opcodes.CHECKCAST, mapInternal);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, jquickRowInternal,
                 "<init>", "(Ljava/util/Map;)V", false);
 
